@@ -1,0 +1,40 @@
+{
+  "response_status": "changes_requested | confirmed | cancelled",
+  "internal_workflow_dependency_candidates": [
+    {
+      "internal_workflow_dependency_candidate_id": "iwdc_001",
+      "name": "string",
+      "dependency_summary": "string",
+      "counterparty_workflow": {
+        "name": "string",
+        "workflow_relation_to_current": "upstream_workflow | downstream_workflow | adjacent_workflow | out_of_scope | uncertain",
+        "organization_scope": "same_organization | likely_same_organization | same_parent_group_or_network | unclear",
+        "organization_scope_rationale": "string",
+        "relationship_summary": "string"
+      },
+      "dependency_relation_type": "upstream_input_dependency | upstream_decision_dependency | upstream_completion_dependency | parallel_coordination_dependency | parallel_resource_dependency | internal_service_dependency | internal_confirmation_dependency | downstream_acceptance_dependency | downstream_readiness_dependency | shared_system_state_dependency | shared_document_or_data_dependency | cross_workflow_handoff_dependency | unclear",
+      "dependency_expectation_tags": [
+        "required_input"
+      ],
+      "required_contribution": "string",
+      "impact_if_unmet": "string",
+      "current_workflow_refs": {
+        "graph_ref_ids": [],
+        "handoff_zone_candidate_ids": [],
+        "impact_summary": "string"
+      },
+      "why_candidate": "string",
+      "localization_uncertainty": "string | null",
+      "confidence": "low | medium | high"
+    }
+  ],
+  "clarification_questions": [
+    {
+      "question_id": "iwdq_001",
+      "question": "Is hospital transport coordination managed internally or by an external provider?",
+      "why_needed": "The dependency affects whether this should be treated as an internal or external workflow dependency.",
+      "internal_workflow_dependency_candidate_ids": ["iwdc_003"],
+      "blocks_next_pass": false
+    }
+  ]
+}

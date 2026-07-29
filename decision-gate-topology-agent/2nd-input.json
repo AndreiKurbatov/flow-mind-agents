@@ -1,0 +1,208 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "string",
+    "topology_status": "changes_requested | confirmed | cancelled",
+    "summary": "string",
+    "nodes": [
+      {
+        "wfpoint_id": "string",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "string",
+        "description": "string",
+        "previous_node_ids": ["string"],
+        "next_node_ids": ["string"],
+        "confidence": "low | medium | high"
+      },
+      {
+        "decision_gate_id": "dg_001",
+        "node_type": "DECISION_GATE",
+        "name": "Discharge finalization decision",
+        "decision_question": "Can the patient proceed to final discharge now?",
+        "decision_responsibility": "Determine whether the patient is sufficiently ready, safe, authorized, documented, and logistically supported to proceed to final discharge.",
+        "previous_node_ids": ["mfp_004"],
+        "anchored_to_node_ids": [
+          "mfp_004"
+        ],
+        "decision_basis": [
+          "clinical readiness",
+          "patient safety",
+          "required discharge documents",
+          "doctor authorization",
+          "post-discharge destination availability",
+          "transport or family support availability",
+          "timing constraints"
+        ],
+        "decision_nature_tags": [
+          "readiness",
+          "risk_or_safety_or_compliance",
+          "completeness_or_validation",
+          "approval_or_authorization",
+          "resource_or_capacity",
+          "timing_or_scheduling"
+        ],
+        "outcomes": [
+          {
+            "outcome_id": "dg_001_out_001",
+            "outcome_label": "can_finalize_discharge",
+            "description": "The patient is clinically ready, safe to leave, required documents are complete, authorization is present, and the destination/logistics are sufficiently confirmed.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "mfp_005"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_002",
+            "outcome_label": "must_wait_or_complete_missing_requirements",
+            "description": "One or more required conditions are not yet satisfied, so the patient cannot proceed to final discharge and the workflow enters waiting or completion activities.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "wait_001",
+              "mfp_003"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_003",
+            "outcome_label": "requires_risk_or_social_review",
+            "description": "The patient may be clinically ready, but safety, social, or post-discharge support risks require additional review before discharge.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+            },
+            "next_node_ids": []
+          },
+          {
+            "outcome_id": "dg_001_out_004",
+            "outcome_label": "requires_alternative_destination",
+            "description": "The planned discharge destination is unavailable or unsuitable, so the workflow must choose another destination or care path.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+            },
+            "next_node_ids": []
+          }
+        ],
+        "confidence": "medium"
+      }
+    ]
+  },
+  "connection_status_definitions": [
+    {
+      "status": "attached",
+      "meaning": "Use when this outcome is already connected to one or more existing topology nodes.",
+      "expected_next_node_ids": "Must contain at least one existing node id."
+    },
+    {
+      "status": "branch_candidate_needed",
+      "meaning": "Use when this outcome is meaningful, but the required continuation branch does not exist yet and should be created by another topology revision agent.",
+      "expected_next_node_ids": "May be empty. Add branch_creation_request to describe the branch that should be created."
+    },
+    {
+      "status": "unresolved",
+      "meaning": "Use when the outcome is detected, but it is unclear where it should lead or whether it should create a branch, merge, wait state, terminal exit, or clarification question.",
+      "expected_next_node_ids": "Usually empty until the uncertainty is resolved."
+    },
+    {
+      "status": "terminal_or_out_of_scope",
+      "meaning": "Use when this outcome ends the flow inside the parent workflow or redirects the process object outside the current workflow scope.",
+      "expected_next_node_ids": "May be empty because the outcome does not continue inside the current topology."
+    }
+  ],
+  "decision_nature_tag_definitions": [
+    {
+      "tag": "entry_or_scope",
+      "meaning": "The decision determines whether the process object enters this workflow, enters through a specific entry point, or should be redirected outside the workflow scope.",
+      "example": "Does this case belong inside this workflow?"
+    },
+    {
+      "tag": "case_classification",
+      "meaning": "The decision determines what kind of case/object is moving through the workflow.",
+      "example": "Is this a simple, complex, urgent, or special-case discharge?"
+    },
+    {
+      "tag": "path_selection",
+      "meaning": "The decision directly selects one of several major normal workflow paths.",
+      "example": "Should the document go through automatic processing or manual review?"
+    },
+    {
+      "tag": "readiness",
+      "meaning": "The decision checks whether the process object is mature or ready enough to move to the next major phase.",
+      "example": "Is the patient clinically ready for discharge?"
+    },
+    {
+      "tag": "completeness_or_validation",
+      "meaning": "The decision checks whether required information, documents, fields, checks, or validations are complete and valid enough to continue.",
+      "example": "Are all required discharge documents complete?"
+    },
+    {
+      "tag": "approval_or_authorization",
+      "meaning": "The decision depends on formal approval, authorization, sign-off, acceptance, or rejection by an actor, team, system, or authority.",
+      "example": "Has the doctor approved discharge?"
+    },
+    {
+      "tag": "risk_or_safety_or_compliance",
+      "meaning": "The decision checks whether continuing through the normal path is safe, compliant, legally acceptable, clinically acceptable, financially acceptable, or policy-compliant.",
+      "example": "Is it safe and compliant to continue?"
+    },
+    {
+      "tag": "resource_or_capacity",
+      "meaning": "The decision depends on whether a required resource, capacity, slot, actor, facility, team, or operational capability is available.",
+      "example": "Is a rehabilitation bed available?"
+    },
+    {
+      "tag": "destination_or_outcome",
+      "meaning": "The decision determines the final destination, outcome, completion state, or exit path of the process object.",
+      "example": "Should the patient go home, to rehab, or to another facility?"
+    },
+    {
+      "tag": "ownership_routing",
+      "meaning": "The decision determines who becomes responsible for the next major part of the workflow.",
+      "example": "Should this case be handled by the doctor, nurse, case manager, or social worker?"
+    },
+    {
+      "tag": "internal_dependency_result",
+      "meaning": "The decision depends on the result, response, completion state, or outcome of an internal dependency inside the same organization or controlled operational environment.",
+      "example": "Did another hospital department complete its required check?"
+    },
+    {
+      "tag": "external_dependency_result",
+      "meaning": "The decision depends on the result, response, confirmation, or outcome of an external dependency outside the direct control of the workflow owner.",
+      "example": "Did the external rehabilitation facility confirm availability?"
+    },
+    {
+      "tag": "timing_or_scheduling",
+      "meaning": "The decision depends on timing, deadlines, calendar constraints, scheduling windows, urgency, or whether the workflow can continue now or later.",
+      "example": "Can the patient be discharged today or must discharge be planned for tomorrow?"
+    },
+    {
+      "tag": "uncertain",
+      "meaning": "Use only when the agent detects a decision gate but cannot confidently classify the nature of the decision.",
+      "example": "There is a control point, but the source context does not make clear whether it is based on readiness, approval, risk, resource availability, or another factor."
+    }
+  ],
+  "topology_revision_context": {
+    "clarification_questions": [
+      {
+        "question_id": "btq_001",
+        "question": "string",
+        "why_needed": "string",
+        "related_node_ids": [
+          "string"
+        ],
+        "blocks_next_pass": true
+      }
+    ],
+    "user_feedback": [
+      {
+        "question_id": "btq_001",
+        "answer": "Treat post-discharge follow-up as downstream workflow."
+      }
+    ],
+    "additional_user_context": "string"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "response_status": "changes_requested | confirmed | cancelled",
+  "graph_abstraction_assessment": {
+    "abstraction_level": "very_high_level_macro | high_level_macro | medium_level_operational | mixed_abstraction | unclear"
+  },
+  "parallel_region_candidates": [
+    {
+      "parallel_region_candidate_id": "prc_001",
+      "name": "string",
+      "parallel_summary": "string",
+      "entry_ref_ids": [
+        "mfp_001"
+      ],
+      "parallel_nodes": [
+        {
+          "graph_ref_id": "mfp_002",
+          "parallel_role": "clinical readiness workstream",
+          "parallel_contribution": "Determines whether the patient is clinically ready for discharge.",
+          "completion_or_readiness_signal": "Clinical readiness is confirmed.",
+          "required_for_convergence": "required"
+        }
+      ],
+      "convergence_ref_ids": [
+        "mfp_004"
+      ],
+      "related_parallel_workflows": [
+        {
+          "workflow_dependency_candidate_id": "ewdc_001",
+          "workflow_dependency_kind": "external",
+          "counterparty_workflow_name": "External provider confirmation workflow",
+          "runs_parallel_with_graph_ref_ids": [
+            "mfp_002"
+          ],
+          "parallel_relationship_summary": "The external provider confirmation workflow may progress while the current workflow performs internal preparation.",
+          "required_for_convergence": "required"
+        }
+      ],
+      "related_handoff_zone_candidate_ids": [
+        "hzc_001"
+      ],
+      "parallelism_nature": {
+        "execution_pattern": "parallel_preparation_before_join",
+        "join_requirement": "all_parallel_nodes_required",
+        "convergence_logic_summary": "The parallel workstreams likely need to be ready before the workflow can proceed to final discharge execution."
+      },
+      "why_parallel": "string",
+      "confidence": "low | medium | high"
+    }
+  ],
+  "clarification_questions": [
+    {
+      "question_id": "prq_001",
+      "question": "string",
+      "why_needed": "string",
+      "parallel_region_candidate_ids": [
+        "prc_001"
+      ],
+      "blocks_next_pass": false
+    }
+  ]
+}

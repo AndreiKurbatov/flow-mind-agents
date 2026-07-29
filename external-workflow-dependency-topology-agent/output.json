@@ -1,0 +1,51 @@
+{
+  "response_status": "changes_requested | confirmed | cancelled",
+  "external_workflow_dependency_candidates": [
+    {
+      "external_workflow_dependency_candidate_id": "ewdc_001",
+      "name": "string",
+      "dependency_summary": "string",
+
+      "counterparty_workflow": {
+        "name": "string",
+        "counterparty_kind": "external_organization_workflow | external_service_provider_workflow | public_authority_workflow | same_network_operationally_external_workflow | patient_or_caregiver_process | external_professional_workflow | unclear",
+        "workflow_relation_to_current": "upstream_workflow | downstream_workflow | adjacent_workflow | out_of_scope | uncertain",
+        "externality_rationale": "string",
+        "relationship_summary": "string"
+      },
+
+      "dependency_expectation_tags": [
+        "required_information"
+      ],
+
+      "required_external_contribution": "string",
+      "impact_if_unmet": "string",
+
+      "control_gap": {
+        "current_organization_control_level": "no_direct_control | limited_influence | shared_network_no_direct_control | unclear",
+        "control_gap_summary": "string"
+      },
+
+      "current_workflow_refs": {
+        "graph_ref_ids": [],
+        "handoff_zone_candidate_ids": [],
+        "impact_summary": "string"
+      },
+
+      "why_candidate": "string",
+      "confidence": "low | medium | high"
+    }
+  ],
+
+  "clarification_questions": [
+    {
+      "question_id": "ewdq_001",
+      "question": "string",
+      "why_needed": "string",
+      "external_workflow_dependency_candidate_ids": [
+        "ewdc_001"
+      ],
+      "blocks_next_pass": false
+    }
+  ]
+}

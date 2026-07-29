@@ -1,0 +1,126 @@
+{
+  "execution_pattern": [
+    {
+      "value": "parallel_preparation_before_join",
+      "meaning": "Use when two or more peer-level branches can prepare different complementary parts of the same workflow outcome in parallel, before their results must converge, be checked together, or become jointly available for a later common step. This pattern is appropriate when the branches do not simply run independently, but each contributes a required or relevant readiness component for the workflow to continue, execute, or close correctly.",
+      "example": "Before a service can be delivered, one branch prepares the contract, another branch prepares the required equipment, and another branch confirms the assigned operator. These activities can happen in parallel, but the final service delivery can start only when the necessary preparation pieces are ready."
+    },
+    {
+      "value": "parallel_independent_workstreams",
+      "meaning": "Use when peer-level branches progress in parallel with limited operational dependency between them, while still contributing to the same overall workflow or primary_process_object.",
+      "example": "A case update, an archive update, and a stakeholder notification progress in parallel; each branch performs its own task and they do not strongly depend on each other."
+    },
+    {
+      "value": "parallel_review_or_validation",
+      "meaning": "Use when the primary_process_object is assessed, reviewed, checked, or validated by multiple branches in parallel before the workflow can proceed, converge, or confirm readiness.",
+      "example": "A request is reviewed in parallel from legal, technical, compliance, and operational perspectives before it can be approved."
+    },
+    {
+      "value": "parallel_internal_coordination",
+      "meaning": "Use when multiple internal workstreams, teams, units, or roles within the current organization progress in parallel and need coordination.",
+      "example": "Several internal departments prepare their respective contributions in parallel and need to align before the workflow can continue."
+    },
+    {
+      "value": "parallel_external_coordination",
+      "meaning": "Use when the current workflow progresses in parallel with one or more external or operationally external workstreams, and coordination across the boundary is needed.",
+      "example": "An internal team continues preparing the case while an external provider, authority, partner, or client-side process works on a required parallel contribution."
+    },
+    {
+      "value": "parallel_resource_or_capacity_preparation",
+      "meaning": "Use when the parallel branches mainly work to secure or prepare the resources, capacity, slots, people, equipment, space, or service availability needed for the workflow to proceed.",
+      "example": "The workflow tries to secure a time slot, assign staff, prepare equipment, and confirm service capacity in parallel before execution."
+    },
+    {
+      "value": "partially_parallel_with_dependencies",
+      "meaning": "Use when peer-level branches can overlap in time, but they are not fully independent because one branch needs preliminary signals, partial outputs, final confirmation, or progress updates from another branch before it can complete correctly.",
+      "example": "One branch starts preparing a solution using preliminary case information, while another branch continues defining the final requirements. The preparation branch can run in parallel, but must later adjust or finalize its work based on the final requirements."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input suggests possible parallelism, but the execution pattern cannot be classified confidently.",
+      "example": "The graph shows multiple activities occurring around the same phase, but it is not clear whether they truly run in parallel, depend on each other, or happen sequentially."
+    }
+  ]
+}
+
+{
+  "join_requirement": [
+    {
+      "value": "all_parallel_nodes_required",
+      "meaning": "Use when all parallel branches appear necessary before the workflow can continue, converge, or close correctly."
+    },
+    {
+      "value": "some_parallel_nodes_required",
+      "meaning": "Use when only a subset of parallel branches must be completed before the workflow can continue."
+    },
+    {
+      "value": "one_of_parallel_nodes_sufficient",
+      "meaning": "Use when completion of any one branch among the parallel alternatives is enough to continue."
+    },
+    {
+      "value": "condition_based_join",
+      "meaning": "Use when parallel branches must be evaluated together against a specific rule, threshold, decision, or readiness condition before the workflow can continue. Completion of the branches alone is not enough; their combined result must satisfy the condition.",
+      "example": "Several checks run in parallel, such as legal, financial, and technical review. The workflow can continue only if the combined result satisfies the approval rule, for example acceptable risk, legal clearance, and technical feasibility."
+    },
+    {
+      "value": "advisory_alignment_only",
+      "meaning": "Use when parallel branches should share status, stay aligned, or coordinate information, but their completion is not strictly required for the workflow to continue. Misalignment may create confusion, rework, weak visibility, or communication issues, but it does not directly block progression.",
+      "example": "A case continues through the main workflow while reporting, stakeholder updates, or non-blocking communication activities run in parallel. These branches should stay aligned with the case status, but the case can still proceed if they are not completed."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input does not make clear how the parallel branches converge or which branches are required."
+    }
+  ]
+}
+
+{
+  "required_for_convergence": [
+    {
+      "value": "required",
+      "meaning": "Use when this specific node appears necessary for the parallel region to converge or for the workflow to continue."
+    },
+    {
+      "value": "optional",
+      "meaning": "Use when this node may run in parallel but does not appear necessary for convergence or continuation."
+    },
+    {
+      "value": "conditional",
+      "meaning": "Use when this node is required only under certain conditions, variants, decisions, or case types."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input does not make clear whether this node is required for convergence."
+    }
+  ]
+}
+
+{
+  "abstraction_level": [
+    {
+      "value": "very_high_level_macro",
+      "meaning": "Use when the graph contains only very broad lifecycle stages or phases, with little or no operational detail. At this level, parallel regions should be identified only if macro-level parallelism is explicitly clear.",
+      "example": "A graph contains only stages such as case intake, case processing, and case closure."
+    },
+    {
+      "value": "high_level_macro",
+      "meaning": "Use when the graph contains broad but distinguishable macro workstreams or major workflow blocks. Parallel regions can be identified between peer-level macro nodes if they appear able to progress concurrently.",
+      "example": "A graph separates clinical preparation, administrative preparation, and post-service coordination as distinct high-level workflow blocks."
+    },
+    {
+      "value": "medium_level_operational",
+      "meaning": "Use when the graph contains more concrete operational activities, tasks, checks, or coordination steps, while still not being a fully detailed low-level execution trace. Parallel regions can be identified with more specificity because the graph exposes concrete work elements.",
+      "example": "A graph includes activities such as preparing documents, arranging transport, confirming availability, validating data, and notifying stakeholders."
+    },
+    {
+      "value": "mixed_abstraction",
+      "meaning": "Use when the graph mixes broad macro-level nodes with more detailed operational nodes. The agent must be careful to compare only peer-level elements and avoid creating parallel regions between a broad macro-block and a low-level task unless the graph clearly treats them as peers.",
+      "example": "A graph contains a broad node such as discharge planning together with detailed nodes such as send request, confirm transport, and update document."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the abstraction level cannot be determined confidently from the input graph, or when the graph structure is too ambiguous to decide whether nodes are macro blocks, operational tasks, or mixed-level elements.",
+      "example": "A graph contains vague node names without enough descriptions or structural clues to understand the level of detail."
+    }
+  ]
+}

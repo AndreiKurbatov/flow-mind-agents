@@ -1,0 +1,30 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "string",
+    "topology_status": "changes_requested | confirmed | cancelled",
+    "summary": "string",
+    "nodes": [
+      {
+        "wfpoint_id": "string",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "string",
+        "description": "string",
+        "next_node_ids": ["string"],
+        "confidence": "low | medium | high"
+      }
+    ]
+  },
+  "revision_request": {
+    "clarification_questions": [
+      {
+        "question_id": "btq_001",
+        "question": "Some question",
+        "why_needed": "Why this question is needed.",
+        "blocks_next_pass": false,
+        "answer": "Treat post-discharge follow-up as downstream workflow.",
+        "related_node_ids": [ "string" ]
+      }
+    ],
+    "additional_user_context": "string"
+  }
+}

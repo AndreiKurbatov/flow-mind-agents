@@ -1,0 +1,47 @@
+{
+  "response_status": "changes_requested | confirmed | cancelled",
+  "macro_logical_segments": [
+    {
+      "macro_logical_segment_id": "mls_001",
+      "name": "Documentation preparation",
+      "segment_summary": "This segment covers the preparation of the discharge documentation package.",
+      "main_flow_boundary": {
+        "start_ref_ids": [
+          "mfp_001"
+        ],
+        "end_ref_ids": [
+          "mfp_003"
+        ]
+      },
+      "parallel_flows_boundaries": [
+        {
+          "parallel_flow_boundary_id": "pfb_001",
+          "start_ref_ids": [
+            "mfp_001"
+          ],
+          "end_ref_ids": [
+            "mfp_003"
+          ],
+          "path_summary": "Administrative documentation preparation happens in parallel with clinical preparation."
+        }
+      ],
+      "primary_process_object_state_at_start": "The discharge case has entered documentation preparation.",
+      "primary_process_object_state_at_end": "The documentation package is prepared for readiness assessment.",
+      "macro_transformation": "The discharge case is transformed from needing documentation preparation into having a prepared documentation package.",
+      "main_operational_purpose": "Prepare the documentation package required for discharge readiness assessment.",
+      "boundary_rationale": "The segment starts when documentation preparation begins and ends when the package is ready for assessment.",
+      "confidence": "high"
+    }
+  ],
+  "clarification_questions": [
+    {
+      "question_id": "mlsq_001",
+      "question": "string",
+      "why_needed": "string",
+      "macro_logical_segment_ids": [
+        "string"
+      ],
+      "blocks_next_pass": true
+    }
+  ]
+}

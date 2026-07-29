@@ -1,0 +1,446 @@
+{
+  "model": "gpt-5.5",
+  "reasoning": {
+    "effort": "high"
+  },
+  "max_output_tokens": 25000,
+  "input": [
+    {
+      "role": "developer",
+      "content": "{{EXCEPTION_PATH_TOPOLOGY_AGENT_DEVELOPER_PROMPT}}\n\n{{EXCEPTION_PATH_CLASSIFICATION_CONFIG}}"
+    },
+    {
+      "role": "user",
+      "content": "{{EXCEPTION_PATH_TOPOLOGY_AGENT_INPUT_JSON}}"
+    }
+  ],
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "exception_path_topology_result",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "response_status": {
+            "type": "string",
+            "description": "Overall status of the exception path analysis result. Use confirmed when the result is usable as a first-pass or revised overlay, changes_requested when important uncertainty remains or user clarification is needed, and cancelled only when the analysis should not proceed.",
+            "enum": [
+              "changes_requested",
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "exception_path_candidates": {
+            "type": "array",
+            "description": "List of candidate exception paths identified in the workflow. Each candidate represents a non-happy-path, alternative, blocked, delayed, escalated, manual, terminal, or special-case route followed or plausibly followed by the primary process object.",
+            "items": {
+              "$ref": "#/$defs/exception_path_candidate"
+            }
+          },
+          "clarification_questions": {
+            "type": "array",
+            "description": "Questions for the user that would help validate, correct, localize, or further detail the exception path candidates in a later iteration. Use an empty array if no clarification is needed.",
+            "items": {
+              "$ref": "#/$defs/clarification_question"
+            }
+          }
+        },
+        "required": [
+          "response_status",
+          "exception_path_candidates",
+          "clarification_questions"
+        ],
+        "$defs": {
+          "exception_path_candidate": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "exception_path_candidate_id": {
+                "type": "string",
+                "description": "Stable identifier of the exception path candidate. Use sequential IDs such as epc_001, epc_002, epc_003. In revision mode, preserve the ID when the candidate keeps the same core meaning."
+              },
+              "name": {
+                "type": "string",
+                "description": "Short human-readable name of the exception path candidate."
+              },
+              "exception_summary": {
+                "type": "string",
+                "description": "Concise summary of the exception path, explaining how the primary process object deviates from the normal flow and why this path matters operationally."
+              },
+              "exception_entry_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references where the primary process object reaches the point at which the exception path may activate or become relevant. Allowed references are only mfp_###, dg_###, or dg_###_out_###.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "exception_trigger_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references that cause, reveal, or express the exception condition. These are often decision gates, negative outcomes, failed checks, blocked nodes, or other graph elements. Allowed references are only mfp_###, dg_###, or dg_###_out_###.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "exception_path_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references that are part of the represented exception branch itself. Use an empty array when the path is hypothesized or not represented in graph nodes. Allowed references are only mfp_###, dg_###, or dg_###_out_###.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "normal_path_bypassed_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references from the normal path that are skipped, delayed, blocked, not reached, or reached only after the exception path is resolved. Allowed references are only mfp_###, dg_###, or dg_###_out_###.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "resolution_or_convergence_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references where the exception path resolves, converges, rejoins the normal flow, or allows the primary process object to continue. Allowed references are only mfp_###, dg_###, or dg_###_out_###.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "termination_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references where the exception path terminates, cancels, rejects, blocks definitively, or closes the primary process object without normal completion. Use an empty array if the path does not terminate. Allowed references are only mfp_###, dg_###, or dg_###_out_###.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "exception_path_type": {
+                "type": "string",
+                "description": "Classifies the operational nature of the exception path.",
+                "enum": [
+                  "blocking_exception_path",
+                  "escalation_exception_path",
+                  "rejection_exception_path",
+                  "cancellation_or_abort_exception_path",
+                  "manual_handling_exception_path",
+                  "risk_or_compliance_exception_path",
+                  "missing_requirement_exception_path",
+                  "readiness_exception_path",
+                  "dependency_failure_exception_path",
+                  "resource_or_capacity_exception_path",
+                  "technical_failure_exception_path",
+                  "validation_failure_exception_path",
+                  "alternative_route_exception_path",
+                  "loop_or_rework_exception_path",
+                  "unclear_exception_path"
+                ]
+              },
+              "exception_path_status": {
+                "type": "string",
+                "description": "Classifies how the exception path is represented or supported by the available input: explicitly in the graph, partially in the graph, implicitly from graph or overlays, inferred from general knowledge, or unclear.",
+                "enum": [
+                  "represented_in_graph",
+                  "partially_represented",
+                  "implicitly_suggested_by_graph",
+                  "implicitly_suggested_by_overlay",
+                  "logically_inferred_not_represented",
+                  "unclear"
+                ]
+              },
+              "exception_expectedness": {
+                "type": "string",
+                "description": "Classifies whether the exception path appears normal, expected, problematic, uncontrolled, rare but critical, or unclear in the workflow context.",
+                "enum": [
+                  "normal_expected_exception",
+                  "expected_exception_path",
+                  "problematic_exception_path",
+                  "uncontrolled_exception_path",
+                  "rare_critical_exception_path",
+                  "unclear"
+                ]
+              },
+              "exception_severity": {
+                "type": "string",
+                "description": "Estimated operational severity of the exception path based on delay, blocking effect, risk, cost, manual effort, compliance, safety, quality, or workflow completion impact.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high",
+                  "critical",
+                  "unknown"
+                ]
+              },
+              "hypothesized_exception_steps": {
+                "type": "array",
+                "description": "Optional descriptive steps for a hypothesized, partially represented, or user-expanded exception path. These steps are not graph nodes and must not introduce new graph references.",
+                "items": {
+                  "$ref": "#/$defs/hypothesized_exception_step"
+                }
+              },
+              "primary_process_object_impact": {
+                "$ref": "#/$defs/primary_process_object_impact"
+              },
+              "exception_cause": {
+                "$ref": "#/$defs/exception_cause"
+              },
+              "resolution_condition": {
+                "$ref": "#/$defs/resolution_condition"
+              },
+              "support_basis": {
+                "$ref": "#/$defs/support_basis"
+              },
+              "related_loop_or_rework_candidate_ids": {
+                "type": "array",
+                "description": "IDs of related loop-or-rework candidates that support or overlap with this exception path. Use only lrc_### IDs. Use an empty array if none.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "related_handoff_zone_candidate_ids": {
+                "type": "array",
+                "description": "IDs of related handoff zone candidates that support or explain this exception path. Use only hzc_### IDs. Use an empty array if none.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "related_internal_workflow_dependency_candidate_ids": {
+                "type": "array",
+                "description": "IDs of related internal workflow dependency candidates that support or explain this exception path. Use only iwdc_### IDs. Use an empty array if none.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "related_external_workflow_dependency_candidate_ids": {
+                "type": "array",
+                "description": "IDs of related external workflow dependency candidates that support or explain this exception path. Use only ewdc_### IDs. Use an empty array if none.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "related_parallel_region_candidate_ids": {
+                "type": "array",
+                "description": "IDs of related parallel region candidates that support or explain this exception path. Use only prc_### IDs. Use an empty array if none.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "why_exception_path": {
+                "type": "string",
+                "description": "Explanation of why this candidate qualifies as an exception path rather than normal flow, handoff only, dependency only, parallelism only, or loop/rework only."
+              },
+              "confidence": {
+                "type": "string",
+                "description": "Confidence level for this exception path candidate based on graph support, overlay support, user context, general workflow knowledge, and localization precision.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            },
+            "required": [
+              "exception_path_candidate_id",
+              "name",
+              "exception_summary",
+              "exception_entry_ref_ids",
+              "exception_trigger_ref_ids",
+              "exception_path_ref_ids",
+              "normal_path_bypassed_ref_ids",
+              "resolution_or_convergence_ref_ids",
+              "termination_ref_ids",
+              "exception_path_type",
+              "exception_path_status",
+              "exception_expectedness",
+              "exception_severity",
+              "hypothesized_exception_steps",
+              "primary_process_object_impact",
+              "exception_cause",
+              "resolution_condition",
+              "support_basis",
+              "related_loop_or_rework_candidate_ids",
+              "related_handoff_zone_candidate_ids",
+              "related_internal_workflow_dependency_candidate_ids",
+              "related_external_workflow_dependency_candidate_ids",
+              "related_parallel_region_candidate_ids",
+              "why_exception_path",
+              "confidence"
+            ]
+          },
+          "hypothesized_exception_step": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "step_id": {
+                "type": "string",
+                "description": "Local identifier of a hypothesized step inside this exception path candidate. Use sequential IDs such as eps_001, eps_002. This is not a graph node ID."
+              },
+              "step_name": {
+                "type": "string",
+                "description": "Short name of the hypothesized exception step."
+              },
+              "step_summary": {
+                "type": "string",
+                "description": "Description of the hypothesized step and its role in the exception path. The step must remain descriptive and must not be treated as a graph node."
+              }
+            },
+            "required": [
+              "step_id",
+              "step_name",
+              "step_summary"
+            ]
+          },
+          "primary_process_object_impact": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "object_affected": {
+                "type": "string",
+                "description": "Name of the primary process object affected by the exception path, such as patient discharge case, invoice processing case, contract review package, service request, or claim case."
+              },
+              "impact_summary": {
+                "type": "string",
+                "description": "Summary of how the exception path affects the primary process object’s progression, readiness, validation, acceptance, completion, closure, risk, quality, or state."
+              }
+            },
+            "required": [
+              "object_affected",
+              "impact_summary"
+            ]
+          },
+          "exception_cause": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cause_category": {
+                "type": "string",
+                "description": "Classifies the primary cause that triggers or explains the exception path.",
+                "enum": [
+                  "incomplete_information",
+                  "missing_documentation",
+                  "incorrect_information",
+                  "missing_authorization",
+                  "missing_requirement",
+                  "failed_validation",
+                  "approval_rejection",
+                  "quality_issue",
+                  "risk_or_safety_issue",
+                  "compliance_issue",
+                  "legal_or_policy_issue",
+                  "unclear_responsibility",
+                  "handoff_failure",
+                  "handoff_misalignment",
+                  "external_non_response",
+                  "external_negative_response",
+                  "external_incomplete_response",
+                  "internal_dependency_not_ready",
+                  "parallel_branch_not_ready",
+                  "resource_unavailable",
+                  "capacity_unavailable",
+                  "case_or_patient_not_ready",
+                  "technical_error",
+                  "system_unavailable",
+                  "manual_entry_error",
+                  "changed_requirement_or_condition",
+                  "user_or_counterparty_cancellation",
+                  "unclear"
+                ]
+              },
+              "cause_summary": {
+                "type": "string",
+                "description": "Concise explanation of the specific cause of this exception path in the workflow context."
+              }
+            },
+            "required": [
+              "cause_category",
+              "cause_summary"
+            ]
+          },
+          "resolution_condition": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "resolution_summary": {
+                "type": "string",
+                "description": "Summary of what must happen for the exception path to be resolved, converge back to normal flow, or terminate cleanly."
+              },
+              "resolution_signal": {
+                "type": "string",
+                "description": "Observable signal, condition, confirmation, decision, or state indicating that the exception path has been resolved or can proceed."
+              }
+            },
+            "required": [
+              "resolution_summary",
+              "resolution_signal"
+            ]
+          },
+          "support_basis": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "support_type": {
+                "type": "string",
+                "description": "Classifies the source of evidence or reasoning that supports the existence of this exception path.",
+                "enum": [
+                  "explicit_graph_branch",
+                  "explicit_decision_outcome",
+                  "explicit_terminal_or_blocking_node",
+                  "implicit_from_decision_outcome",
+                  "implicit_from_handoff",
+                  "implicit_from_internal_dependency",
+                  "implicit_from_external_dependency",
+                  "implicit_from_parallel_region",
+                  "implicit_from_loop_or_rework",
+                  "implicit_from_graph_structure",
+                  "user_provided_context",
+                  "general_workflow_knowledge",
+                  "weak_or_unclear_support"
+                ]
+              },
+              "support_summary": {
+                "type": "string",
+                "description": "Explanation of the evidence or reasoning supporting this exception path, including whether it comes from graph structure, decision outcomes, overlays, user context, or general workflow knowledge."
+              }
+            },
+            "required": [
+              "support_type",
+              "support_summary"
+            ]
+          },
+          "clarification_question": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "description": "Stable identifier of the clarification question. Use sequential IDs such as epq_001, epq_002. Do not use prq_### for this agent."
+              },
+              "question": {
+                "type": "string",
+                "description": "Question to ask the user in order to validate, correct, localize, or further detail one or more exception path candidates."
+              },
+              "why_needed": {
+                "type": "string",
+                "description": "Explanation of why this question is useful for improving the exception path analysis."
+              },
+              "exception_path_candidate_ids": {
+                "type": "array",
+                "description": "IDs of exception path candidates related to this clarification question. Use only epc_### IDs. Use an empty array if the question is general.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blocks_next_pass": {
+                "type": "boolean",
+                "description": "Whether the missing answer blocks a reliable next analysis pass. Use false for useful but non-blocking questions."
+              }
+            },
+            "required": [
+              "question_id",
+              "question",
+              "why_needed",
+              "exception_path_candidate_ids",
+              "blocks_next_pass"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

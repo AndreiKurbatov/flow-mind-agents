@@ -1,0 +1,395 @@
+{
+  "model": "gpt-5.5",
+  "reasoning": {
+    "effort": "medium"
+  },
+  "max_output_tokens": 8000,
+  "input": [
+    {
+      "role": "developer",
+      "content": "{{LOOP_OR_REWORK_TOPOLOGY_AGENT_DEVELOPER_PROMPT}}\n\n{{LOOP_OR_REWORK_CLASSIFICATION_CONFIG}}"
+    },
+    {
+      "role": "user",
+      "content": "{{LOOP_OR_REWORK_TOPOLOGY_AGENT_INPUT_JSON}}"
+    }
+  ],
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "loop_or_rework_topology_result",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "description": "Structured output produced by the loop-or-rework-topology-agent. The result is an analytical overlay that identifies loop or rework candidates in the workflow graph without modifying the graph.",
+        "additionalProperties": false,
+        "properties": {
+          "response_status": {
+            "type": "string",
+            "description": "Overall status of the loop/rework analysis result. Use changes_requested when the result needs user review, contains uncertainty, or includes clarification questions. Use confirmed when the result appears sufficiently supported and no material clarification is needed. Use cancelled only when the input explicitly indicates that the analysis should be cancelled or the workflow context is unusable.",
+            "enum": [
+              "changes_requested",
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "loop_or_rework_candidates": {
+            "type": "array",
+            "description": "List of loop or rework candidates detected in the workflow. Each candidate is an overlay that references existing graph nodes and explains where the primary process object may return, repeat, be corrected, be completed, retried, reassessed, remediated, or reprocessed before the workflow can continue. Use an empty array if no loop or rework candidate is sufficiently supported.",
+            "items": {
+              "type": "object",
+              "description": "A single loop or rework candidate. It must describe the loop/rework geometry, cause, impact, exit condition, involved parties, related overlays, and confidence.",
+              "additionalProperties": false,
+              "properties": {
+                "loop_or_rework_candidate_id": {
+                  "type": "string",
+                  "description": "Stable ID of this loop or rework candidate. Use sequential IDs such as lrc_001, lrc_002, lrc_003. In revision mode, preserve the same ID when the candidate keeps the same core meaning."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Short human-readable name for the candidate. It should summarize the loop or rework pattern, for example Missing documentation rework loop or External provider retry loop."
+                },
+                "loop_summary": {
+                  "type": "string",
+                  "description": "Concise summary of the loop/rework behavior. Explain what returns, repeats, is corrected, retried, reassessed, or reworked, and under what condition."
+                },
+                "loop_entry_ref_ids": {
+                  "type": "array",
+                  "description": "Graph refs where the primary process object enters the condition, area, or operational point where the loop can activate or become relevant. These refs must refer only to graph elements such as mfp_###, dg_###, or dg_###_out_###. Do not include overlay IDs such as hzc_###, ewdc_###, iwdc_###, or prc_###.",
+                  "items": {
+                    "type": "string",
+                    "description": "Graph ref ID where the loop becomes relevant or can activate."
+                  }
+                },
+                "loop_trigger_ref_ids": {
+                  "type": "array",
+                  "description": "Graph refs that cause or reveal the return, retry, repetition, correction, or rework. Typical refs include decision gates, negative outcomes, failed checks, review nodes, readiness checks, or validation outcomes. These refs must refer only to graph elements.",
+                  "items": {
+                    "type": "string",
+                    "description": "Graph ref ID that triggers or reveals the loop/rework."
+                  }
+                },
+                "return_to_ref_ids": {
+                  "type": "array",
+                  "description": "Graph refs to which the primary process object returns. Use an empty array if there is no visible backward return or if the rework happens forward through a remediation path. These refs must refer only to graph elements.",
+                  "items": {
+                    "type": "string",
+                    "description": "Graph ref ID that receives the returned primary process object."
+                  }
+                },
+                "reworked_ref_ids": {
+                  "type": "array",
+                  "description": "Graph refs that are repeated, corrected, completed, re-entered, reprocessed, or traversed again during the loop. These refs must refer only to graph elements.",
+                  "items": {
+                    "type": "string",
+                    "description": "Graph ref ID that is part of the repeated or reworked region."
+                  }
+                },
+                "exit_or_convergence_ref_ids": {
+                  "type": "array",
+                  "description": "Graph refs where the loop resolves, exits, rejoins the normal flow, or converges into a later workflow step. Use an empty array if the exit or convergence point is not visible or not supported. These refs must refer only to graph elements.",
+                  "items": {
+                    "type": "string",
+                    "description": "Graph ref ID where the loop exits or converges."
+                  }
+                },
+                "loop_or_rework_type": {
+                  "type": "string",
+                  "description": "Controlled classification of the operational type of loop or rework. Use the value that best describes the mechanism causing repetition, correction, reassessment, retry, or remediation.",
+                  "enum": [
+                    "expected_operational_loop",
+                    "missing_information_rework",
+                    "missing_documentation_rework",
+                    "incorrect_information_rework",
+                    "failed_validation_rework",
+                    "approval_rejection_rework",
+                    "quality_or_review_rework",
+                    "handoff_bounce_rework",
+                    "external_dependency_retry_loop",
+                    "internal_dependency_retry_loop",
+                    "resource_or_capacity_retry_loop",
+                    "readiness_reassessment_loop",
+                    "compliance_or_remediation_loop",
+                    "technical_or_system_error_rework",
+                    "manual_correction_rework",
+                    "unclear_loop_or_rework"
+                  ]
+                },
+                "loop_direction": {
+                  "type": "string",
+                  "description": "Controlled classification of the geometric or directional shape of the loop in the workflow. This describes how the object moves when the loop or rework occurs, not why it occurs.",
+                  "enum": [
+                    "backward_to_previous_activity",
+                    "backward_to_previous_stage",
+                    "repeat_same_activity",
+                    "repeat_subsequence",
+                    "retry_same_request_or_action",
+                    "bidirectional_bounce_between_parties",
+                    "forward_remediation_without_backward_return",
+                    "unclear"
+                  ]
+                },
+                "loop_expectedness": {
+                  "type": "string",
+                  "description": "Controlled classification of how the loop should be interpreted operationally: normal, expected exception, problematic rework, uncontrolled rework, or unclear. This does not describe visibility or evidence strength.",
+                  "enum": [
+                    "normal_expected_loop",
+                    "expected_exception_path",
+                    "problematic_rework",
+                    "uncontrolled_rework",
+                    "unclear"
+                  ]
+                },
+                "loop_visibility": {
+                  "type": "string",
+                  "description": "Controlled classification of how visible or well-supported the loop is in the input. This is an evidence field, not a severity field.",
+                  "enum": [
+                    "explicit",
+                    "implicit_from_decision_outcome",
+                    "implicit_from_handoff_or_dependency",
+                    "weakly_suggested",
+                    "unclear"
+                  ]
+                },
+                "primary_process_object_impact": {
+                  "type": "object",
+                  "description": "Explanation of how the loop/rework affects the primary process object of the workflow.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "object_affected": {
+                      "type": "string",
+                      "description": "Name of the primary process object affected by this loop/rework, for example patient discharge case, invoice processing case, contract review package, or another object from the input."
+                    },
+                    "impact_summary": {
+                      "type": "string",
+                      "description": "Concise explanation of why the primary process object cannot continue normally, what state it remains in, or what must be resolved before progress can continue."
+                    }
+                  },
+                  "required": [
+                    "object_affected",
+                    "impact_summary"
+                  ]
+                },
+                "rework_cause": {
+                  "type": "object",
+                  "description": "Classification and explanation of the cause of the loop or rework.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "cause_category": {
+                      "type": "string",
+                      "description": "Controlled category describing why the loop or rework occurs. This should classify the main cause, not the direction of the loop.",
+                      "enum": [
+                        "incomplete_information",
+                        "missing_documentation",
+                        "incorrect_information",
+                        "failed_validation",
+                        "approval_rejection",
+                        "quality_issue",
+                        "unclear_responsibility",
+                        "handoff_misalignment",
+                        "external_non_response",
+                        "external_incomplete_response",
+                        "internal_dependency_not_ready",
+                        "resource_unavailable",
+                        "capacity_unavailable",
+                        "case_or_patient_not_ready",
+                        "compliance_issue",
+                        "technical_error",
+                        "manual_entry_error",
+                        "changed_requirement_or_condition",
+                        "unclear"
+                      ]
+                    },
+                    "cause_summary": {
+                      "type": "string",
+                      "description": "Concise explanation of the specific cause in this workflow context."
+                    }
+                  },
+                  "required": [
+                    "cause_category",
+                    "cause_summary"
+                  ]
+                },
+                "completion_or_exit_condition": {
+                  "type": "object",
+                  "description": "Explanation of how the loop or rework is resolved and how the primary process object can exit the loop.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "exit_condition_summary": {
+                      "type": "string",
+                      "description": "Concise explanation of the condition that must be satisfied for the loop to close or for the workflow to continue."
+                    },
+                    "exit_signal": {
+                      "type": "string",
+                      "description": "Observable signal, confirmation, decision, review result, readiness state, or event indicating that the loop has been resolved."
+                    }
+                  },
+                  "required": [
+                    "exit_condition_summary",
+                    "exit_signal"
+                  ]
+                },
+                "involved_parties": {
+                  "type": "array",
+                  "description": "Parties involved in the loop or rework. Use specific party labels when supported by the input; otherwise use cautious generic labels. Use an empty array if parties are not identifiable.",
+                  "items": {
+                    "type": "object",
+                    "description": "A party involved in the loop/rework and its structural role in the loop.",
+                    "additionalProperties": false,
+                    "properties": {
+                      "party_label": {
+                        "type": "string",
+                        "description": "Human-readable label for the party involved in the loop, for example clinical ward team, reviewing team, social worker, external provider, caregiver, receiving party, or responsible internal team."
+                      },
+                      "party_role_in_loop": {
+                        "type": "string",
+                        "description": "Controlled role of this party in the loop/rework. Use the value that best describes what this party does in the loop.",
+                        "enum": [
+                          "detects_issue_or_gap",
+                          "triggers_return",
+                          "requests_correction_or_integration",
+                          "corrects_or_completes_information",
+                          "reworks_output",
+                          "reviews_reworked_output",
+                          "approves_after_rework",
+                          "rejects_or_blocks_progression",
+                          "provides_missing_input",
+                          "waits_for_rework_completion",
+                          "receives_returned_case",
+                          "coordinates_loop_resolution",
+                          "owns_exit_condition",
+                          "external_counterparty_in_loop",
+                          "unclear"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "party_label",
+                      "party_role_in_loop"
+                    ]
+                  }
+                },
+                "related_handoff_zone_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of handoff zone candidates that are meaningfully related to this loop/rework. Use only hzc_### IDs. Do not include graph refs here.",
+                  "items": {
+                    "type": "string",
+                    "description": "Related handoff zone candidate ID, for example hzc_001."
+                  }
+                },
+                "related_internal_workflow_dependency_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of internal workflow dependency candidates that are meaningfully related to this loop/rework. Use only iwdc_### IDs. Do not include graph refs here.",
+                  "items": {
+                    "type": "string",
+                    "description": "Related internal workflow dependency candidate ID, for example iwdc_001."
+                  }
+                },
+                "related_external_workflow_dependency_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of external workflow dependency candidates that are meaningfully related to this loop/rework. Use only ewdc_### IDs. Do not include graph refs here.",
+                  "items": {
+                    "type": "string",
+                    "description": "Related external workflow dependency candidate ID, for example ewdc_001."
+                  }
+                },
+                "related_parallel_region_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of parallel region candidates that are meaningfully related to this loop/rework, for example when a failed convergence, missing parallel contribution, or required parallel readiness signal causes rework or retry. Use only prc_### IDs. Do not include graph refs here.",
+                  "items": {
+                    "type": "string",
+                    "description": "Related parallel region candidate ID, for example prc_001."
+                  }
+                },
+                "why_loop_or_rework": {
+                  "type": "string",
+                  "description": "Rationale explaining why this candidate qualifies as a loop or rework pattern based on the graph, decision outcomes, overlays, user context, or reasonable interpretation."
+                },
+                "confidence": {
+                  "type": "string",
+                  "description": "Overall confidence in this loop/rework candidate. Use high when strongly supported, medium when plausible but with some uncertainty, and low when weakly supported or highly inferential.",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              },
+              "required": [
+                "loop_or_rework_candidate_id",
+                "name",
+                "loop_summary",
+                "loop_entry_ref_ids",
+                "loop_trigger_ref_ids",
+                "return_to_ref_ids",
+                "reworked_ref_ids",
+                "exit_or_convergence_ref_ids",
+                "loop_or_rework_type",
+                "loop_direction",
+                "loop_expectedness",
+                "loop_visibility",
+                "primary_process_object_impact",
+                "rework_cause",
+                "completion_or_exit_condition",
+                "involved_parties",
+                "related_handoff_zone_candidate_ids",
+                "related_internal_workflow_dependency_candidate_ids",
+                "related_external_workflow_dependency_candidate_ids",
+                "related_parallel_region_candidate_ids",
+                "why_loop_or_rework",
+                "confidence"
+              ]
+            }
+          },
+          "clarification_questions": {
+            "type": "array",
+            "description": "Clarification questions that would materially improve the next pass. Use an empty array if no clarification is needed.",
+            "items": {
+              "type": "object",
+              "description": "A clarification question related to one or more loop/rework candidates, or a general question if candidate IDs are empty.",
+              "additionalProperties": false,
+              "properties": {
+                "question_id": {
+                  "type": "string",
+                  "description": "Stable clarification question ID. Use sequential IDs with the lrq_### prefix, for example lrq_001, lrq_002. Do not use prq_###."
+                },
+                "question": {
+                  "type": "string",
+                  "description": "The clarification question to ask the user. It should be specific, actionable, and focused on resolving uncertainty that matters for loop/rework analysis."
+                },
+                "why_needed": {
+                  "type": "string",
+                  "description": "Explanation of why this clarification is needed and how the answer would affect the loop/rework analysis."
+                },
+                "loop_or_rework_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of loop/rework candidates related to this question. Use only lrc_### IDs. Use an empty array if the question is general or not tied to a specific candidate.",
+                  "items": {
+                    "type": "string",
+                    "description": "Related loop/rework candidate ID, for example lrc_001."
+                  }
+                },
+                "blocks_next_pass": {
+                  "type": "boolean",
+                  "description": "True if the missing information prevents a reliable next pass. False if the question is useful but does not block continued analysis."
+                }
+              },
+              "required": [
+                "question_id",
+                "question",
+                "why_needed",
+                "loop_or_rework_candidate_ids",
+                "blocks_next_pass"
+              ]
+            }
+          }
+        },
+        "required": [
+          "response_status",
+          "loop_or_rework_candidates",
+          "clarification_questions"
+        ]
+      }
+    }
+  }
+}

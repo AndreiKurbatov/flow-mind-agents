@@ -1,0 +1,301 @@
+{
+  "loop_or_rework_type": [
+    {
+      "value": "expected_operational_loop",
+      "meaning": "Use when the workflow intentionally repeats an activity, check, monitoring step, or operational cycle as part of normal process behavior, not necessarily because of an error or failure."
+    },
+    {
+      "value": "missing_information_rework",
+      "meaning": "Use when the workflow returns, repeats, or reopens work because required information, data, answers, confirmations, or contextual details are missing."
+    },
+    {
+      "value": "missing_documentation_rework",
+      "meaning": "Use when the loop is caused specifically by missing documents, forms, attachments, reports, certificates, or other required documentary evidence."
+    },
+    {
+      "value": "incorrect_information_rework",
+      "meaning": "Use when the workflow must return or repeat because information was provided but is wrong, inconsistent, outdated, contradictory, or not usable."
+    },
+    {
+      "value": "failed_validation_rework",
+      "meaning": "Use when a validation, check, control, or verification step fails and the object must be corrected, completed, or reprocessed before it can continue."
+    },
+    {
+      "value": "approval_rejection_rework",
+      "meaning": "Use when an approval, authorization, sign-off, or acceptance step rejects the object and sends it back for correction, revision, or resubmission."
+    },
+    {
+      "value": "quality_or_review_rework",
+      "meaning": "Use when a review or quality check identifies issues, defects, incompleteness, or insufficient quality, causing the work to be revised or reviewed again."
+    },
+    {
+      "value": "handoff_bounce_rework",
+      "meaning": "Use when the object bounces between parties, teams, roles, or responsibility boundaries because the receiving party cannot proceed without clarification, correction, or additional input from the sender."
+    },
+    {
+      "value": "external_dependency_retry_loop",
+      "meaning": "Use when the workflow repeatedly waits for, requests, follows up on, resends, or corrects an input from an external or operationally external workflow, provider, authority, partner, patient, caregiver, or service."
+    },
+    {
+      "value": "internal_dependency_retry_loop",
+      "meaning": "Use when the workflow repeatedly waits for, requests, follows up on, or corrects an input from another internal workflow, internal team, department, system, or service."
+    },
+    {
+      "value": "resource_or_capacity_retry_loop",
+      "meaning": "Use when the workflow retries or repeats work because required resources, capacity, slots, staff, equipment, space, beds, appointments, or service availability are not yet available."
+    },
+    {
+      "value": "readiness_reassessment_loop",
+      "meaning": "Use when the object is repeatedly reassessed until it becomes ready to proceed, such as clinical readiness, operational readiness, administrative readiness, or case maturity."
+    },
+    {
+      "value": "compliance_or_remediation_loop",
+      "meaning": "Use when a compliance, policy, regulatory, audit, legal, safety, or risk issue requires remediation and then a repeated check before the workflow can continue."
+    },
+    {
+      "value": "technical_or_system_error_rework",
+      "meaning": "Use when the loop is caused by a technical failure, system error, integration issue, failed transmission, processing error, or unavailable digital service."
+    },
+    {
+      "value": "manual_correction_rework",
+      "meaning": "Use when the workflow must repeat or correct work because of manual entry mistakes, manual processing errors, duplicated work, misclassification, or human correction needs."
+    },
+    {
+      "value": "unclear_loop_or_rework",
+      "meaning": "Use when the input suggests a possible loop or rework pattern, but the specific type cannot be determined confidently from the graph, overlays, or provided context."
+    }
+  ]
+}
+
+{
+  "loop_direction": [
+    {
+      "value": "backward_to_previous_activity",
+      "meaning": "Use when the workflow returns from a later point to a previous activity or task that must be corrected, completed, repeated, or reprocessed."
+    },
+    {
+      "value": "backward_to_previous_stage",
+      "meaning": "Use when the workflow returns from a later stage or phase to an earlier broader stage, rather than to a single specific activity."
+    },
+    {
+      "value": "repeat_same_activity",
+      "meaning": "Use when the same activity is performed again on the same primary process object, without clearly moving backward to a different previous node."
+    },
+    {
+      "value": "repeat_subsequence",
+      "meaning": "Use when a sequence of two or more activities is repeated, corrected, or re-executed before the workflow can continue."
+    },
+    {
+      "value": "retry_same_request_or_action",
+      "meaning": "Use when the workflow repeats the same request, submission, communication, check, transmission, or operational action because the previous attempt did not produce a usable result."
+    },
+    {
+      "value": "bidirectional_bounce_between_parties",
+      "meaning": "Use when the primary process object, request, case, or responsibility moves back and forth between two or more parties, teams, roles, systems, or workflows before it can progress."
+    },
+    {
+      "value": "forward_remediation_without_backward_return",
+      "meaning": "Use when the workflow does not visibly return to an earlier node, but creates a correction, remediation, clarification, or follow-up activity later in the process to fix a previous issue."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input suggests a loop or rework pattern, but the direction or geometric shape of the loop cannot be determined confidently."
+    }
+  ]
+}
+
+{
+  "loop_expectedness": [
+    {
+      "value": "normal_expected_loop",
+      "meaning": "Use when the loop is a normal, expected, and controlled part of the workflow, not necessarily a sign of error, failure, or avoidable rework."
+    },
+    {
+      "value": "expected_exception_path",
+      "meaning": "Use when the loop is not the main happy path, but is a known and expected exception path that the workflow is designed to handle."
+    },
+    {
+      "value": "problematic_rework",
+      "meaning": "Use when the loop appears to create avoidable correction, repetition, delay, extra coordination, or operational waste, even if the workflow can still handle it."
+    },
+    {
+      "value": "uncontrolled_rework",
+      "meaning": "Use when the loop appears poorly governed, informal, repeated, unclear in ownership, or not well controlled by the workflow structure."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input suggests a loop or rework pattern, but it is not clear whether it is normal, expected, problematic, or uncontrolled."
+    }
+  ]
+}
+
+{
+  "loop_visibility": [
+    {
+      "value": "explicit",
+      "meaning": "Use when the loop, return path, repeated activity, or rework path is directly represented in the graph structure, for example by an explicit backward edge, retry path, repeated node, or negative outcome returning to an earlier activity."
+    },
+    {
+      "value": "implicit_from_decision_outcome",
+      "meaning": "Use when the graph does not show a fully explicit return path, but a decision gate or outcome strongly implies that the object must be corrected, completed, resubmitted, reassessed, or reprocessed before continuing."
+    },
+    {
+      "value": "implicit_from_handoff_or_dependency",
+      "meaning": "Use when the loop is not directly shown in the graph, but is suggested by a handoff, internal dependency, external dependency, retry, follow-up, bounce between parties, or dependency response that requires correction or additional input."
+    },
+    {
+      "value": "weakly_suggested",
+      "meaning": "Use when a loop or rework pattern is only weakly suggested by the graph, overlays, or general workflow context, but there is not enough direct evidence to treat it as clearly present. Use low confidence or ask a clarification question when appropriate."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input suggests a possible loop or rework pattern, but the agent cannot determine how visible or well-supported the loop is from the available graph, overlays, or context."
+    }
+  ]
+}
+
+{
+  "cause_category": [
+    {
+      "value": "incomplete_information",
+      "meaning": "Use when the loop or rework is caused by information that exists but is incomplete, insufficient, partial, or not detailed enough for the workflow to continue."
+    },
+    {
+      "value": "missing_documentation",
+      "meaning": "Use when the loop or rework is caused by required documents, forms, files, attachments, reports, certificates, or other documentary evidence being missing."
+    },
+    {
+      "value": "incorrect_information",
+      "meaning": "Use when the loop or rework is caused by information that is wrong, inconsistent, outdated, contradictory, inaccurate, or not usable."
+    },
+    {
+      "value": "failed_validation",
+      "meaning": "Use when a validation, verification, control, check, or rule evaluation fails and the object must be corrected, completed, or reprocessed."
+    },
+    {
+      "value": "approval_rejection",
+      "meaning": "Use when the loop or rework is caused by an approval, authorization, sign-off, acceptance, or decision step rejecting the object."
+    },
+    {
+      "value": "quality_issue",
+      "meaning": "Use when the loop or rework is caused by insufficient quality, defects, unclear content, weak output, poor preparation, or review findings that require correction."
+    },
+    {
+      "value": "unclear_responsibility",
+      "meaning": "Use when the loop or rework is caused by ambiguity about who owns the next action, who must correct the issue, or who is responsible for moving the object forward."
+    },
+    {
+      "value": "handoff_misalignment",
+      "meaning": "Use when the loop or rework is caused by a failed, incomplete, misunderstood, or poorly aligned handoff between parties, teams, roles, systems, or workflows."
+    },
+    {
+      "value": "external_non_response",
+      "meaning": "Use when the loop or retry is caused by an external or operationally external party not responding, not confirming, or not providing the expected input."
+    },
+    {
+      "value": "external_incomplete_response",
+      "meaning": "Use when the loop or rework is caused by an external or operationally external party providing a response that is incomplete, insufficient, unclear, or unusable."
+    },
+    {
+      "value": "internal_dependency_not_ready",
+      "meaning": "Use when the loop or rework is caused by another internal workflow, team, department, system, or service not being ready or not providing a needed input on time."
+    },
+    {
+      "value": "resource_unavailable",
+      "meaning": "Use when the loop or retry is caused by a required resource, person, equipment, system, tool, material, or service not being available."
+    },
+    {
+      "value": "capacity_unavailable",
+      "meaning": "Use when the loop or retry is caused by lack of available capacity, slots, beds, appointments, staff bandwidth, service availability, or operational space."
+    },
+    {
+      "value": "case_or_patient_not_ready",
+      "meaning": "Use when the loop is caused by the primary process object not being ready to proceed, such as a patient not being clinically ready, a case not being mature, or a condition not yet being satisfied."
+    },
+    {
+      "value": "compliance_issue",
+      "meaning": "Use when the loop or rework is caused by a compliance, policy, legal, regulatory, audit, safety, risk, or governance issue that must be remediated."
+    },
+    {
+      "value": "technical_error",
+      "meaning": "Use when the loop or rework is caused by a technical failure, system error, integration issue, processing failure, failed transmission, unavailable service, or software problem."
+    },
+    {
+      "value": "manual_entry_error",
+      "meaning": "Use when the loop or rework is caused by a human data-entry mistake, manual processing error, misclassification, duplication, typo, or other manual correction need."
+    },
+    {
+      "value": "changed_requirement_or_condition",
+      "meaning": "Use when the loop or rework is caused by a requirement, condition, decision context, case status, stakeholder need, or external constraint changing after work had already progressed."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the input suggests that a loop or rework exists, but the cause cannot be determined confidently from the graph, overlays, or provided context."
+    }
+  ]
+}
+
+{
+  "party_role_in_loop": [
+    {
+      "value": "detects_issue_or_gap",
+      "meaning": "Use when this party identifies that something is missing, incorrect, incomplete, invalid, unclear, or not ready, causing the loop or rework to become visible."
+    },
+    {
+      "value": "triggers_return",
+      "meaning": "Use when this party performs the action, decision, review, rejection, or signal that causes the primary process object to return to an earlier activity, stage, party, or correction path."
+    },
+    {
+      "value": "requests_correction_or_integration",
+      "meaning": "Use when this party asks another party to correct, complete, integrate, clarify, resubmit, or provide additional information before the workflow can continue."
+    },
+    {
+      "value": "corrects_or_completes_information",
+      "meaning": "Use when this party fixes, completes, updates, enriches, or integrates missing or insufficient information needed to resolve the loop."
+    },
+    {
+      "value": "reworks_output",
+      "meaning": "Use when this party revises, rebuilds, reprocesses, or redoes an output, document, request, case element, decision package, or other work product."
+    },
+    {
+      "value": "reviews_reworked_output",
+      "meaning": "Use when this party reviews, checks, validates, or reassesses the corrected or reworked output before the workflow can continue."
+    },
+    {
+      "value": "approves_after_rework",
+      "meaning": "Use when this party approves, accepts, authorizes, or signs off after the required correction, integration, remediation, or rework has been completed."
+    },
+    {
+      "value": "rejects_or_blocks_progression",
+      "meaning": "Use when this party rejects the current state of the object or blocks progression because requirements, readiness, quality, compliance, or acceptance criteria are not satisfied."
+    },
+    {
+      "value": "provides_missing_input",
+      "meaning": "Use when this party supplies the missing information, document, confirmation, data, decision, resource, or response needed to resolve the loop."
+    },
+    {
+      "value": "waits_for_rework_completion",
+      "meaning": "Use when this party cannot proceed and must wait until another party completes correction, integration, resubmission, remediation, or rework."
+    },
+    {
+      "value": "receives_returned_case",
+      "meaning": "Use when this party receives the primary process object back after it has been returned from a later step, review, decision, handoff, dependency, or exception path."
+    },
+    {
+      "value": "coordinates_loop_resolution",
+      "meaning": "Use when this party coordinates the actions, actors, information, timing, or dependencies needed to close the loop and allow the workflow to continue."
+    },
+    {
+      "value": "owns_exit_condition",
+      "meaning": "Use when this party determines, confirms, or controls whether the loop is resolved and whether the primary process object can exit the loop."
+    },
+    {
+      "value": "external_counterparty_in_loop",
+      "meaning": "Use when this party is external or operationally external to the current workflow and participates in the loop by providing, correcting, delaying, rejecting, or confirming an input."
+    },
+    {
+      "value": "unclear",
+      "meaning": "Use when the party is involved in the loop, but its specific role cannot be determined confidently from the graph, overlays, or provided context."
+    }
+  ]
+}

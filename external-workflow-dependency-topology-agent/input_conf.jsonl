@@ -1,0 +1,202 @@
+{
+  "description": "Available values for workflow_boundary_context field that you will find in input json",
+  "boundary_interpretation_policy": {
+    "workflow_name": {
+      "rigidity": "HARD_ANCHOR",
+      "instruction": "Use as the name of the parent workflow. Do not rename unless there is a major contradiction."
+    },
+    "operational_purpose": {
+      "rigidity": "STRONG_ANCHOR",
+      "instruction": "Use as the main reason this workflow exists. You may refine wording but not change the purpose silently."
+    },
+    "primary_process_object": {
+      "rigidity": "HARD_ANCHOR",
+      "instruction": "Use this as the main object moving through the workflow. If another object appears more central, report it as a proposed adjustment."
+    },
+    "start_boundary": {
+      "rigidity": "SOFT_FRAME",
+      "instruction": "Use as the initial start hypothesis. If topology suggests the workflow starts earlier or later, report a proposed boundary adjustment."
+    },
+    "end_boundary": {
+      "rigidity": "SOFT_FRAME",
+      "instruction": "Use as the initial end hypothesis. If downstream activities appear structurally inside the parent workflow, report uncertainty or proposed adjustment."
+    },
+    "included_scope": {
+      "rigidity": "SOFT_FRAME",
+      "instruction": "Treat as likely inside scope, but allow newly discovered internal areas if supported by the source context."
+    },
+    "excluded_scope": {
+      "rigidity": "RELATIONSHIP_HINT",
+      "instruction": "Treat as likely outside the parent workflow, but check whether any excluded area appears structurally necessary for the main flow."
+    },
+    "upstream_workflows": {
+      "rigidity": "RELATIONSHIP_HINT",
+      "instruction": "Use as possible upstream dependencies. Do not convert them into internal macro-blocks unless evidence supports it."
+    },
+    "downstream_workflows": {
+      "rigidity": "RELATIONSHIP_HINT",
+      "instruction": "Use as possible downstream workflows. Be careful not to include them silently inside the parent workflow."
+    },
+    "adjacent_workflows": {
+      "rigidity": "RELATIONSHIP_HINT",
+      "instruction": "Use as neighboring workflows. Mention if they interact with the parent workflow, but do not merge them into the parent flow."
+    }
+  }
+}
+
+{
+  "description": "Available values for counterparty_kind field that you will find in output json",
+  "counterparty_kind": [
+    {
+      "tag": "external_organization_workflow",
+      "meaning": "A workflow owned or operated by a separate external organization."
+    },
+    {
+      "tag": "external_service_provider_workflow",
+      "meaning": "A workflow run by an external provider that delivers a service, capacity, resource, or operational execution."
+    },
+    {
+      "tag": "public_authority_or_regulator_workflow",
+      "meaning": "A workflow run by a public authority, regulator, municipality, commission, or administrative body."
+    },
+    {
+      "tag": "same_network_operationally_external_workflow",
+      "meaning": "A workflow in the same broader network, ecosystem, parent group, or regional system, but outside the current organization's direct operational control."
+    },
+    {
+      "tag": "external_professional_workflow",
+      "meaning": "A workflow or process managed by an external professional actor rather than by a full organization."
+    },
+    {
+      "tag": "external_individual_or_group_process",
+      "meaning": "A process, action, decision, or confirmation expected from an external individual or informal group."
+    },
+    {
+      "tag": "unclear",
+      "meaning": "The counterparty type cannot be classified reliably from the available input."
+    }
+  ]
+}
+
+{
+  "description": "Available values for workflow_relation_to_current field that you will find in output json",
+  "workflow_relation_to_current" : [
+    "upstream_workflow",
+    "downstream_workflow",
+    "adjacent_workflow",
+    "out_of_scope",
+    "uncertain"
+  ]
+}
+
+{
+  "description": "Available values for current_organization_control_level field that you will find in output json",
+  "current_organization_control_level": [
+    {
+      "tag": "no_direct_control",
+      "meaning": "The current organization has no direct operational control over the counterparty workflow."
+    },
+    {
+      "tag": "limited_influence",
+      "meaning": "The current organization cannot control the counterparty workflow, but can influence it through requests, communication, escalation, or provided information."
+    },
+    {
+      "tag": "same_network_no_direct_control",
+      "meaning": "The counterparty belongs to the same broader network, ecosystem, parent group, or regional system, but remains outside direct operational control."
+    },
+    {
+      "tag": "unclear",
+      "meaning": "The available input does not make the control relationship clear."
+    }
+  ]
+}
+
+{
+  "description": "Available values for dependency_expectation_tags field that you will find in output json",
+  "dependency_expectation_tags": [
+    {
+      "tag": "required_input",
+      "meaning": "The current workflow needs an input from the neighboring internal workflow."
+    },
+    {
+      "tag": "required_output",
+      "meaning": "The current workflow needs a concrete output produced by the neighboring internal workflow."
+    },
+    {
+      "tag": "required_information",
+      "meaning": "The current workflow needs information from the neighboring internal workflow."
+    },
+    {
+      "tag": "required_document",
+      "meaning": "The current workflow needs a document produced, completed, or validated by the neighboring internal workflow."
+    },
+    {
+      "tag": "required_data_update",
+      "meaning": "The current workflow needs another internal workflow to update data in a shared system or record."
+    },
+    {
+      "tag": "required_decision",
+      "meaning": "The current workflow needs a decision from the neighboring internal workflow."
+    },
+    {
+      "tag": "required_approval_or_authorization",
+      "meaning": "The current workflow needs formal approval or authorization from another internal workflow."
+    },
+    {
+      "tag": "required_confirmation",
+      "meaning": "The current workflow needs an explicit confirmation from the neighboring internal workflow."
+    },
+    {
+      "tag": "required_validation",
+      "meaning": "The current workflow needs another internal workflow to validate information, documents, status, or readiness."
+    },
+    {
+      "tag": "required_status_change",
+      "meaning": "The current workflow needs a status change produced by another internal workflow."
+    },
+    {
+      "tag": "required_resource_availability",
+      "meaning": "The current workflow depends on a resource becoming available through another internal workflow."
+    },
+    {
+      "tag": "required_capacity_or_slot",
+      "meaning": "The current workflow depends on capacity, a time slot, staff availability, or scheduling availability managed by another internal workflow."
+    },
+    {
+      "tag": "required_service_completion",
+      "meaning": "The current workflow needs another internal service workflow to complete its service before the current workflow can proceed."
+    },
+    {
+      "tag": "required_task_completion",
+      "meaning": "The current workflow depends on a specific task being completed by another internal workflow."
+    },
+    {
+      "tag": "required_case_acceptance",
+      "meaning": "The current workflow needs another internal workflow to accept the case or process object."
+    },
+    {
+      "tag": "required_case_transfer",
+      "meaning": "The current workflow depends on the case or process object being transferred to or from another internal workflow."
+    },
+    {
+      "tag": "required_coordination",
+      "meaning": "The current workflow needs active coordination with another internal workflow."
+    },
+    {
+      "tag": "required_synchronization",
+      "meaning": "The current workflow needs timing or state synchronization with another internal workflow."
+    },
+    {
+      "tag": "required_exception_resolution",
+      "meaning": "The current workflow depends on another internal workflow resolving an issue, blocker, exception, or abnormal condition."
+    },
+    {
+      "tag": "required_closure_signal",
+      "meaning": "The current workflow needs a closure, completion, or readiness signal from another internal workflow."
+    },
+    {
+      "tag": "unclear",
+      "meaning": "There is a dependency expectation, but it is not clear what exactly the current workflow needs from the neighboring workflow."
+    }
+  ]
+}

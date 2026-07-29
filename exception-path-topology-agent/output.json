@@ -1,0 +1,73 @@
+{
+  "response_status": "changes_requested | confirmed | cancelled",
+  "exception_path_candidates": [
+    {
+      "exception_path_candidate_id": "epc_001",
+      "name": "Missing documentation exception path",
+      "exception_summary": "The discharge case deviates from the normal flow when required documentation is incomplete.",
+      "exception_entry_ref_ids": [
+        "dg_001"
+      ],
+      "exception_trigger_ref_ids": [
+        "dg_001_out_002"
+      ],
+      "exception_path_ref_ids": [
+        "mfp_003"
+      ],
+      "normal_path_bypassed_ref_ids": [
+        "mfp_004"
+      ],
+      "resolution_or_convergence_ref_ids": [
+        "mfp_004"
+      ],
+      "termination_ref_ids": [],
+      "exception_path_type": "missing_requirement_exception_path",
+      "exception_path_status": "represented_in_graph",
+      "exception_expectedness": "expected_exception_path",
+      "exception_severity": "medium",
+      "hypothesized_exception_steps": [
+        {
+          "step_id": "eps_001",
+          "step_name": "Check internal transport availability",
+          "step_summary": "The team verifies whether an internal hospital transport option is available."
+        }
+      ],
+      "primary_process_object_impact": {
+        "object_affected": "patient discharge case",
+        "impact_summary": "The case cannot proceed to final discharge until the missing documentation is completed."
+      },
+      "exception_cause": {
+        "cause_category": "missing_documentation",
+        "cause_summary": "Required documentation is missing or incomplete."
+      },
+      "resolution_condition": {
+        "resolution_summary": "Documentation is completed and accepted.",
+        "resolution_signal": "The documentation completeness check passes."
+      },
+      "support_basis": {
+        "support_type": "explicit_decision_outcome",
+        "support_summary": "The graph contains a negative outcome from the documentation completeness gate."
+      },
+      "related_loop_or_rework_candidate_ids": [
+        "lrc_001"
+      ],
+      "related_handoff_zone_candidate_ids": [],
+      "related_internal_workflow_dependency_candidate_ids": [],
+      "related_external_workflow_dependency_candidate_ids": [],
+      "related_parallel_region_candidate_ids": [],
+      "why_exception_path": "This path is followed only when the normal condition for proceeding is not satisfied.",
+      "confidence": "high"
+    }
+  ],
+  "clarification_questions": [
+    {
+      "question_id": "prq_001",
+      "question": "string",
+      "why_needed": "string",
+      "exception_path_candidate_ids": [
+        "prc_001"
+      ],
+      "blocks_next_pass": false
+    }
+  ]
+}

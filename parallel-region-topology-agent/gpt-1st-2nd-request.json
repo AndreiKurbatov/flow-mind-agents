@@ -1,0 +1,326 @@
+{
+  "model": "gpt-5.5",
+  "reasoning": {
+    "effort": "high"
+  },
+  "max_output_tokens": 25000,
+  "input": [
+    {
+
+      "role": "developer",
+      "content": "{{PARALLEL_REGION_TOPOLOGY_AGENT_DEVELOPER_PROMPT}}"
+    },
+    {
+      "role": "user",
+      "content": "{{PARALLEL_REGION_TOPOLOGY_AGENT_INPUT_JSON}}"
+    }
+  ],
+  "text": {
+    "format": {
+      "type": "json_schema",
+      "name": "parallel_region_topology_result",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "description": "Structured result produced by the parallel-region-topology-agent. It identifies candidate regions where workflow graph nodes and/or related internal/external workflows may advance in parallel.",
+        "additionalProperties": false,
+        "properties": {
+          "response_status": {
+            "type": "string",
+            "description": "Overall status of the agent response. Use 'confirmed' when the output is a usable draft or revised result; use 'changes_requested' when important uncertainty, contradiction, or missing information prevents a reliable result; use 'cancelled' only when the input or user instruction indicates that the analysis should not proceed.",
+            "enum": [
+              "changes_requested",
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "graph_abstraction_assessment": {
+            "type": "object",
+            "description": "Assessment of the effective abstraction level of the input workflow graph. This guides how aggressively the agent may detect parallel regions. The agent must identify parallelism only at the level of detail actually exposed by the graph.",
+            "additionalProperties": false,
+            "properties": {
+              "abstraction_level": {
+                "type": "string",
+                "description": "The effective abstraction level of the current graph. Use this to avoid detecting lower-level parallelism inside macro nodes that are not decomposed in the input graph.",
+                "enum": [
+                  "very_high_level_macro",
+                  "high_level_macro",
+                  "medium_level_operational",
+                  "mixed_abstraction",
+                  "unclear"
+                ]
+              }
+            },
+            "required": [
+              "abstraction_level"
+            ]
+          },
+          "parallel_region_candidates": {
+            "type": "array",
+            "description": "List of candidate parallel regions detected in the workflow. Each candidate represents a region where two or more total participants may advance in parallel. Participants may include graph nodes and/or related internal or external workflow dependencies.",
+            "items": {
+              "type": "object",
+              "description": "A candidate region where parallel execution, preparation, review, coordination, or readiness work may occur.",
+              "additionalProperties": false,
+              "properties": {
+                "parallel_region_candidate_id": {
+                  "type": "string",
+                  "description": "Stable unique ID of the parallel region candidate within this output. Use sequential IDs such as 'prc_001', 'prc_002', 'prc_003'. In revision iterations, preserve the ID if the candidate keeps the same core meaning."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Short human-readable name of the parallel region candidate. The name should summarize the parallel work area without adding unsupported details."
+                },
+                "parallel_summary": {
+                  "type": "string",
+                  "description": "Concise summary of what appears to run in parallel, what the participants contribute, and how this parallel region relates to the current workflow."
+                },
+                "entry_ref_ids": {
+                  "type": "array",
+                  "description": "Graph references where the parallel region appears to begin. These may be wfpoint_id, decision_gate_id, or outcome_id values from the current graph. Leave empty if the entry point is unclear.",
+                  "items": {
+                    "type": "string",
+                    "description": "Existing graph reference that appears to act as an entry point into the parallel region. Must refer to an existing wfpoint_id, decision_gate_id, or outcome_id."
+                  }
+                },
+                "parallel_nodes": {
+                  "type": "array",
+                  "description": "Existing graph nodes or graph outcomes that participate directly in the parallel region. These must be references from the current workflow graph only. Do not put handoff IDs, internal dependency IDs, or external dependency IDs here.",
+                  "items": {
+                    "type": "object",
+                    "description": "A current-workflow graph participant in the parallel region.",
+                    "additionalProperties": false,
+                    "properties": {
+                      "graph_ref_id": {
+                        "type": "string",
+                        "description": "Reference ID of an existing graph element participating in the parallel region. Must be a wfpoint_id, decision_gate_id, or outcome_id from the current graph."
+                      },
+                      "parallel_role": {
+                        "type": "string",
+                        "description": "Short description of the role this graph element plays in the parallel region, such as clinical readiness workstream, administrative preparation, resource confirmation, review branch, coordination branch, or similar."
+                      },
+                      "parallel_contribution": {
+                        "type": "string",
+                        "description": "Explanation of what this graph element contributes to the shared workflow outcome, readiness state, review, coordination, or convergence."
+                      },
+                      "completion_or_readiness_signal": {
+                        "type": "string",
+                        "description": "Signal indicating that this participant has completed its contribution or is ready for convergence. If the input does not specify a concrete signal, provide a conservative description based on the node's purpose."
+                      },
+                      "required_for_convergence": {
+                        "type": "string",
+                        "description": "Whether this specific graph participant appears necessary for the parallel region to converge or for the workflow to continue.",
+                        "enum": [
+                          "required",
+                          "optional",
+                          "conditional",
+                          "unclear"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "graph_ref_id",
+                      "parallel_role",
+                      "parallel_contribution",
+                      "completion_or_readiness_signal",
+                      "required_for_convergence"
+                    ]
+                  }
+                },
+                "convergence_ref_ids": {
+                  "type": "array",
+                  "description": "Graph references where the parallel participants appear to converge, synchronize, be checked together, or become jointly relevant. These may be wfpoint_id, decision_gate_id, or outcome_id values from the current graph. Leave empty if the convergence point is unclear.",
+                  "items": {
+                    "type": "string",
+                    "description": "Existing graph reference that appears to act as a convergence, synchronization, join, or joint-readiness point. Must refer to an existing wfpoint_id, decision_gate_id, or outcome_id."
+                  }
+                },
+                "related_parallel_workflows": {
+                  "type": "array",
+                  "description": "Internal or external workflow dependency candidates that may advance in parallel with one or more graph nodes. These are related workflow participants, not graph nodes.",
+                  "items": {
+                    "type": "object",
+                    "description": "A related internal or external workflow dependency that may run in parallel with part of the current workflow.",
+                    "additionalProperties": false,
+                    "properties": {
+                      "workflow_dependency_candidate_id": {
+                        "type": "string",
+                        "description": "ID of the internal or external workflow dependency candidate that represents the related parallel workflow. Usually starts with 'iwdc_' for internal dependencies or 'ewdc_' for external dependencies."
+                      },
+                      "workflow_dependency_kind": {
+                        "type": "string",
+                        "description": "Whether the related workflow dependency is internal or external relative to the current organization or operational scope.",
+                        "enum": [
+                          "external",
+                          "internal"
+                        ]
+                      },
+                      "counterparty_workflow_name": {
+                        "type": "string",
+                        "description": "Human-readable name of the counterparty workflow that may progress in parallel."
+                      },
+                      "runs_parallel_with_graph_ref_ids": {
+                        "type": "array",
+                        "description": "Current graph references that this related workflow appears to run in parallel with. These must refer to existing graph elements, not dependency IDs.",
+                        "items": {
+                          "type": "string",
+                          "description": "Existing graph reference from the current workflow that the related workflow may run in parallel with."
+                        }
+                      },
+                      "parallel_relationship_summary": {
+                        "type": "string",
+                        "description": "Explanation of how the related internal or external workflow runs in parallel with the current workflow graph elements, and what contribution or dependency it represents."
+                      },
+                      "required_for_convergence": {
+                        "type": "string",
+                        "description": "Whether this related workflow appears necessary for convergence or continuation of the current workflow.",
+                        "enum": [
+                          "required",
+                          "optional",
+                          "conditional",
+                          "unclear"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "workflow_dependency_candidate_id",
+                      "workflow_dependency_kind",
+                      "counterparty_workflow_name",
+                      "runs_parallel_with_graph_ref_ids",
+                      "parallel_relationship_summary",
+                      "required_for_convergence"
+                    ]
+                  }
+                },
+                "related_handoff_zone_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of handoff zone candidates that support or help explain this parallel region. Handoffs are supporting evidence only and must not be treated as graph-node participants.",
+                  "items": {
+                    "type": "string",
+                    "description": "ID of a related handoff zone candidate, such as 'hzc_001'."
+                  }
+                },
+                "parallelism_nature": {
+                  "type": "object",
+                  "description": "Classification and explanation of the operational nature of the parallelism and its convergence logic.",
+                  "additionalProperties": false,
+                  "properties": {
+                    "execution_pattern": {
+                      "type": "string",
+                      "description": "Operational shape of the parallelism. This describes how the participants run in parallel, not whether each participant is mandatory.",
+                      "enum": [
+                        "parallel_preparation_before_join",
+                        "parallel_independent_workstreams",
+                        "parallel_review_or_validation",
+                        "parallel_internal_coordination",
+                        "parallel_external_coordination",
+                        "parallel_resource_or_capacity_preparation",
+                        "partially_parallel_with_dependencies",
+                        "unclear"
+                      ]
+                    },
+                    "join_requirement": {
+                      "type": "string",
+                      "description": "Logic required for the workflow to continue, converge, or close after the parallel region.",
+                      "enum": [
+                        "all_parallel_nodes_required",
+                        "some_parallel_nodes_required",
+                        "one_of_parallel_nodes_sufficient",
+                        "condition_based_join",
+                        "advisory_alignment_only",
+                        "unclear"
+                      ]
+                    },
+                    "convergence_logic_summary": {
+                      "type": "string",
+                      "description": "Free-text explanation of how the parallel participants appear to converge, synchronize, satisfy a condition, align, or jointly contribute to workflow continuation."
+                    }
+                  },
+                  "required": [
+                    "execution_pattern",
+                    "join_requirement",
+                    "convergence_logic_summary"
+                  ]
+                },
+                "why_parallel": {
+                  "type": "string",
+                  "description": "Explanation of why this candidate is considered parallel rather than sequential, adjacent, merely related, or only a handoff/dependency. This should refer to graph structure, overlay evidence, workflow logic, user feedback, or plausible peer-level concurrency."
+                },
+                "confidence": {
+                  "type": "string",
+                  "description": "Confidence level for this parallel region candidate. Use high when the graph and context clearly support parallelism; medium when plausible but partially inferred; low when weakly supported or uncertain.",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              },
+              "required": [
+                "parallel_region_candidate_id",
+                "name",
+                "parallel_summary",
+                "entry_ref_ids",
+                "parallel_nodes",
+                "convergence_ref_ids",
+                "related_parallel_workflows",
+                "related_handoff_zone_candidate_ids",
+                "parallelism_nature",
+                "why_parallel",
+                "confidence"
+              ]
+            }
+          },
+          "clarification_questions": {
+            "type": "array",
+            "description": "Clarification questions for the user when missing information materially affects the parallel-region analysis. Do not ask unnecessary questions if the result can be produced with appropriate confidence.",
+            "items": {
+              "type": "object",
+              "description": "A question to resolve uncertainty about candidate parallel regions, graph abstraction, participant relationships, convergence logic, or related workflows.",
+              "additionalProperties": false,
+              "properties": {
+                "question_id": {
+                  "type": "string",
+                  "description": "Stable unique ID of the clarification question. Use sequential IDs such as 'prq_001', 'prq_002', 'prq_003'."
+                },
+                "question": {
+                  "type": "string",
+                  "description": "Clear user-facing clarification question."
+                },
+                "why_needed": {
+                  "type": "string",
+                  "description": "Explanation of why this question matters for the parallel-region analysis."
+                },
+                "parallel_region_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of the parallel region candidates affected by this question. Leave empty if the question concerns the graph as a whole rather than a specific candidate.",
+                  "items": {
+                    "type": "string",
+                    "description": "ID of an affected parallel region candidate, such as 'prc_001'."
+                  }
+                },
+                "blocks_next_pass": {
+                  "type": "boolean",
+                  "description": "Whether the missing answer blocks the next analysis pass. Use true only when the analysis cannot be meaningfully refined without this answer."
+                }
+              },
+              "required": [
+                "question_id",
+                "question",
+                "why_needed",
+                "parallel_region_candidate_ids",
+                "blocks_next_pass"
+              ]
+            }
+          }
+        },
+        "required": [
+          "response_status",
+          "graph_abstraction_assessment",
+          "parallel_region_candidates",
+          "clarification_questions"
+        ]
+      }
+    }
+  }
+}

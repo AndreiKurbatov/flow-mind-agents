@@ -1,0 +1,82 @@
+{
+  "response_status": "changes_requested | confirmed | cancelled",
+  "loop_or_rework_candidates": [
+    {
+      "loop_or_rework_candidate_id": "lrc_001",
+      "name": "Missing documentation rework loop",
+      "loop_summary": "The workflow may return from documentation review to documentation preparation when required information is missing.",
+
+      "loop_entry_ref_ids": [
+        "mfp_003"
+      ],
+      "loop_trigger_ref_ids": [
+        "dg_001",
+        "dg_001_out_002"
+      ],
+      "return_to_ref_ids": [
+        "mfp_002"
+      ],
+      "reworked_ref_ids": [
+        "mfp_002",
+        "mfp_003"
+      ],
+      "exit_or_convergence_ref_ids": [
+        "mfp_004"
+      ],
+
+      "loop_or_rework_type": "missing_information_rework",
+      "loop_direction": "backward_to_previous_activity",
+      "loop_expectedness": "expected_exception_path",
+      "loop_visibility": "explicit",
+
+      "primary_process_object_impact": {
+        "object_affected": "patient discharge case",
+        "impact_summary": "The discharge case cannot proceed until the missing documentation is completed and reviewed again."
+      },
+
+      "rework_cause": {
+        "cause_category": "incomplete_information",
+        "cause_summary": "The review identifies that required information or documentation is missing."
+      },
+
+      "completion_or_exit_condition": {
+        "exit_condition_summary": "The documentation is complete enough to pass review.",
+        "exit_signal": "Review confirms completeness."
+      },
+
+      "involved_parties": [
+        {
+          "party_label": "clinical ward team",
+          "party_role_in_loop": "corrects_or_completes_information"
+        },
+        {
+          "party_label": "reviewing team",
+          "party_role_in_loop": "detects_issue_or_gap"
+        }
+      ],
+
+      "related_handoff_zone_candidate_ids": [
+        "hzc_001"
+      ],
+      "related_internal_workflow_dependency_candidate_ids": [],
+      "related_external_workflow_dependency_candidate_ids": [],
+      "related_parallel_region_candidate_ids": [
+        "prc_001"
+      ],
+
+      "why_loop_or_rework": "The graph suggests that after a negative review outcome, the workflow returns to a previous preparation activity before review can happen again.",
+      "confidence": "medium"
+    }
+  ],
+  "clarification_questions": [
+    {
+      "question_id": "lrq_001",
+      "question": "string",
+      "why_needed": "string",
+      "loop_or_rework_candidate_ids": [
+        "lrc_001"
+      ],
+      "blocks_next_pass": false
+    }
+  ]
+}

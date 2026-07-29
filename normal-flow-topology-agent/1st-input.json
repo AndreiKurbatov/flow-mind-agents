@@ -1,0 +1,116 @@
+{
+  "workflow_boundary_definition_result": {
+    "response_status": "changes_requested | confirmed | cancelled",
+
+    "user_asserted_context": {
+      "workflow": {
+        "workflow_name": "string",
+        "domain_or_industry": "healthcare | legal | finance | insurance | public_administration | logistics | education | other | unclear", // These values are examples, the user can also enter their own value
+        "country_or_jurisdiction": "string"
+      },
+      "organization": {
+        "organization_name": "string",
+        "organization_type": "hospital | clinic | public_authority | private_company | non_profit | service_provider | department | multi_organization_network | other | unclear", // These values are examples, the user can also enter their own value.
+        "organization_scope_to_consider": "single_local_unit | single_organization | organization_network | cross_organization_process | unclear", // These values will be enum constants
+        "local_environment": {
+          "site_or_unit_name": "string",
+          "unit_type": "ward | department | office | branch | team | service_unit | operational_area | other | unclear" // These values are examples, the user can also enter their own value
+        }
+      }
+    },
+
+    "user_boundary_constraints": {
+      "things_to_force_inside_scope": [
+        "string"
+      ],
+      "things_to_force_outside_scope": [
+        "string"
+      ],
+      "things_the_agent_must_not_assume": [
+        "string"
+      ]
+    },
+
+    "resolved_organization_context": {
+      "current_organization": "string",
+      "current_operational_unit": "string",
+      "organization_scope_used": "single_local_unit | single_organization | organization_network | cross_organization_process | unclear", // These values will be enum constants
+      "organization_boundary_description": "string",
+      "internality_rule": "string",
+      "externality_rule": "string"
+    },
+
+    "workflow_boundary": {
+      "workflow_name": "string",
+      "parent_workflow_definition": "string",
+      "operational_purpose": "string",
+
+      "primary_process_object": {
+        "name": "string",
+        "why_primary": "string",
+        "alternative_candidates": [
+          {
+            "name": "string",
+            "why_not_primary": "string"
+          }
+        ]
+      },
+
+      "start_boundary": {
+        "start_event_or_condition": "string",
+        "first_internal_activity": "string",
+        "what_is_before_start": [
+          "string"
+        ]
+      },
+
+      "end_boundary": {
+        "end_event_or_condition": "string",
+        "final_internal_output_or_state": "string",
+        "what_happens_after_end": [
+          "string"
+        ]
+      },
+
+      "included_scope": [
+        {
+          "activity_or_area": "string",
+          "reason_included": "string"
+        }
+      ],
+
+      "excluded_scope": [
+        {
+          "activity_or_area": "string",
+          "reason_excluded": "string",
+          "belongs_to": "upstream_workflow | downstream_workflow | adjacent_workflow | uncertain", // These values will be enum constants
+          "wf_name": "string"
+        }
+      ],
+
+      "upstream_workflows": [
+        {
+          "name": "string",
+          "relationship_to_parent": "string",
+          "output_passed_to_parent": "string"
+        }
+      ],
+
+      "downstream_workflows": [
+        {
+          "name": "string",
+          "relationship_to_parent": "string",
+          "input_received_from_parent": "string"
+        }
+      ],
+
+      "adjacent_workflows": [
+        {
+          "name": "string",
+          "relationship_to_parent": "string",
+          "reason_not_inside_parent": "string"
+        }
+      ]
+    }
+  }
+}

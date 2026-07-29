@@ -1,0 +1,388 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "string",
+    "topology_status": "changes_requested | confirmed | cancelled",
+    "summary": "string",
+    "primary_process_object": {
+      "name": "string",
+      "why_primary": "string",
+      "alternative_candidates": [
+        {
+          "name": "string",
+          "why_not_primary": "string"
+        },
+        {
+          "name": "care transfer request",
+          "why_not_primary": "May trigger or support the workflow, but does not represent the whole workflow."
+        }
+      ]
+    },
+    "nodes": [
+      {
+        "wfpoint_id": "string",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "string",
+        "description": "string",
+        "previous_node_ids": ["string"],
+        "next_node_ids": ["string"],
+        "confidence": "low | medium | high"
+      },
+      {
+        "decision_gate_id": "dg_001",
+        "node_type": "DECISION_GATE",
+        "name": "Discharge finalization decision",
+        "decision_question": "Can the patient proceed to final discharge now?",
+        "decision_responsibility": "Determine whether the patient is sufficiently ready, safe, authorized, documented, and logistically supported to proceed to final discharge.",
+        "previous_node_ids": ["mfp_004"],
+        "anchored_to_node_ids": [
+          "mfp_004"
+        ],
+        "decision_basis": [
+          "clinical readiness",
+          "patient safety",
+          "required discharge documents",
+          "doctor authorization",
+          "post-discharge destination availability",
+          "transport or family support availability",
+          "timing constraints"
+        ],
+        "decision_nature_tags": [
+          "readiness",
+          "risk_or_safety_or_compliance",
+          "completeness_or_validation",
+          "approval_or_authorization",
+          "resource_or_capacity",
+          "timing_or_scheduling"
+        ],
+        "outcomes": [
+          {
+            "outcome_id": "dg_001_out_001",
+            "outcome_label": "can_finalize_discharge",
+            "description": "The patient is clinically ready, safe to leave, required documents are complete, authorization is present, and the destination/logistics are sufficiently confirmed.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "mfp_005"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_002",
+            "outcome_label": "must_wait_or_complete_missing_requirements",
+            "description": "One or more required conditions are not yet satisfied, so the patient cannot proceed to final discharge and the workflow enters waiting or completion activities.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "mfp_004",
+              "mfp_003"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_003",
+            "outcome_label": "requires_risk_or_social_review",
+            "description": "The patient may be clinically ready, but safety, social, or post-discharge support risks require additional review before discharge.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+            },
+            "next_node_ids": []
+          },
+          {
+            "outcome_id": "dg_001_out_004",
+            "outcome_label": "requires_alternative_destination",
+            "description": "The planned discharge destination is unavailable or unsuitable, so the workflow must choose another destination or care path.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+            },
+            "next_node_ids": []
+          }
+        ],
+        "confidence": "medium"
+      }
+    ]
+  },
+  "decision_nature_tag_definitions": [
+    {
+      "tag": "entry_or_scope",
+      "meaning": "The decision determines whether the process object enters this workflow, enters through a specific entry point, or should be redirected outside the workflow scope.",
+      "example": "Does this case belong inside this workflow?"
+    },
+    {
+      "tag": "case_classification",
+      "meaning": "The decision determines what kind of case/object is moving through the workflow.",
+      "example": "Is this a simple, complex, urgent, or special-case discharge?"
+    },
+    {
+      "tag": "path_selection",
+      "meaning": "The decision directly selects one of several major normal workflow paths.",
+      "example": "Should the document go through automatic processing or manual review?"
+    },
+    {
+      "tag": "readiness",
+      "meaning": "The decision checks whether the process object is mature or ready enough to move to the next major phase.",
+      "example": "Is the patient clinically ready for discharge?"
+    },
+    {
+      "tag": "completeness_or_validation",
+      "meaning": "The decision checks whether required information, documents, fields, checks, or validations are complete and valid enough to continue.",
+      "example": "Are all required discharge documents complete?"
+    },
+    {
+      "tag": "approval_or_authorization",
+      "meaning": "The decision depends on formal approval, authorization, sign-off, acceptance, or rejection by an actor, team, system, or authority.",
+      "example": "Has the doctor approved discharge?"
+    },
+    {
+      "tag": "risk_or_safety_or_compliance",
+      "meaning": "The decision checks whether continuing through the normal path is safe, compliant, legally acceptable, clinically acceptable, financially acceptable, or policy-compliant.",
+      "example": "Is it safe and compliant to continue?"
+    },
+    {
+      "tag": "resource_or_capacity",
+      "meaning": "The decision depends on whether a required resource, capacity, slot, actor, facility, team, or operational capability is available.",
+      "example": "Is a rehabilitation bed available?"
+    },
+    {
+      "tag": "destination_or_outcome",
+      "meaning": "The decision determines the final destination, outcome, completion state, or exit path of the process object.",
+      "example": "Should the patient go home, to rehab, or to another facility?"
+    },
+    {
+      "tag": "ownership_routing",
+      "meaning": "The decision determines who becomes responsible for the next major part of the workflow.",
+      "example": "Should this case be handled by the doctor, nurse, case manager, or social worker?"
+    },
+    {
+      "tag": "internal_dependency_result",
+      "meaning": "The decision depends on the result, response, completion state, or outcome of an internal dependency inside the same organization or controlled operational environment.",
+      "example": "Did another hospital department complete its required check?"
+    },
+    {
+      "tag": "external_dependency_result",
+      "meaning": "The decision depends on the result, response, confirmation, or outcome of an external dependency outside the direct control of the workflow owner.",
+      "example": "Did the external rehabilitation facility confirm availability?"
+    },
+    {
+      "tag": "timing_or_scheduling",
+      "meaning": "The decision depends on timing, deadlines, calendar constraints, scheduling windows, urgency, or whether the workflow can continue now or later.",
+      "example": "Can the patient be discharged today or must discharge be planned for tomorrow?"
+    },
+    {
+      "tag": "uncertain",
+      "meaning": "Use only when the agent detects a decision gate but cannot confidently classify the nature of the decision.",
+      "example": "There is a control point, but the source context does not make clear whether it is based on readiness, approval, risk, resource availability, or another factor."
+    }
+  ],
+  "connection_status_definitions": [
+    {
+      "status": "attached",
+      "meaning": "Use when this outcome is already connected to one or more existing topology nodes.",
+      "expected_next_node_ids": "Must contain at least one existing node id."
+    },
+    {
+      "status": "branch_candidate_needed",
+      "meaning": "Use when this outcome is meaningful, but the required continuation branch does not exist yet and should be created by another topology revision agent.",
+      "expected_next_node_ids": "May be empty. Add branch_creation_request to describe the branch that should be created."
+    },
+    {
+      "status": "unresolved",
+      "meaning": "Use when the outcome is detected, but it is unclear where it should lead or whether it should create a branch, merge, wait state, terminal exit, or clarification question.",
+      "expected_next_node_ids": "Usually empty until the uncertainty is resolved."
+    },
+    {
+      "status": "terminal_or_out_of_scope",
+      "meaning": "Use when this outcome ends the flow inside the parent workflow or redirects the process object outside the current workflow scope.",
+      "expected_next_node_ids": "May be empty because the outcome does not continue inside the current topology."
+    }
+  ],
+  "location_kind_definitions": [
+    {
+      "value": "within_single_ref",
+      "meaning": "The handoff appears to be contained inside a single graph reference, usually because the referenced MAIN_FLOW_POINT already describes a transfer of responsibility, ownership, information, or control."
+    },
+    {
+      "value": "between_refs",
+      "meaning": "The handoff appears to happen between two or more directly connected graph references, usually when responsibility, ownership, information, or control passes from the source reference to the target reference."
+    },
+    {
+      "value": "at_decision_gate",
+      "meaning": "The handoff is associated with a DECISION_GATE as a whole, usually because the gate transfers decision authority, responsibility, ownership, or routing control."
+    },
+    {
+      "value": "at_decision_outcome",
+      "meaning": "The handoff is associated with one specific DECISION_GATE outcome, usually because only that outcome transfers responsibility, ownership, information, or control to another party."
+    },
+    {
+      "value": "uncertain_multi_ref_zone",
+      "meaning": "Fallback value. Use only when the graph clearly suggests that a handoff exists, but the exact location cannot be safely localized to a single ref, between specific refs, a decision gate, or a decision outcome."
+    }
+  ],
+  "handoff_nature_tag_definitions": [
+    {
+      "tag": "responsibility_transfer",
+      "meaning": "Use when responsibility for performing the next meaningful part of the workflow moves from one party to another.",
+      "example": "A clinical team passes the case to a social worker for post-discharge support planning."
+    },
+    {
+      "tag": "ownership_transfer",
+      "meaning": "Use when ownership or primary accountability for the process object moves from one party to another.",
+      "example": "A document case moves from the intake team to the compliance team as the new owner."
+    },
+    {
+      "tag": "process_control_transfer",
+      "meaning": "Use when operational control over the continuation of the workflow moves to another party, system, queue, or context, even if formal responsibility is not explicit.",
+      "example": "A document moves from automated validation into manual review control."
+    },
+    {
+      "tag": "information_or_document_transfer",
+      "meaning": "Use when the handoff primarily involves passing information, documents, metadata, records, forms, messages, or case details.",
+      "example": "A discharge summary is sent from the ward team to the receiving facility."
+    },
+    {
+      "tag": "physical_or_material_transfer",
+      "meaning": "Use when the handoff involves moving or transferring custody of a physical object, person, sample, asset, paper document, or material item.",
+      "example": "A lab sample is sent from the ward to the laboratory."
+    },
+    {
+      "tag": "decision_authority_transfer",
+      "meaning": "Use when authority to decide, approve, reject, authorize, or sign off moves to another party.",
+      "example": "A case is escalated from an operator to a medical director for approval."
+    },
+    {
+      "tag": "work_queue_transfer",
+      "meaning": "Use when work is moved into a queue, inbox, task list, backlog, or pool where another party must pick it up.",
+      "example": "A failed automatic validation creates a task in the manual review queue."
+    },
+    {
+      "tag": "human_to_human",
+      "meaning": "Use when the handoff is from one human person, role, team, or department to another human person, role, team, or department.",
+      "example": "A nurse hands the discharge case to a social worker."
+    },
+    {
+      "tag": "human_to_system",
+      "meaning": "Use when a human party sends, enters, uploads, submits, or transfers something to a system or automated service.",
+      "example": "An operator uploads a document package into the document management system."
+    },
+    {
+      "tag": "system_to_human",
+      "meaning": "Use when a system, automated service, or technical process passes work, information, or responsibility to a human party.",
+      "example": "An automatic classifier sends uncertain documents to a human reviewer."
+    },
+    {
+      "tag": "system_to_system",
+      "meaning": "Use when the handoff is between software systems, platforms, automated services, integrations, or technical environments.",
+      "example": "A document management system sends metadata to an external fiscal validation service."
+    },
+    {
+      "tag": "cross_role_boundary",
+      "meaning": "Use when the handoff crosses from one role or professional function to another, even inside the same team or organization.",
+      "example": "A doctor passes discharge follow-up coordination to a nurse."
+    },
+    {
+      "tag": "cross_team_boundary",
+      "meaning": "Use when the handoff crosses from one operational team to another team.",
+      "example": "The intake team transfers a case to the manual review team."
+    },
+    {
+      "tag": "cross_department_boundary",
+      "meaning": "Use when the handoff crosses from one formal department, unit, or division to another inside the same organization.",
+      "example": "The emergency department transfers the patient case to the radiology department."
+    },
+    {
+      "tag": "cross_organization_boundary",
+      "meaning": "Use when the handoff crosses from one organization to another organization.",
+      "example": "A hospital sends a rehabilitation placement request to an external facility."
+    },
+    {
+      "tag": "external_dependency_boundary",
+      "meaning": "Use when continuation of the workflow depends on a party outside the direct control of the main workflow owner.",
+      "example": "Discharge planning depends on an external facility confirming bed availability."
+    },
+    {
+      "tag": "confirmation_dependency",
+      "meaning": "Use when the receiver must confirm, accept, reject, validate, acknowledge, or respond before the workflow can continue.",
+      "example": "An external provider must confirm availability before the case can proceed."
+    },
+    {
+      "tag": "waiting_for_receiver",
+      "meaning": "Use when the handoff creates a waiting state because the next step depends on the receiver picking up, processing, or responding to the transferred work.",
+      "example": "A case waits in a queue until a reviewer takes responsibility for it."
+    },
+    {
+      "tag": "feedback_or_clarification_loop",
+      "meaning": "Use when the handoff may require the receiver to ask for missing information, corrections, clarification, or feedback before continuing.",
+      "example": "The receiving team sends the case back because required information is missing."
+    },
+    {
+      "tag": "escalation_or_routing",
+      "meaning": "Use when the handoff routes the case to a different party because it needs escalation, special handling, exception management, or reassignment.",
+      "example": "A high-risk case is routed from the standard team to a senior reviewer."
+    },
+    {
+      "tag": "uncertain",
+      "meaning": "Use only when a handoff is detected, but its exact nature cannot be inferred from the graph or available context.",
+      "example": "The process appears to move to another party, but it is unclear whether this is a responsibility transfer, information transfer, escalation, or system handoff."
+    }
+  ],
+  "party_kind_definitions": [
+    {
+      "party_kind": "individual_person",
+      "meaning": "A specific identifiable person involved in the handoff.",
+      "example": "Dr. Rossi, a named case manager, a specific employee."
+    },
+    {
+      "party_kind": "human_role",
+      "meaning": "A human role or professional function, without identifying a specific person.",
+      "example": "doctor, nurse, social worker, operator, reviewer."
+    },
+    {
+      "party_kind": "team",
+      "meaning": "A group of people working together as an operational unit, but not necessarily a formal department.",
+      "example": "discharge planning team, support team, manual review team."
+    },
+    {
+      "party_kind": "department",
+      "meaning": "A formal organizational unit inside an organization.",
+      "example": "radiology department, billing department, emergency department."
+    },
+    {
+      "party_kind": "organization",
+      "meaning": "An entire organization that receives or transfers responsibility, information, control, or work.",
+      "example": "hospital, insurance company, supplier, public authority."
+    },
+    {
+      "party_kind": "system",
+      "meaning": "A software system, platform, application, or technical environment involved in the handoff.",
+      "example": "document management system, hospital EHR, ERP system."
+    },
+    {
+      "party_kind": "automated_service",
+      "meaning": "An automated technical service, job, function, bot, or integration that performs work without direct human handling.",
+      "example": "validation service, automatic routing service, cloud function, scheduled job."
+    },
+    {
+      "party_kind": "work_queue",
+      "meaning": "A queue, inbox, task list, backlog, or pool where work waits to be picked up by a human, team, or system.",
+      "example": "manual review queue, support inbox, pending approvals queue."
+    },
+    {
+      "party_kind": "external_party",
+      "meaning": "An external actor or entity outside the direct control of the main workflow owner, when a more specific kind is not clear or not needed.",
+      "example": "external provider, rehabilitation facility, vendor, customer, patient family."
+    },
+    {
+      "party_kind": "mixed_or_composite",
+      "meaning": "A composite party made of multiple actors, teams, systems, departments, or organizations that cannot be cleanly reduced to one party kind.",
+      "example": "doctor plus nurse team, hospital plus external provider coordination group, system plus manual operator."
+    },
+    {
+      "party_kind": "unknown",
+      "meaning": "Use only when the handoff clearly involves another party, but the available graph or context does not allow the agent to infer what kind of party it is.",
+      "example": "the next responsible party is mentioned generically, but it is unclear whether it is a person, team, system, or organization."
+    }
+  ]
+}

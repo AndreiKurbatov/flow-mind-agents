@@ -1,0 +1,279 @@
+{
+  "model": "gpt-5.5",
+  "reasoning": {
+    "effort": "high"
+  },
+  "max_output_tokens": 25000,
+  "input": [
+    {
+      "role": "developer",
+      "content": "--EXTERNAL_WORKFLOW_DEPENDENCY_TOPOLOGY_AGENT_DEVELOPER_PROMPT--"
+    },
+    {
+      "role": "user",
+      "content": "--EXTERNAL_WORKFLOW_DEPENDENCY_TOPOLOGY_AGENT_INPUT_JSON--"
+    }
+  ],
+  "text": {
+    "verbosity": "medium",
+    "format": {
+      "type": "json_schema",
+      "name": "external_workflow_dependency_result",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Structured result produced by the external-workflow-dependency-topology-agent. The result is an analytical overlay over the current workflow graph and does not modify the workflow topology.",
+        "properties": {
+          "response_status": {
+            "type": "string",
+            "description": "Overall status of the agent response. Use changes_requested when candidates require user review or clarification questions exist. Use confirmed only when the result is stable. Use cancelled only when the analysis is cancelled.",
+            "enum": [
+              "changes_requested",
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "external_workflow_dependency_candidates": {
+            "type": "array",
+            "description": "List of candidate dependencies between the current workflow and workflows, organizations, providers, authorities, professionals, individuals, or groups outside the current organization's direct operational control.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "One candidate external workflow dependency. A candidate represents a required contribution from an external or operationally external counterparty that affects the primary process object in the current workflow.",
+              "properties": {
+                "external_workflow_dependency_candidate_id": {
+                  "type": "string",
+                  "description": "Stable sequential identifier for the external workflow dependency candidate. Use IDs such as ewdc_001, ewdc_002, ewdc_003."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Short human-readable name of the dependency candidate."
+                },
+                "dependency_summary": {
+                  "type": "string",
+                  "description": "Concise summary of how the current workflow depends on the external or operationally external counterparty workflow."
+                },
+                "counterparty_workflow": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "The external or operationally external workflow, process, actor, organization, provider, authority, professional, individual, or group from which the current workflow needs a contribution.",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the external or operationally external counterparty workflow/process."
+                    },
+                    "counterparty_kind": {
+                      "type": "string",
+                      "description": "Classification of the external counterparty type. Use the value that best describes who owns or performs the counterparty workflow/process.",
+                      "enum": [
+                        "external_organization_workflow",
+                        "external_service_provider_workflow",
+                        "public_authority_or_regulator_workflow",
+                        "same_network_operationally_external_workflow",
+                        "external_professional_workflow",
+                        "external_individual_or_group_process",
+                        "unclear"
+                      ]
+                    },
+                    "workflow_relation_to_current": {
+                      "type": "string",
+                      "description": "Topological relation of the counterparty workflow to the current workflow. This describes whether the counterparty is upstream, downstream, adjacent, out of scope, or uncertain relative to the current workflow.",
+                      "enum": [
+                        "upstream_workflow",
+                        "downstream_workflow",
+                        "adjacent_workflow",
+                        "out_of_scope",
+                        "uncertain"
+                      ]
+                    },
+                    "externality_rationale": {
+                      "type": "string",
+                      "description": "Explanation of why the counterparty is considered external or operationally external according to organization_context, additional_user_context, and available evidence."
+                    },
+                    "relationship_summary": {
+                      "type": "string",
+                      "description": "Short explanation of how the counterparty workflow/process relates to the current workflow."
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "counterparty_kind",
+                    "workflow_relation_to_current",
+                    "externality_rationale",
+                    "relationship_summary"
+                  ]
+                },
+                "dependency_expectation_tags": {
+                  "type": "array",
+                  "description": "Normalized tags describing what the current workflow expects from the external or operationally external counterparty. Use one or more values. If the expected contribution exists but cannot be classified, use unclear.",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "required_input",
+                      "required_output",
+                      "required_information",
+                      "required_document",
+                      "required_data_update",
+                      "required_decision",
+                      "required_approval_or_authorization",
+                      "required_confirmation",
+                      "required_validation",
+                      "required_status_change",
+                      "required_resource_availability",
+                      "required_capacity_or_slot",
+                      "required_service_completion",
+                      "required_task_completion",
+                      "required_case_acceptance",
+                      "required_case_transfer",
+                      "required_coordination",
+                      "required_synchronization",
+                      "required_exception_resolution",
+                      "required_closure_signal",
+                      "unclear"
+                    ]
+                  }
+                },
+                "required_external_contribution": {
+                  "type": "string",
+                  "description": "Specific contribution required from the external or operationally external counterparty. Describe concretely what must be provided, confirmed, accepted, activated, completed, validated, updated, or made available."
+                },
+                "impact_if_unmet": {
+                  "type": "string",
+                  "description": "Explanation of what happens to the current workflow if the required external contribution is missing, late, incomplete, refused, invalid, or unavailable."
+                },
+                "control_gap": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Explanation of the operational control gap between the current organization and the external counterparty workflow.",
+                  "properties": {
+                    "current_organization_control_level": {
+                      "type": "string",
+                      "description": "Degree of operational control the current organization has over the counterparty workflow.",
+                      "enum": [
+                        "no_direct_control",
+                        "limited_influence",
+                        "same_network_no_direct_control",
+                        "unclear"
+                      ]
+                    },
+                    "control_gap_summary": {
+                      "type": "string",
+                      "description": "Explanation of why the current organization cannot directly assign, prioritize, execute, control, or close the counterparty workflow."
+                    }
+                  },
+                  "required": [
+                    "current_organization_control_level",
+                    "control_gap_summary"
+                  ]
+                },
+                "current_workflow_refs": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "References to the current workflow graph or handoff overlay where this external dependency is relevant. The candidate must reference at least one graph ref or one handoff candidate ID according to the developer prompt.",
+                  "properties": {
+                    "graph_ref_ids": {
+                      "type": "array",
+                      "description": "Graph references where the dependency impacts the current workflow. Values must be valid wfpoint_id, decision_gate_id, or outcome_id values from the current graph.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "handoff_zone_candidate_ids": {
+                      "type": "array",
+                      "description": "Relevant handoff candidate IDs from the provided handoff_zone_candidates. Do not put handoff IDs inside graph_ref_ids.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "impact_summary": {
+                      "type": "string",
+                      "description": "Explanation of how the dependency affects the referenced graph nodes, decision outcomes, or handoff candidates."
+                    }
+                  },
+                  "required": [
+                    "graph_ref_ids",
+                    "handoff_zone_candidate_ids",
+                    "impact_summary"
+                  ]
+                },
+                "why_candidate": {
+                  "type": "string",
+                  "description": "Reason why this item is considered a candidate external workflow dependency, grounded in the graph, boundary context, organization context, handoff candidates, user context, or reasonable domain interpretation."
+                },
+                "confidence": {
+                  "type": "string",
+                  "description": "Confidence level for the candidate. Use high when clearly supported and well localized, medium when plausible but not fully explicit, and low when weakly supported or affected by uncertainty.",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              },
+              "required": [
+                "external_workflow_dependency_candidate_id",
+                "name",
+                "dependency_summary",
+                "counterparty_workflow",
+                "dependency_expectation_tags",
+                "required_external_contribution",
+                "impact_if_unmet",
+                "control_gap",
+                "current_workflow_refs",
+                "why_candidate",
+                "confidence"
+              ]
+            }
+          },
+          "clarification_questions": {
+            "type": "array",
+            "description": "Questions that should be asked to the user when additional information would materially improve classification, confirmation, localization, or revision of external workflow dependency candidates.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "One clarification question connected to one or more external workflow dependency candidates when possible.",
+              "properties": {
+                "question_id": {
+                  "type": "string",
+                  "description": "Stable sequential identifier for the clarification question. Use IDs such as ewdq_001, ewdq_002, ewdq_003."
+                },
+                "question": {
+                  "type": "string",
+                  "description": "Specific question to ask the user. The question should help classify, confirm, localize, or route an external workflow dependency."
+                },
+                "why_needed": {
+                  "type": "string",
+                  "description": "Explanation of why this question matters for the external workflow dependency analysis."
+                },
+                "external_workflow_dependency_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of dependency candidates related to this question. Use an empty array only when the question is general and not tied to a specific candidate.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "blocks_next_pass": {
+                  "type": "boolean",
+                  "description": "Whether the missing information materially blocks a reliable next pass. Use true only when the answer is needed before the analysis can proceed reliably."
+                }
+              },
+              "required": [
+                "question_id",
+                "question",
+                "why_needed",
+                "external_workflow_dependency_candidate_ids",
+                "blocks_next_pass"
+              ]
+            }
+          }
+        },
+        "required": [
+          "response_status",
+          "external_workflow_dependency_candidates",
+          "clarification_questions"
+        ]
+      }
+    }
+  }
+}

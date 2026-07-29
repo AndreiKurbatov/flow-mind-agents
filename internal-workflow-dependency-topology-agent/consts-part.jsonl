@@ -1,0 +1,211 @@
+{
+  "workflow_relation_to_current" : [
+    "upstream_workflow",
+    "downstream_workflow",
+    "adjacent_workflow",
+    "out_of_scope",
+    "uncertain"
+  ]
+}
+{
+  "organization_scope": [
+    {
+      "tag": "same_organization",
+      "meaning": "The counterparty workflow clearly belongs to the same organization as the current workflow.",
+      "example": "A hospital discharge workflow depends on the hospital pharmacy workflow within the same hospital."
+    },
+    {
+      "tag": "likely_same_organization",
+      "meaning": "The counterparty workflow appears to belong to the same organization, but the input does not explicitly confirm it.",
+      "example": "The workflow depends on an internal transport coordination team, but the organizational ownership is not fully stated."
+    },
+    {
+      "tag": "same_parent_group_or_network",
+      "meaning": "The counterparty workflow belongs to the same parent group, network, enterprise, or organizational system, but not necessarily to the same local unit.",
+      "example": "A local hospital workflow depends on a centralized scheduling workflow managed by the same hospital network."
+    },
+    {
+      "tag": "unclear",
+      "meaning": "There is not enough evidence to determine whether the counterparty workflow is inside the same organization.",
+      "example": "The workflow depends on transport coordination, but it is unclear whether transport is internal or outsourced."
+    }
+  ]
+}
+{
+  "dependency_relation_type": [
+    {
+      "tag": "upstream_input_dependency",
+      "meaning": "The current workflow depends on an input produced by a workflow that happens before it.",
+      "example": "The discharge workflow depends on an admission or clinical assessment workflow to provide the initial discharge readiness information."
+    },
+    {
+      "tag": "upstream_decision_dependency",
+      "meaning": "The current workflow depends on a decision made in an upstream internal workflow.",
+      "example": "The discharge workflow depends on a clinical assessment workflow deciding that the patient is eligible for discharge planning."
+    },
+    {
+      "tag": "upstream_completion_dependency",
+      "meaning": "The current workflow can start or progress only after an upstream internal workflow has completed.",
+      "example": "The discharge workflow can begin only after the treatment workflow is completed."
+    },
+    {
+      "tag": "parallel_coordination_dependency",
+      "meaning": "The current workflow must coordinate with another internal workflow running in parallel.",
+      "example": "The discharge workflow must coordinate with social service planning while discharge documents are being prepared."
+    },
+    {
+      "tag": "parallel_resource_dependency",
+      "meaning": "The current workflow depends on a resource managed or prepared by another parallel internal workflow.",
+      "example": "The discharge workflow depends on internal transport being available at the right time."
+    },
+    {
+      "tag": "internal_service_dependency",
+      "meaning": "The current workflow depends on an internal service workflow that provides a supporting operational service.",
+      "example": "The discharge workflow depends on the pharmacy workflow to prepare discharge medications."
+    },
+    {
+      "tag": "internal_confirmation_dependency",
+      "meaning": "The current workflow depends on an explicit confirmation from another internal workflow.",
+      "example": "The ward team cannot finalize discharge until pharmacy confirms that medications are ready."
+    },
+    {
+      "tag": "downstream_acceptance_dependency",
+      "meaning": "The current workflow depends on a downstream internal workflow accepting the case, output, responsibility, or handoff.",
+      "example": "The discharge workflow cannot close until the follow-up care workflow accepts the patient case."
+    },
+    {
+      "tag": "downstream_readiness_dependency",
+      "meaning": "The current workflow depends on a downstream internal workflow being ready to receive or continue the process object.",
+      "example": "The discharge workflow depends on the rehabilitation planning workflow being ready to receive the patient."
+    },
+    {
+      "tag": "shared_system_state_dependency",
+      "meaning": "The current workflow depends on a shared internal system state being updated or available.",
+      "example": "The discharge workflow depends on the patient status being updated in the hospital information system."
+    },
+    {
+      "tag": "shared_document_or_data_dependency",
+      "meaning": "The current workflow depends on documents or data produced, updated, or maintained by another internal workflow.",
+      "example": "The discharge workflow depends on lab results or administrative documents produced by another internal workflow."
+    },
+    {
+      "tag": "cross_workflow_handoff_dependency",
+      "meaning": "The dependency exists because a case, document, responsibility, confirmation, or information package must pass between the current workflow and another internal workflow.",
+      "example": "The pharmacy workflow must send medication readiness confirmation back to the discharge workflow."
+    },
+    {
+      "tag": "unclear",
+      "meaning": "There is evidence of a dependency, but the exact relation type is not clear enough to classify.",
+      "example": "The workflow depends on another internal team, but it is unclear whether the dependency is about confirmation, resource availability, or data."
+    }
+  ]
+}
+{
+  "dependency_expectation_tags": [
+    {
+      "tag": "required_input",
+      "meaning": "The current workflow needs an input from the neighboring internal workflow.",
+      "example": "The workflow needs an initial case package from an upstream workflow."
+    },
+    {
+      "tag": "required_output",
+      "meaning": "The current workflow needs a concrete output produced by the neighboring internal workflow.",
+      "example": "The workflow needs prepared discharge medications from the pharmacy workflow."
+    },
+    {
+      "tag": "required_information",
+      "meaning": "The current workflow needs information from the neighboring internal workflow.",
+      "example": "The workflow needs information about the patient’s follow-up requirements."
+    },
+    {
+      "tag": "required_document",
+      "meaning": "The current workflow needs a document produced, completed, or validated by the neighboring internal workflow.",
+      "example": "The workflow needs a completed clinical report or discharge summary."
+    },
+    {
+      "tag": "required_data_update",
+      "meaning": "The current workflow needs another internal workflow to update data in a shared system or record.",
+      "example": "The administrative workflow must update the patient’s discharge status in the system."
+    },
+    {
+      "tag": "required_decision",
+      "meaning": "The current workflow needs a decision from the neighboring internal workflow.",
+      "example": "The workflow needs a clinical decision that the patient is safe to discharge."
+    },
+    {
+      "tag": "required_approval_or_authorization",
+      "meaning": "The current workflow needs formal approval or authorization from another internal workflow.",
+      "example": "The workflow needs administrative authorization before final discharge."
+    },
+    {
+      "tag": "required_confirmation",
+      "meaning": "The current workflow needs an explicit confirmation from the neighboring internal workflow.",
+      "example": "The workflow needs confirmation that medication is ready."
+    },
+    {
+      "tag": "required_validation",
+      "meaning": "The current workflow needs another internal workflow to validate information, documents, status, or readiness.",
+      "example": "The workflow needs validation that all required discharge documents are complete."
+    },
+    {
+      "tag": "required_status_change",
+      "meaning": "The current workflow needs a status change produced by another internal workflow.",
+      "example": "The patient status must change from 'under treatment' to 'ready for discharge'."
+    },
+    {
+      "tag": "required_resource_availability",
+      "meaning": "The current workflow depends on a resource becoming available through another internal workflow.",
+      "example": "The workflow depends on a wheelchair, medication, room, bed, or transport resource becoming available."
+    },
+    {
+      "tag": "required_capacity_or_slot",
+      "meaning": "The current workflow depends on capacity, a time slot, staff availability, or scheduling availability managed by another internal workflow.",
+      "example": "The discharge workflow depends on a follow-up appointment slot being available."
+    },
+    {
+      "tag": "required_service_completion",
+      "meaning": "The current workflow needs another internal service workflow to complete its service before the current workflow can proceed.",
+      "example": "The lab workflow must complete the required test before the current workflow can continue."
+    },
+    {
+      "tag": "required_task_completion",
+      "meaning": "The current workflow depends on a specific task being completed by another internal workflow.",
+      "example": "The pharmacy workflow must complete medication preparation."
+    },
+    {
+      "tag": "required_case_acceptance",
+      "meaning": "The current workflow needs another internal workflow to accept the case or process object.",
+      "example": "The follow-up care workflow must accept the discharged patient case."
+    },
+    {
+      "tag": "required_case_transfer",
+      "meaning": "The current workflow depends on the case or process object being transferred to or from another internal workflow.",
+      "example": "The discharge case must be transferred from the ward workflow to the post-discharge planning workflow."
+    },
+    {
+      "tag": "required_coordination",
+      "meaning": "The current workflow needs active coordination with another internal workflow.",
+      "example": "The ward team and social services workflow must coordinate discharge timing and support."
+    },
+    {
+      "tag": "required_synchronization",
+      "meaning": "The current workflow needs timing or state synchronization with another internal workflow.",
+      "example": "Medication preparation, transport, and discharge instruction delivery must be synchronized before the patient leaves."
+    },
+    {
+      "tag": "required_exception_resolution",
+      "meaning": "The current workflow depends on another internal workflow resolving an issue, blocker, exception, or abnormal condition.",
+      "example": "The administrative workflow must resolve a missing document issue before discharge can be finalized."
+    },
+    {
+      "tag": "required_closure_signal",
+      "meaning": "The current workflow needs a closure, completion, or readiness signal from another internal workflow.",
+      "example": "The workflow needs a signal that the downstream follow-up workflow has accepted the case and the discharge workflow can close."
+    },
+    {
+      "tag": "unclear",
+      "meaning": "There is a dependency expectation, but it is not clear what exactly the current workflow needs from the neighboring workflow.",
+      "example": "The workflow depends on another internal team, but the expected contribution is not specified."
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "string",
+    "summary": "string",
+    "primary_process_object": {
+      "name": "string",
+      "why_primary": "string",
+      "alternative_candidates": [
+        {
+          "name": "string",
+          "why_not_primary": "string"
+        },
+        {
+          "name": "care transfer request",
+          "why_not_primary": "May trigger or support the workflow, but does not represent the whole workflow."
+        }
+      ]
+    },
+    "nodes": [
+      {
+        "wfpoint_id": "string",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "string",
+        "description": "string",
+        "previous_node_ids": [
+          "string"
+        ],
+        "next_node_ids": [
+          "string"
+        ],
+        "confidence": "low | medium | high"
+      },
+      {
+        "decision_gate_id": "dg_001",
+        "node_type": "DECISION_GATE",
+        "name": "Discharge finalization decision",
+        "decision_question": "Can the patient proceed to final discharge now?",
+        "decision_responsibility": "Determine whether the patient is sufficiently ready, safe, authorized, documented, and logistically supported to proceed to final discharge.",
+        "previous_node_ids": [
+          "mfp_004"
+        ],
+        "anchored_to_node_ids": [
+          "mfp_004"
+        ],
+        "decision_basis": [
+          "clinical readiness",
+          "patient safety",
+          "required discharge documents",
+          "doctor authorization",
+          "post-discharge destination availability",
+          "transport or family support availability",
+          "timing constraints"
+        ],
+        "decision_nature_tags": [
+          "readiness",
+          "risk_or_safety_or_compliance",
+          "completeness_or_validation",
+          "approval_or_authorization",
+          "resource_or_capacity",
+          "timing_or_scheduling"
+        ],
+        "outcomes": [
+          {
+            "outcome_id": "dg_001_out_001",
+            "outcome_label": "can_finalize_discharge",
+            "description": "The patient is clinically ready, safe to leave, required documents are complete, authorization is present, and the destination/logistics are sufficiently confirmed.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "mfp_005"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_002",
+            "outcome_label": "must_wait_or_complete_missing_requirements",
+            "description": "One or more required conditions are not yet satisfied, so the patient cannot proceed to final discharge and the workflow enters waiting or completion activities.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "mfp_004",
+              "mfp_003"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_003",
+            "outcome_label": "requires_risk_or_social_review",
+            "description": "The patient may be clinically ready, but safety, social, or post-discharge support risks require additional review before discharge.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+            },
+            "next_node_ids": []
+          },
+          {
+            "outcome_id": "dg_001_out_004",
+            "outcome_label": "requires_alternative_destination",
+            "description": "The planned discharge destination is unavailable or unsuitable, so the workflow must choose another destination or care path.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+            },
+            "next_node_ids": []
+          }
+        ],
+        "confidence": "medium"
+      }
+    ]
+  },
+  "handoff_zone_candidates": [
+    {
+      "handoff_zone_candidate_id": "hzc_001",
+      "name": "Clinical team to social worker handoff",
+      "handoff_summary": "The discharge case appears to move from the clinical ward team to a social worker for post-discharge support planning.",
+      "location_kind": "between_refs",
+      "source_ref_ids": [
+        "mfp_003"
+      ],
+      "target_ref_ids": [
+        "mfp_004"
+      ],
+      "boundary_ref_ids": [
+        "mfp_003",
+        "mfp_004"
+      ],
+      "from_party": {
+        "party_kind": "team",
+        "party_label": "clinical ward team",
+        "organization": "hospital",
+        "party_detail": "Ward team responsible for clinical discharge preparation",
+        "context_description": "Prepares the patient case before post-discharge support planning."
+      },
+      "to_party": {
+        "party_kind": "human_role",
+        "party_label": "social worker",
+        "organization": "hospital",
+        "party_detail": "Role responsible for social and post-discharge support planning",
+        "context_description": "Receives the case to assess and arrange support needs."
+      },
+      "transferred_responsibility_or_control": "Responsibility for assessing or arranging post-discharge social support moves from the clinical ward team to the social worker.",
+      "transferred_payload": [
+        "patient discharge case",
+        "post-discharge support needs",
+        "relevant clinical/social information"
+      ],
+      "sender_expected_action": "Prepare and send the discharge support request with the relevant clinical and social information.",
+      "receiver_expected_action": "Review the request and arrange the required post-discharge support.",
+      "handoff_nature_tags": [
+        "responsibility_transfer",
+        "information_or_document_transfer",
+        "human_to_human",
+        "cross_role_boundary"
+      ],
+      "why_candidate": "The flow appears to move from clinical discharge preparation to a different responsible party for post-discharge support planning.",
+      "localization_uncertainty": null,
+      "confidence": "medium"
+    }
+  ],
+  "workflow_boundary_context": {
+    "workflow_boundary": {
+      "workflow_name": "string",
+      "boundary_review_status": "changes_requested | confirmed | cancelled",
+      "parent_workflow_definition": "string",
+      "operational_purpose": "string",
+      "primary_process_object": {
+        "name": "string",
+        "why_primary": "string",
+        "alternative_candidates": [
+          {
+            "name": "string",
+            "why_not_primary": "string"
+          },
+          {
+            "name": "care transfer request",
+            "why_not_primary": "May trigger or support the workflow, but does not represent the whole workflow."
+          }
+        ]
+      },
+      "start_boundary": {
+        "start_event_or_condition": "string",
+        "first_internal_activity": "string",
+        "what_is_before_start": [],
+        "uncertainties": []
+      },
+      "end_boundary": {
+        "end_event_or_condition": "string",
+        "final_internal_output_or_state": "string",
+        "what_happens_after_end": [],
+        "uncertainties": []
+      },
+      "included_scope": [
+        {
+          "activity_or_area": "string",
+          "reason_included": "string"
+        }
+      ],
+      "excluded_scope": [
+        {
+          "activity_or_area": "string",
+          "reason_excluded": "string",
+          "belongs_to": "upstream_workflow | downstream_workflow | adjacent_workflow | out_of_scope | uncertain",
+          "wf_name": "string"
+        }
+      ],
+      "upstream_workflows": [
+        {
+          "name": "string",
+          "relationship_to_parent": "string",
+          "output_passed_to_parent": "string"
+        }
+      ],
+      "downstream_workflows": [
+        {
+          "name": "string",
+          "relationship_to_parent": "string",
+          "input_received_from_parent": "string"
+        }
+      ],
+      "adjacent_workflows": [
+        {
+          "name": "string",
+          "relationship_to_parent": "string",
+          "reason_not_inside_parent": "string"
+        }
+      ]
+    }
+  },
+  "external_workflow_dependency_candidates": [
+    {
+      "external_workflow_dependency_candidate_id": "ewdc_001",
+      "name": "string",
+      "dependency_summary": "string",
+
+      "counterparty_workflow": {
+        "name": "string",
+        "counterparty_kind": "external_organization_workflow | external_service_provider_workflow | public_authority_workflow | same_network_operationally_external_workflow | patient_or_caregiver_process | external_professional_workflow | unclear",
+        "workflow_relation_to_current": "upstream_workflow | downstream_workflow | adjacent_workflow | out_of_scope | uncertain",
+        "externality_rationale": "string",
+        "relationship_summary": "string"
+      },
+
+      "dependency_expectation_tags": [
+        "required_information"
+      ],
+
+      "required_external_contribution": "string",
+      "impact_if_unmet": "string",
+
+      "control_gap": {
+        "current_organization_control_level": "no_direct_control | limited_influence | shared_network_no_direct_control | unclear",
+        "control_gap_summary": "string"
+      },
+
+      "current_workflow_refs": {
+        "graph_ref_ids": [],
+        "handoff_zone_candidate_ids": [],
+        "impact_summary": "string"
+      },
+
+      "why_candidate": "string",
+      "confidence": "low | medium | high"
+    }
+  ],
+  "internal_workflow_dependency_candidates": [
+    {
+      "internal_workflow_dependency_candidate_id": "iwdc_001",
+      "name": "string",
+      "dependency_summary": "string",
+      "counterparty_workflow": {
+        "name": "string",
+        "workflow_relation_to_current": "upstream_workflow | downstream_workflow | adjacent_workflow | out_of_scope | uncertain",
+        "organization_scope": "same_organization | likely_same_organization | same_parent_group_or_network | unclear",
+        "organization_scope_rationale": "string",
+        "relationship_summary": "string"
+      },
+      "dependency_relation_type": "upstream_input_dependency | upstream_decision_dependency | upstream_completion_dependency | parallel_coordination_dependency | parallel_resource_dependency | internal_service_dependency | internal_confirmation_dependency | downstream_acceptance_dependency | downstream_readiness_dependency | shared_system_state_dependency | shared_document_or_data_dependency | cross_workflow_handoff_dependency | unclear",
+      "dependency_expectation_tags": [
+        "required_input"
+      ],
+      "required_contribution": "string",
+      "impact_if_unmet": "string",
+      "current_workflow_refs": {
+        "graph_ref_ids": [],
+        "handoff_zone_candidate_ids": [],
+        "impact_summary": "string"
+      },
+      "why_candidate": "string",
+      "localization_uncertainty": "string | null",
+      "confidence": "low | medium | high"
+    }
+  ],
+  "organization_context": {
+    "current_organization": "Hospital A",
+    "current_operational_unit": "ward clinical team / discharge planning team",
+    "organization_boundary_description": "For this analysis, the hospital ward team, hospital doctors, nurses, internal discharge office, internal social worker, and hospital pharmacy are considered internal to the current organization. Territorial care services, COT, municipal social services, external home-care providers, RSA facilities, patient family/caregivers, and general practitioners are considered outside the hospital's direct operational control unless the input explicitly states that they belong to the same organization and are managed as part of the same operational workflow.",
+    "externality_rule": "Treat workflows outside the current organization's direct operational control as external or operationally external, even if they belong to the same regional healthcare ecosystem."
+  },
+  "previous_parallel_region_result" : {
+    "response_status": "changes_requested | confirmed | cancelled",
+    "graph_abstraction_assessment": {
+      "abstraction_level": "very_high_level_macro | high_level_macro | medium_level_operational | mixed_abstraction | unclear"
+    },
+    "parallel_region_candidates": [
+      {
+        "parallel_region_candidate_id": "prc_001",
+        "name": "string",
+        "parallel_summary": "string",
+        "entry_ref_ids": [
+          "mfp_001"
+        ],
+        "parallel_nodes": [
+          {
+            "graph_ref_id": "mfp_002",
+            "parallel_role": "clinical readiness workstream",
+            "parallel_contribution": "Determines whether the patient is clinically ready for discharge.",
+            "completion_or_readiness_signal": "Clinical readiness is confirmed.",
+            "required_for_convergence": "required"
+          }
+        ],
+        "convergence_ref_ids": [
+          "mfp_004"
+        ],
+        "related_parallel_workflows": [
+          {
+            "workflow_dependency_candidate_id": "ewdc_001",
+            "workflow_dependency_kind": "external",
+            "counterparty_workflow_name": "External provider confirmation workflow",
+            "runs_parallel_with_graph_ref_ids": [
+              "mfp_002"
+            ],
+            "parallel_relationship_summary": "The external provider confirmation workflow may progress while the current workflow performs internal preparation.",
+            "required_for_convergence": "required"
+          }
+        ],
+        "related_handoff_zone_candidate_ids": [
+          "hzc_001"
+        ],
+        "parallelism_nature": {
+          "execution_pattern": "parallel_preparation_before_join",
+          "join_requirement": "all_parallel_nodes_required",
+          "convergence_logic_summary": "The parallel workstreams likely need to be ready before the workflow can proceed to final discharge execution."
+        },
+        "why_parallel": "string",
+        "confidence": "low | medium | high"
+      }
+    ]
+  },
+  "revision_parallel_region": {
+    "clarification_questions": [
+      {
+        "question_id": "prq_001",
+        "question": "string",
+        "why_needed": "string",
+        "parallel_region_candidate_ids": [
+          "prc_001"
+        ],
+        "blocks_next_pass": false
+      }
+    ],
+    "user_feedback": [
+      {
+        "question_id": "prq_001",
+        "answer": "Treat post-discharge follow-up as downstream workflow."
+      }
+    ],
+    "additional_user_context": "string"
+  },
+  "additional_user_context": "string"
+}

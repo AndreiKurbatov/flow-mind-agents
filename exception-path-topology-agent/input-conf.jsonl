@@ -1,0 +1,339 @@
+{
+  "exception_path_type": {
+    "description": "Classifies the operational nature of the exception path, meaning the type of non-happy-path route followed by the primary process object when the normal flow cannot proceed as expected.",
+    "values": [
+      {
+        "value": "blocking_exception_path",
+        "description": "The primary process object is blocked and cannot continue until the blocking condition is resolved."
+      },
+      {
+        "value": "escalation_exception_path",
+        "description": "The case is escalated to a higher-level role, specialist team, authority, or decision owner for further handling."
+      },
+      {
+        "value": "rejection_exception_path",
+        "description": "The case, request, output, document, or process object is rejected, refused, or not accepted."
+      },
+      {
+        "value": "cancellation_or_abort_exception_path",
+        "description": "The workflow or case is cancelled, aborted, stopped, or closed before reaching the normal completion path."
+      },
+      {
+        "value": "manual_handling_exception_path",
+        "description": "The case leaves the standard or automated flow and requires manual handling, manual review, or manual correction."
+      },
+      {
+        "value": "risk_or_compliance_exception_path",
+        "description": "The case is diverted because of risk, safety, legal, regulatory, fiscal, privacy, clinical, security, or compliance concerns."
+      },
+      {
+        "value": "missing_requirement_exception_path",
+        "description": "The case cannot proceed because a required condition, document, authorization, information item, or prerequisite is missing."
+      },
+      {
+        "value": "readiness_exception_path",
+        "description": "The primary process object is not ready to proceed to the next stage or final completion."
+      },
+      {
+        "value": "dependency_failure_exception_path",
+        "description": "The path is triggered because an internal or external dependency does not provide the expected input, response, readiness, or completion."
+      },
+      {
+        "value": "resource_or_capacity_exception_path",
+        "description": "The case deviates because a required resource, capacity, slot, staff member, bed, equipment, transport, or operational availability is missing."
+      },
+      {
+        "value": "technical_failure_exception_path",
+        "description": "The exception path is caused by a technical error, system failure, integration issue, unavailable service, or automation failure."
+      },
+      {
+        "value": "validation_failure_exception_path",
+        "description": "The case follows an alternative path because a validation, check, control, or rule evaluation fails."
+      },
+      {
+        "value": "alternative_route_exception_path",
+        "description": "The case follows a special alternative route that differs from the normal flow but is not necessarily problematic."
+      },
+      {
+        "value": "loop_or_rework_exception_path",
+        "description": "The exception path is strongly connected to a loop or rework pattern, where the case must return, repeat, be corrected, or be reprocessed."
+      },
+      {
+        "value": "unclear_exception_path",
+        "description": "The available input suggests an exception path, but its specific operational type is unclear or insufficiently supported."
+      }
+    ]
+  }
+}
+
+{
+  "exception_path_status": {
+    "description": "Classifies how the exception path is supported or represented in the available input, distinguishing between paths explicitly visible in the graph, partially visible paths, paths suggested by analytical overlays, and paths inferred only through general workflow knowledge.",
+    "values": [
+      {
+        "value": "represented_in_graph",
+        "description": "The exception path is explicitly represented in the graph through existing nodes, decision gates, outcomes, or graph connections."
+      },
+      {
+        "value": "partially_represented",
+        "description": "Only part of the exception path is visible in the graph, such as the trigger or outcome, but the full path is not completely detailed."
+      },
+      {
+        "value": "implicitly_suggested_by_graph",
+        "description": "The graph structure suggests that an exception path may exist, but it is not explicitly shown as a complete branch."
+      },
+      {
+        "value": "implicitly_suggested_by_overlay",
+        "description": "The exception path is suggested by another analytical overlay, such as a handoff, internal dependency, external dependency, parallel region, or loop/rework candidate."
+      },
+      {
+        "value": "logically_inferred_not_represented",
+        "description": "The exception path is logically plausible based on general workflow knowledge, but it is not represented in the graph or directly supported by another overlay."
+      },
+      {
+        "value": "unclear",
+        "description": "The available input is not sufficient to determine whether or how the exception path is represented or supported."
+      }
+    ]
+  }
+}
+
+{
+  "exception_expectedness": {
+    "description": "Classifies how expected, normal, problematic, uncontrolled, or critical the exception path appears to be within the operational workflow.",
+    "values": [
+      {
+        "value": "normal_expected_exception",
+        "description": "The exception path is a normal and expected operational variant. It is non-happy-path, but it is still a physiological part of how the workflow works."
+      },
+      {
+        "value": "expected_exception_path",
+        "description": "The exception path is expected as a known special-case or alternative route, but it is not necessarily part of the normal routine."
+      },
+      {
+        "value": "problematic_exception_path",
+        "description": "The exception path likely creates operational friction, delay, manual work, rework, risk, cost, or coordination problems."
+      },
+      {
+        "value": "uncontrolled_exception_path",
+        "description": "The exception path appears poorly governed, with unclear ownership, unclear rules, unclear exit conditions, or weak process control."
+      },
+      {
+        "value": "rare_critical_exception_path",
+        "description": "The exception path may be rare, but it has high operational, safety, legal, compliance, financial, or reputational impact when it occurs."
+      },
+      {
+        "value": "unclear",
+        "description": "The available input is not sufficient to determine whether the exception path is normal, expected, problematic, uncontrolled, or critical."
+      }
+    ]
+  }
+}
+
+{
+  "exception_severity": {
+    "description": "Classifies the estimated operational severity of the exception path, based on its potential impact on workflow completion, delay, risk, cost, manual effort, compliance, safety, or service quality.",
+    "values": [
+      {
+        "value": "low",
+        "description": "The exception path has limited impact. It may cause minor delay, small manual effort, or a local inconvenience, but it does not significantly threaten workflow completion."
+      },
+      {
+        "value": "medium",
+        "description": "The exception path has a noticeable operational impact. It may delay the case, require coordination, create extra work, or affect service quality, but it is usually manageable."
+      },
+      {
+        "value": "high",
+        "description": "The exception path has a strong operational impact. It may seriously delay or block progress, create significant manual work, increase risk, or require escalation."
+      },
+      {
+        "value": "critical",
+        "description": "The exception path may cause severe consequences, such as workflow failure, major safety risk, compliance violation, legal exposure, financial loss, or serious harm to the primary process object."
+      },
+      {
+        "value": "unknown",
+        "description": "The available input is not sufficient to estimate the severity of the exception path."
+      }
+    ]
+  }
+}
+
+{
+  "cause_category": {
+    "description": "Classifies the primary cause that triggers or explains the exception path. It identifies why the primary process object cannot continue through the normal flow and must follow an alternative, blocked, escalated, delayed, manual, or terminal path.",
+    "values": [
+      {
+        "value": "incomplete_information",
+        "description": "Required information exists but is incomplete, insufficient, or not detailed enough to continue normally."
+      },
+      {
+        "value": "missing_documentation",
+        "description": "A required document, file, form, certificate, report, or attachment is missing."
+      },
+      {
+        "value": "incorrect_information",
+        "description": "Information is present but wrong, inconsistent, outdated, invalid, or contradictory."
+      },
+      {
+        "value": "missing_authorization",
+        "description": "A required approval, permission, consent, signature, authorization, or formal clearance is missing."
+      },
+      {
+        "value": "missing_requirement",
+        "description": "A required condition, prerequisite, input, eligibility criterion, or operational requirement is not satisfied."
+      },
+      {
+        "value": "failed_validation",
+        "description": "A validation, check, rule, control, or verification step fails."
+      },
+      {
+        "value": "approval_rejection",
+        "description": "An approval authority, reviewer, manager, or responsible party rejects the case, request, output, or proposed next step."
+      },
+      {
+        "value": "quality_issue",
+        "description": "The output, information, document, preparation, or case state does not meet the required quality standard."
+      },
+      {
+        "value": "risk_or_safety_issue",
+        "description": "The path is triggered by a risk, safety concern, clinical risk, operational risk, security risk, or unacceptable exposure."
+      },
+      {
+        "value": "compliance_issue",
+        "description": "The case does not satisfy a regulatory, procedural, audit, fiscal, privacy, security, or compliance requirement."
+      },
+      {
+        "value": "legal_or_policy_issue",
+        "description": "The case raises a legal, contractual, policy, governance, or formal rule issue that prevents normal progression."
+      },
+      {
+        "value": "unclear_responsibility",
+        "description": "Ownership, accountability, or responsibility for the next action is unclear."
+      },
+      {
+        "value": "handoff_failure",
+        "description": "A handoff between parties fails, is not accepted, is not completed, or does not transfer the required information or responsibility."
+      },
+      {
+        "value": "handoff_misalignment",
+        "description": "The sending and receiving parties are misaligned about expectations, readiness, scope, timing, responsibility, or required output."
+      },
+      {
+        "value": "external_non_response",
+        "description": "An external party, organization, provider, authority, patient, caregiver, or counterparty does not respond when a response is required."
+      },
+      {
+        "value": "external_negative_response",
+        "description": "An external party responds negatively, refuses, rejects, denies, or cannot provide the expected contribution."
+      },
+      {
+        "value": "external_incomplete_response",
+        "description": "An external party responds, but the response is incomplete, insufficient, ambiguous, or unusable."
+      },
+      {
+        "value": "internal_dependency_not_ready",
+        "description": "An internal team, function, system, workstream, or prerequisite is not ready or has not completed its required contribution."
+      },
+      {
+        "value": "parallel_branch_not_ready",
+        "description": "One branch of a parallel workflow region is not ready, preventing convergence or normal continuation."
+      },
+      {
+        "value": "resource_unavailable",
+        "description": "A required resource, person, equipment, bed, transport, room, tool, or asset is unavailable."
+      },
+      {
+        "value": "capacity_unavailable",
+        "description": "The required operational capacity, slot, workload availability, service availability, or processing capacity is unavailable or insufficient."
+      },
+      {
+        "value": "case_or_patient_not_ready",
+        "description": "The primary process object, such as a patient discharge case, invoice case, contract package, or service request, is not ready to proceed."
+      },
+      {
+        "value": "technical_error",
+        "description": "A technical error, integration failure, automation failure, data processing error, or software issue prevents normal progression."
+      },
+      {
+        "value": "system_unavailable",
+        "description": "A required system, platform, application, database, service, or infrastructure component is unavailable."
+      },
+      {
+        "value": "manual_entry_error",
+        "description": "The exception is caused by a human data entry mistake, manual input error, typo, wrong selection, or incorrect manual update."
+      },
+      {
+        "value": "changed_requirement_or_condition",
+        "description": "A requirement, condition, status, context, decision, or external circumstance changes after the workflow has already started."
+      },
+      {
+        "value": "user_or_counterparty_cancellation",
+        "description": "The user, patient, client, supplier, caregiver, external party, or counterparty cancels, withdraws, refuses, or stops the process."
+      },
+      {
+        "value": "unclear",
+        "description": "The available input suggests an exception path, but the cause is unclear or insufficiently supported."
+      }
+    ]
+  }
+}
+
+{
+  "support_type": {
+    "description": "Classifies the source of evidence or reasoning that supports the existence of the exception path. It explains whether the path is explicitly represented in the graph, implicitly suggested by graph structure or analytical overlays, provided by the user, or inferred from general workflow knowledge.",
+    "values": [
+      {
+        "value": "explicit_graph_branch",
+        "description": "The exception path is directly represented as a visible branch in the graph, using existing nodes, decision gates, outcomes, or connections."
+      },
+      {
+        "value": "explicit_decision_outcome",
+        "description": "The exception path is directly supported by a specific decision gate outcome, such as a negative, failed, rejected, blocked, or not-ready outcome."
+      },
+      {
+        "value": "explicit_terminal_or_blocking_node",
+        "description": "The graph contains an explicit node that represents termination, cancellation, rejection, blocking, stopping, or inability to proceed."
+      },
+      {
+        "value": "implicit_from_decision_outcome",
+        "description": "A decision outcome suggests that an exception path exists, but the downstream path is not fully represented or detailed in the graph."
+      },
+      {
+        "value": "implicit_from_handoff",
+        "description": "A handoff overlay suggests a possible exception path, such as bounce-back, rejected handoff, unclear ownership, failed transfer, or escalation between parties."
+      },
+      {
+        "value": "implicit_from_internal_dependency",
+        "description": "An internal workflow dependency suggests a possible exception path caused by an internal team, function, system, or workstream not being ready or not providing the expected contribution."
+      },
+      {
+        "value": "implicit_from_external_dependency",
+        "description": "An external workflow dependency suggests a possible exception path caused by an external party, provider, authority, patient, caregiver, or counterparty not responding or not providing the expected contribution."
+      },
+      {
+        "value": "implicit_from_parallel_region",
+        "description": "A parallel region suggests a possible exception path caused by failed convergence, a branch not being ready, or one parallel workstream blocking the continuation of the overall workflow."
+      },
+      {
+        "value": "implicit_from_loop_or_rework",
+        "description": "A loop or rework candidate suggests an exception path because the primary process object returns, repeats, is corrected, or is reprocessed instead of continuing normally."
+      },
+      {
+        "value": "implicit_from_graph_structure",
+        "description": "The overall graph structure suggests an exception path, even though no single explicit branch, outcome, or node fully represents it."
+      },
+      {
+        "value": "user_provided_context",
+        "description": "The exception path is supported by additional context, clarification, correction, or explanation provided by the user."
+      },
+      {
+        "value": "general_workflow_knowledge",
+        "description": "The exception path is logically plausible based on general knowledge of this type of workflow, but it is not represented in the graph and is not directly supported by another overlay."
+      },
+      {
+        "value": "weak_or_unclear_support",
+        "description": "There are weak or ambiguous indications that an exception path may exist, but the available support is insufficient or unclear."
+      }
+    ]
+  }
+}

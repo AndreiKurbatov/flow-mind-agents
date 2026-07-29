@@ -1,0 +1,278 @@
+{
+  "model": "gpt-5.5",
+  "reasoning": {
+    "effort": "high"
+  },
+  "max_output_tokens": 25000,
+  "input": [
+    {
+      "role": "developer",
+      "content": "--INTERNAL_WORKFLOW_DEPENDENCY_TOPOLOGY_AGENT_DEVELOPER_PROMPT--"
+    },
+    {
+      "role": "user",
+      "content": "--INTERNAL_WORKFLOW_DEPENDENCY_TOPOLOGY_AGENT_INPUT_JSON--"
+    }
+  ],
+  "text": {
+    "verbosity": "medium",
+    "format": {
+      "type": "json_schema",
+      "name": "internal_workflow_dependency_result",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "description": "Result produced by the internal-workflow-dependency-topology-agent. It identifies candidate dependencies between the currently analyzed workflow and neighboring workflows that are outside the current workflow boundary but inside the same organization.",
+        "additionalProperties": false,
+        "required": [
+          "response_status",
+          "internal_workflow_dependency_candidates",
+          "clarification_questions"
+        ],
+        "properties": {
+          "response_status": {
+            "type": "string",
+            "description": "Review status of the agent result. Use changes_requested when the output contains candidates or clarification questions requiring user review; confirmed when the result is stable; cancelled only if the analysis was cancelled.",
+            "enum": [
+              "changes_requested",
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "internal_workflow_dependency_candidates": {
+            "type": "array",
+            "description": "List of candidate dependencies between the current workflow and neighboring workflows that are outside the current workflow boundary but internal to the same organization, likely internal, or within the same parent group/network.",
+            "items": {
+              "type": "object",
+              "description": "A single candidate dependency between the current workflow and a neighboring internal workflow.",
+              "additionalProperties": false,
+              "required": [
+                "internal_workflow_dependency_candidate_id",
+                "name",
+                "dependency_summary",
+                "counterparty_workflow",
+                "dependency_relation_type",
+                "dependency_expectation_tags",
+                "required_contribution",
+                "impact_if_unmet",
+                "current_workflow_refs",
+                "why_candidate",
+                "localization_uncertainty",
+                "confidence"
+              ],
+              "properties": {
+                "internal_workflow_dependency_candidate_id": {
+                  "type": "string",
+                  "description": "Stable unique identifier for this internal workflow dependency candidate. Use sequential IDs such as iwdc_001, iwdc_002, iwdc_003."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Short human-readable name of the dependency candidate."
+                },
+                "dependency_summary": {
+                  "type": "string",
+                  "description": "Concise summary of how the current workflow depends on the neighboring internal workflow."
+                },
+                "counterparty_workflow": {
+                  "type": "object",
+                  "description": "The neighboring workflow outside the current workflow boundary that provides the required contribution to the current workflow.",
+                  "additionalProperties": false,
+                  "required": [
+                    "name",
+                    "workflow_relation_to_current",
+                    "organization_scope",
+                    "organization_scope_rationale",
+                    "relationship_summary"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name or inferred label of the neighboring workflow that the current workflow depends on."
+                    },
+                    "workflow_relation_to_current": {
+                      "type": "string",
+                      "description": "How the neighboring workflow is positioned relative to the current workflow boundary.",
+                      "enum": [
+                        "upstream_workflow",
+                        "downstream_workflow",
+                        "adjacent_workflow",
+                        "out_of_scope",
+                        "uncertain"
+                      ]
+                    },
+                    "organization_scope": {
+                      "type": "string",
+                      "description": "How confidently the neighboring workflow belongs to the same organization or organizational group as the current workflow.",
+                      "enum": [
+                        "same_organization",
+                        "likely_same_organization",
+                        "same_parent_group_or_network",
+                        "unclear"
+                      ]
+                    },
+                    "organization_scope_rationale": {
+                      "type": "string",
+                      "description": "Brief explanation of why the counterparty workflow is considered internal, likely internal, part of the same parent group/network, or unclear."
+                    },
+                    "relationship_summary": {
+                      "type": "string",
+                      "description": "Short explanation of the relationship between the current workflow and the counterparty workflow."
+                    }
+                  }
+                },
+                "dependency_relation_type": {
+                  "type": "string",
+                  "description": "Primary type of inter-workflow dependency relation.",
+                  "enum": [
+                    "upstream_input_dependency",
+                    "upstream_decision_dependency",
+                    "upstream_completion_dependency",
+                    "parallel_coordination_dependency",
+                    "parallel_resource_dependency",
+                    "internal_service_dependency",
+                    "internal_confirmation_dependency",
+                    "downstream_acceptance_dependency",
+                    "downstream_readiness_dependency",
+                    "shared_system_state_dependency",
+                    "shared_document_or_data_dependency",
+                    "cross_workflow_handoff_dependency",
+                    "unclear"
+                  ]
+                },
+                "dependency_expectation_tags": {
+                  "type": "array",
+                  "description": "Tags describing what the current workflow expects from the neighboring internal workflow. Use the minimum sufficient set of predefined tags.",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "required_input",
+                      "required_output",
+                      "required_information",
+                      "required_document",
+                      "required_data_update",
+                      "required_decision",
+                      "required_approval_or_authorization",
+                      "required_confirmation",
+                      "required_validation",
+                      "required_status_change",
+                      "required_resource_availability",
+                      "required_capacity_or_slot",
+                      "required_service_completion",
+                      "required_task_completion",
+                      "required_case_acceptance",
+                      "required_case_transfer",
+                      "required_coordination",
+                      "required_synchronization",
+                      "required_exception_resolution",
+                      "required_closure_signal",
+                      "unclear"
+                    ]
+                  }
+                },
+                "required_contribution": {
+                  "type": "string",
+                  "description": "Specific contribution expected from the neighboring internal workflow. This explains what the current workflow needs in order to start, progress, decide, complete, hand off, or close correctly."
+                },
+                "impact_if_unmet": {
+                  "type": "string",
+                  "description": "What happens to the current workflow if the required contribution is missing, late, incomplete, invalid, unavailable, or not confirmed."
+                },
+                "current_workflow_refs": {
+                  "type": "object",
+                  "description": "References to the current workflow graph or handoff overlay where this dependency is relevant or visible.",
+                  "additionalProperties": false,
+                  "required": [
+                    "graph_ref_ids",
+                    "handoff_zone_candidate_ids",
+                    "impact_summary"
+                  ],
+                  "properties": {
+                    "graph_ref_ids": {
+                      "type": "array",
+                      "description": "Graph references in the current workflow where this dependency is relevant. Valid values are wfpoint_id, decision_gate_id, or outcome_id, such as mfp_001, dg_001, or dg_001_out_002. Do not include handoff IDs here.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "handoff_zone_candidate_ids": {
+                      "type": "array",
+                      "description": "IDs of existing handoff zone candidates related to this dependency. Valid values are handoff_zone_candidate_id values such as hzc_001. Do not include graph refs here.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "impact_summary": {
+                      "type": "string",
+                      "description": "Brief explanation of how the dependency affects the referenced part of the current workflow."
+                    }
+                  }
+                },
+                "why_candidate": {
+                  "type": "string",
+                  "description": "Reason why this dependency should be considered a candidate. Explain the evidence or inference connecting the current workflow to the neighboring internal workflow."
+                },
+                "localization_uncertainty": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Concrete explanation if the dependency appears real but its exact graph or handoff location is uncertain. Use null when localization is clear."
+                },
+                "confidence": {
+                  "type": "string",
+                  "description": "Confidence level for the candidate, considering evidence strength, localization clarity, and organizational scope certainty.",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              }
+            }
+          },
+          "clarification_questions": {
+            "type": "array",
+            "description": "Top-level clarification questions that would materially help confirm, classify, localize, or route the dependency candidates. Do not ask generic questions.",
+            "items": {
+              "type": "object",
+              "description": "A clarification question related to one or more internal workflow dependency candidates.",
+              "additionalProperties": false,
+              "required": [
+                "question_id",
+                "question",
+                "why_needed",
+                "internal_workflow_dependency_candidate_ids",
+                "blocks_next_pass"
+              ],
+              "properties": {
+                "question_id": {
+                  "type": "string",
+                  "description": "Stable unique identifier for the clarification question. Use sequential IDs such as iwdq_001, iwdq_002, iwdq_003."
+                },
+                "question": {
+                  "type": "string",
+                  "description": "Specific question for the user. It should be actionable and directly related to confirming, classifying, localizing, or routing one or more dependency candidates."
+                },
+                "why_needed": {
+                  "type": "string",
+                  "description": "Explanation of why this clarification is needed and what part of the dependency analysis it affects."
+                },
+                "internal_workflow_dependency_candidate_ids": {
+                  "type": "array",
+                  "description": "IDs of dependency candidates that this question relates to. Use an empty array only if the question concerns the whole result rather than a specific candidate.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "blocks_next_pass": {
+                  "type": "boolean",
+                  "description": "Whether the missing answer materially blocks the next analysis pass. Use false when uncertainty can be handled with lower confidence or localization_uncertainty."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "string",
+    "topology_status": "changes_requested | confirmed | cancelled",
+    "summary": "string",
+    "nodes": [
+      {
+        "wfpoint_id": "string",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "string",
+        "description": "string",
+        "previous_node_ids": ["string"],
+        "next_node_ids": ["string"],
+        "confidence": "low | medium | high"
+      },
+      {
+        "decision_gate_id": "dg_001",
+        "node_type": "DECISION_GATE",
+        "name": "Discharge finalization decision",
+        "decision_question": "Can the patient proceed to final discharge now?",
+        "decision_responsibility": "Determine whether the patient is sufficiently ready, safe, authorized, documented, and logistically supported to proceed to final discharge.",
+        "previous_node_ids": ["mfp_004"],
+        "anchored_to_node_ids": [
+          "mfp_004"
+        ],
+        "decision_basis": [
+          "clinical readiness",
+          "patient safety",
+          "required discharge documents",
+          "doctor authorization",
+          "post-discharge destination availability",
+          "transport or family support availability",
+          "timing constraints"
+        ],
+        "decision_nature_tags": [
+          "readiness",
+          "risk_or_safety_or_compliance",
+          "completeness_or_validation",
+          "approval_or_authorization",
+          "resource_or_capacity",
+          "timing_or_scheduling"
+        ],
+        "outcomes": [
+          {
+            "outcome_id": "dg_001_out_001",
+            "outcome_label": "can_finalize_discharge",
+            "description": "The patient is clinically ready, safe to leave, required documents are complete, authorization is present, and the destination/logistics are sufficiently confirmed.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "mfp_005"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_002",
+            "outcome_label": "must_wait_or_complete_missing_requirements",
+            "description": "One or more required conditions are not yet satisfied, so the patient cannot proceed to final discharge and the workflow enters waiting or completion activities.",
+            "connection_status": "attached",
+            "branch_creation_request": null,
+            "next_node_ids": [
+              "wait_001",
+              "mfp_003"
+            ]
+          },
+          {
+            "outcome_id": "dg_001_out_003",
+            "outcome_label": "requires_risk_or_social_review",
+            "description": "The patient may be clinically ready, but safety, social, or post-discharge support risks require additional review before discharge.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path.",
+            },
+            "next_node_ids": []
+          },
+          {
+            "outcome_id": "dg_001_out_004",
+            "outcome_label": "requires_alternative_destination",
+            "description": "The planned discharge destination is unavailable or unsuitable, so the workflow must choose another destination or care path.",
+            "connection_status": "branch_candidate_needed",
+            "branch_creation_request": {
+              "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+              "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+              "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path.",
+            },
+            "next_node_ids": []
+          }
+        ],
+        "confidence": "medium"
+      }
+    ],
+    "clarification_questions": [
+      {
+        "question_id": "btq_001",
+        "question": "string",
+        "why_needed": "string",
+        "related_node_ids": ["string"],
+        "blocks_next_pass": true
+      }
+    ]
+  }
+}

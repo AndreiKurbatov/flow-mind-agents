@@ -1,0 +1,161 @@
+{
+  "workflow_boundary_definition_initial_input": {
+    "workflow_seed": {
+      "workflow_name": "string",
+      "short_workflow_description": "string",
+      "domain_or_industry": "healthcare | legal | finance | insurance | public_administration | logistics | education | other | unclear", // These values are examples, the user can also enter their own value
+      "country_or_jurisdiction": "string"
+    },
+    "organizational_context": {
+      "organization_name": "string",
+      "organization_type": "hospital | clinic | public_authority | private_company | non_profit | service_provider | department | multi_organization_network | other | unclear", // These values are examples, the user can also enter their own value.
+      "organization_scope_to_consider": "single_local_unit | single_organization | organization_network | cross_organization_process | unclear", // These values will be enum constants
+      "local_environment": {
+        "site_or_unit_name": "string",
+        "unit_type": "ward | department | office | branch | team | service_unit | operational_area | other | unclear", // These values are examples, the user can also enter their own value.
+        "local_specifics": [
+          "string"
+        ],
+        "why_local_context_matters": "string"
+      },
+      "regulatory_or_country_specific_notes": [
+        "string"
+      ],
+      "organizational_specific_notes": [
+        "string"
+      ]
+    },
+    "workflow_focus": {
+      "parent_workflow_candidate": "string",
+      "why_this_workflow_is_being_analyzed": "string",
+      "operational_purpose_hypothesis": "string",
+      "main_process_object_candidates": [
+        {
+          "name": "string",
+          "object_type": "patient | case | request | document | file | claim | order | application | ticket | contract | asset | other | unclear", // These values are examples, the user can also enter their own value.
+          "why_it_may_be_primary": "string"
+        }
+      ]
+    },
+    "raw_workflow_context": {
+      "user_description": "string",
+      "known_steps_or_activities": [
+        {
+          "activity_name": "string",
+          "activity_description": "string",
+          "known_or_assumed_order": "string",
+          "performed_by": "string",
+          "notes": "string"
+        }
+      ],
+      "known_actors_or_roles": [
+        {
+          "actor_or_role_name": "string",
+          "actor_type": "person | team | department | external_organization | system | patient_or_client | other | unclear", // These values are examples, the user can also enter their own value.
+          "role_in_workflow": "string",
+          "organization_or_unit": "string"
+        }
+      ],
+      "systems_documents_or_data": [
+        {
+          "name": "string",
+          "type": "system | document | form | database | message | report | dataset | other | unclear", // These values are examples, the user can also enter their own value.
+          "role_in_workflow": "string"
+        }
+      ],
+      "important_terms_or_local_vocabulary": [
+        {
+          "term": "string",
+          "meaning_or_notes": "string"
+        }
+      ]
+    },
+    "boundary_hints": {
+      "possible_start": {
+        "start_event_or_condition_candidate": "string",
+        "first_internal_activity_candidate": "string",
+        "what_may_happen_before_start": [
+          "string"
+        ],
+        "confidence": "low | medium | high | unclear"
+      },
+      "possible_end": {
+        "end_event_or_condition_candidate": "string",
+        "final_internal_output_or_state_candidate": "string",
+        "what_may_happen_after_end": [
+          "string"
+        ],
+        "confidence": "low | medium | high | unclear"
+      },
+      "likely_inside_scope": [
+        {
+          "activity_or_area": "string",
+          "reason_likely_inside": "string",
+          "confidence": "low | medium | high | unclear"
+        }
+      ],
+      "likely_outside_scope": [
+        {
+          "activity_or_area": "string",
+          "reason_likely_outside": "string",
+          "possible_relation_to_parent": "upstream_workflow | downstream_workflow | adjacent_workflow | uncertain", // These values will be enum constants
+          "possible_workflow_name": "string",
+          "confidence": "low | medium | high | unclear"
+        }
+      ]
+    },
+    "surrounding_workflow_hints": {
+      "upstream_workflow_candidates": [
+        {
+          "name": "string",
+          "relationship_to_parent_hypothesis": "string",
+          "possible_output_passed_to_parent": "string",
+          "confidence": "low | medium | high | unclear"
+        }
+      ],
+      "downstream_workflow_candidates": [
+        {
+          "name": "string",
+          "relationship_to_parent_hypothesis": "string",
+          "possible_input_received_from_parent": "string",
+          "confidence": "low | medium | high | unclear"
+        }
+      ],
+      "adjacent_workflow_candidates": [
+        {
+          "name": "string",
+          "relationship_to_parent_hypothesis": "string",
+          "reason_it_may_be_adjacent_not_internal": "string",
+          "confidence": "low | medium | high | unclear"
+        }
+      ]
+    },
+    "known_variants_exceptions_or_special_cases": [
+      {
+        "name": "string",
+        "description": "string",
+        "how_it_may_affect_boundaries": "string"
+      }
+    ],
+    "known_uncertainties": [
+      {
+        "uncertainty": "string",
+        "why_it_matters": "string",
+        "possible_options": [
+          "string"
+        ]
+      }
+    ],
+    "user_boundary_preferences": {
+      "things_to_force_inside_scope": [
+        "string"
+      ],
+      "things_to_force_outside_scope": [
+        "string"
+      ],
+      "things_the_agent_must_not_assume": [
+        "string"
+      ]
+    }
+  }
+}
