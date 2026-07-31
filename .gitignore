@@ -1,0 +1,30 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Generated output and dependencies
+node_modules/
+target/
+build/
+dist/
+out/
+
