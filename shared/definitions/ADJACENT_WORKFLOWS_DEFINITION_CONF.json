@@ -1,0 +1,34 @@
+{
+  "adjacent_workflows": {
+    "canonical_definition": "Adjacent workflows are related workflows that interact with the parent workflow but are not clearly before it or after it. They may run in parallel, share actors, exchange information, support decisions, or coordinate around the same object, while remaining separate workflows.",
+    "purpose": "They prevent the parent workflow from becoming too broad by separating nearby but distinct operational processes.",
+    "relationship_rule": "A workflow is adjacent when it is connected to the parent workflow but does not primarily provide the starting input and does not primarily consume the final output.",
+    "what_it_is_not": [
+      "It is not upstream if its main role is not to produce the parent workflow's initial input or precondition.",
+      "It is not downstream if its main role is not to consume the parent workflow's final output.",
+      "It is not internal if it has a separate purpose, ownership, lifecycle, or operational control.",
+      "It should not be included just because it exchanges information with the parent workflow."
+    ],
+    "typical_relationships_to_parent": [
+      "parallel coordination",
+      "supporting workflow",
+      "shared actor or department",
+      "shared system or document",
+      "information exchange",
+      "related decision process",
+      "separate operational responsibility"
+    ],
+    "examples": [
+      {
+        "name": "bed management workflow",
+        "relationship_to_parent": "Interacts with discharge planning because bed availability and patient movement are related, but it has a separate operational purpose.",
+        "reason_not_inside_parent": "Its main purpose is managing hospital capacity, not completing the individual discharge workflow."
+      },
+      {
+        "name": "pharmacy stock management workflow",
+        "relationship_to_parent": "May affect medication availability during discharge, but it is a separate operational process.",
+        "reason_not_inside_parent": "It manages inventory rather than the specific patient discharge case."
+      }
+    ]
+  }
+}

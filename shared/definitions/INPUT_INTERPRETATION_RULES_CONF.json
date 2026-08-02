@@ -1,0 +1,24 @@
+{
+  "input_interpretation_rules": {
+    "all_fields_are_optional": true,
+    "missing_fields_policy": "If a field is missing, the agent must not invent it. It may infer cautiously only when supported by the provided context, otherwise it should mark the area as unclear or create a confirmation question.",
+    "fact_fields_policy": "If present, fields listed in user_asserted_fact_fields must be treated as explicit user-provided facts. The agent should not override them. If they conflict with other provided information, the agent should preserve the user-provided fact and surface the conflict as a boundary uncertainty or confirmation question.",
+    "preference_fields_policy": "If present, fields listed in user_boundary_preference_fields must be treated as user constraints or desired framing. They are not workflow evidence, but they should guide how the workflow boundary is interpreted unless they clearly conflict with the factual context.",
+    "default_hint_policy": "All input fields not listed as user_asserted_fact_fields or user_boundary_preference_fields must be treated as user-provided hints. Hints are hypotheses, partial knowledge, or weak evidence. The agent may use them, revise them, downgrade them, or mark them as uncertain in the output."
+  },
+  "user_asserted_fact_fields": [
+    "workflow_seed.workflow_name",
+    "workflow_seed.domain_or_industry",
+    "workflow_seed.country_or_jurisdiction",
+    "organizational_context.organization_name",
+    "organizational_context.organization_type",
+    "organizational_context.organization_scope_to_consider",
+    "organizational_context.local_environment.site_or_unit_name",
+    "organizational_context.local_environment.unit_type"
+  ],
+  "user_boundary_preference_fields": [
+    "user_boundary_preferences.things_to_force_inside_scope",
+    "user_boundary_preferences.things_to_force_outside_scope",
+    "user_boundary_preferences.things_the_agent_must_not_assume"
+  ]
+}

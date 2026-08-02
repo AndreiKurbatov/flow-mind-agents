@@ -1,0 +1,8 @@
+{
+  "scenario": "FAILED",
+  "response_id": "mock-response-failed",
+  "error": {
+    "code": "mock_generation_failed",
+    "message": "Configured GPT generation failure"
+  }
+}

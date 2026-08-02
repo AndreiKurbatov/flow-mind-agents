@@ -1,0 +1,41 @@
+{
+  "field_name": "organization_scope_to_consider",
+  "description": "Defines the organizational level at which the parent workflow should be analyzed. This field tells the agent what organizational boundary should be treated as the main analysis frame: a single local unit, the whole organization, a network of related organizations, or a process that crosses independent organizational boundaries. It is used to decide whether surrounding activities should be considered internal to the parent workflow, upstream, downstream, adjacent, or external.",
+  "allowed_values": [
+    {
+      "value": "single_local_unit",
+      "meaning": "The workflow should be analyzed within one specific local operational unit, such as a department, ward, office, branch, team, or service unit.",
+      "use_when": "Use this when the user wants to focus on how the workflow works inside one local unit, even if other departments or organizations are involved around it.",
+      "boundary_effect": "Activities performed outside the selected local unit may be treated as upstream, downstream, adjacent, or external to the parent workflow, even if they belong to the same larger organization.",
+      "example": "Analyzing patient discharge only inside one hospital ward."
+    },
+    {
+      "value": "single_organization",
+      "meaning": "The workflow should be analyzed within the boundary of one entire organization.",
+      "use_when": "Use this when the workflow may involve multiple internal departments, units, or teams, but all of them belong to the same organization.",
+      "boundary_effect": "Activities performed by different internal departments may still be considered part of the parent workflow if they contribute directly to the same organizational process.",
+      "example": "Analyzing the discharge workflow across the whole hospital, including ward staff, pharmacy, administration, and social services if they are internal."
+    },
+    {
+      "value": "organization_network",
+      "meaning": "The workflow should be analyzed within a network or group of related organizations that operate under the same parent group, healthcare network, corporate group, or shared governance structure.",
+      "use_when": "Use this when the workflow involves multiple related organizations that are not the same local unit but are still part of a broader coordinated network.",
+      "boundary_effect": "Activities across different entities in the same network may be considered internal or semi-internal depending on their operational relationship to the parent workflow.",
+      "example": "Analyzing a patient transfer workflow between hospitals belonging to the same healthcare network."
+    },
+    {
+      "value": "cross_organization_process",
+      "meaning": "The workflow should be analyzed as a process that crosses boundaries between independent organizations.",
+      "use_when": "Use this when the parent workflow intentionally includes coordination between separate organizations, such as a hospital, public authority, insurance company, external provider, municipality, or third-party service.",
+      "boundary_effect": "External organizational interactions may be included inside the parent workflow if they are essential parts of the process being analyzed, rather than automatically treated as outside dependencies.",
+      "example": "Analyzing hospital discharge planning that includes the hospital, municipality, external care provider, and family doctor."
+    },
+    {
+      "value": "unclear",
+      "meaning": "The intended organizational analysis boundary is not yet known or cannot be determined from the input.",
+      "use_when": "Use this when the user has not specified whether the workflow should be analyzed at local-unit, whole-organization, network, or cross-organization level.",
+      "boundary_effect": "The agent should avoid making a strong assumption and should surface this as a boundary uncertainty or ask a confirmation question.",
+      "example": "The user describes a workflow but does not clarify whether only one department or the whole organization should be included."
+    }
+  ]
+}

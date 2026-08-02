@@ -1,0 +1,78 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "Complex Hospital Patient Discharge",
+    "topology_status": "changes_requested",
+    "summary": "The topology represents a complex hospital discharge workflow. It includes routine discharge preparation, medication-related activities, home-care coordination, facility transfers, transport alternatives, discharge postponement, return to active treatment and discharge against medical advice.",
+    "nodes": [
+      {
+        "wfpoint_id": "mfp_001",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm preliminary clinical readiness",
+        "description": "The responsible physician performs an initial assessment and determines whether the patient may enter the discharge preparation process.",
+        "next_node_ids": [
+          "mfp_002"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_002",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Determine discharge disposition",
+        "description": "The clinical team determines whether the planned discharge can continue, whether the patient must return to active treatment, or whether the patient intends to leave against medical advice.",
+        "next_node_ids": [
+          "mfp_003",
+          "mfp_030",
+          "mfp_032"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_003",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Assess discharge complexity",
+        "description": "The team identifies the clinical documentation, medication and continuity-of-care workstreams required for the discharge.",
+        "next_node_ids": [
+          "mfp_004",
+          "mfp_005",
+          "mfp_006"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_004",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Prepare routine clinical documentation",
+        "description": "The clinical team prepares the standard discharge letter, follow-up instructions, clinical reports and required certificates.",
+        "next_node_ids": [
+          "mfp_009"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_005",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Perform medication reconciliation",
+        "description": "Current medicines are compared with the intended post-discharge therapy to identify additions, discontinuations, substitutions and potential interactions.",
+        "next_node_ids": [
+          "mfp_007",
+          "mfp_008"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_006",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Assess social and continuity-of-care needs",
+        "description": "The team evaluates whether the patient can return home, requires organized home support, needs placement in another facility or currently has no safe discharge destination.",
+        "next_node_ids": [
+          "mfp_011",
+          "mfp_012",
+          "mfp_013"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_007",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Finalize internal medication plan",
+        "description": "The physician and hospital pharmacist finalize the post-discharge medication plan using resources available within

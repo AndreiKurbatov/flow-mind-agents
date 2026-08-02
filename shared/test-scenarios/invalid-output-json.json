@@ -1,0 +1,5 @@
+{
+  "scenario": "INVALID_OUTPUT_JSON",
+  "response_id": "mock-response-invalid-output-json",
+  "output_text": "{ \"invalid_json\": "
+}

@@ -1,0 +1,37 @@
+{
+  "upstream_workflows": {
+    "canonical_definition": "Upstream workflows are workflows that happen before the parent workflow and provide an input, trigger, precondition, request, object, decision, document, authorization, or state required for the parent workflow to start or proceed.",
+    "purpose": "They define what is outside and before the parent workflow, while explaining how the parent workflow is initiated or enabled.",
+    "relationship_rule": "A workflow is upstream when its output is passed into the parent workflow, or when the parent workflow depends on its completion, decision, request, or produced object.",
+    "what_it_is_not": [
+      "It is not an internal step of the parent workflow.",
+      "It is not downstream follow-up work after the parent workflow ends.",
+      "It is not merely adjacent just because it interacts with the same actors or systems.",
+      "It should not be included inside the parent workflow unless the selected organizational and workflow scope explicitly includes it."
+    ],
+    "typical_outputs_passed_to_parent": [
+      "request",
+      "case",
+      "document",
+      "approval",
+      "decision",
+      "referral",
+      "authorization",
+      "completed assessment",
+      "initial data",
+      "triggering event"
+    ],
+    "examples": [
+      {
+        "name": "hospital admission workflow",
+        "relationship_to_parent": "Creates the patient case and clinical context before discharge planning can begin.",
+        "output_passed_to_parent": "Admitted patient with clinical record and care episode."
+      },
+      {
+        "name": "purchase request submission workflow",
+        "relationship_to_parent": "Creates the request that starts the approval workflow.",
+        "output_passed_to_parent": "Submitted purchase request."
+      }
+    ]
+  }
+}

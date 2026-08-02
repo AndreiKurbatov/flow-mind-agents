@@ -1,0 +1,11 @@
+{
+  "scenario": "HTTP_ERROR",
+  "status_code": 429,
+  "request_id": "mock-request-rate-limit",
+  "error": {
+    "code": "rate_limit_exceeded",
+    "type": "rate_limit_error",
+    "param": null,
+    "message": "Configured rate limit error"
+  }
+}

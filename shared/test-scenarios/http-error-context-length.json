@@ -1,0 +1,11 @@
+{
+  "scenario": "HTTP_ERROR",
+  "status_code": 400,
+  "request_id": "mock-request-context-length",
+  "error": {
+    "code": "context_length_exceeded",
+    "type": "invalid_request_error",
+    "param": "input",
+    "message": "Configured context length exceeded error"
+  }
+}

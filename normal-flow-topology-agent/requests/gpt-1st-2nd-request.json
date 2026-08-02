@@ -3,7 +3,7 @@
   "reasoning": {
     "effort": "high"
   },
-  "max_output_tokens": 25000,
+  "max_output_tokens": 50000,
   "input": [
     {
       "role": "developer",
@@ -22,10 +22,11 @@
       "strict": true,
       "schema": {
         "type": "object",
-        "description": "Root object containing the normal-flow topology draft produced by the agent.",
+        "description": "Root object containing the normal-flow topology draft and fields presented to the user for revision.",
         "additionalProperties": false,
         "required": [
-          "normal_flow_topology_draft"
+          "normal_flow_topology_draft",
+          "revision_request"
         ],
         "properties": {
           "normal_flow_topology_draft": {
@@ -36,8 +37,7 @@
               "workflow_name",
               "topology_status",
               "summary",
-              "nodes",
-              "clarification_questions"
+              "nodes"
             ],
             "properties": {
               "workflow_name": {
@@ -69,7 +69,6 @@
                     "node_type",
                     "name",
                     "description",
-                    "previous_node_ids",
                     "next_node_ids",
                     "confidence"
                   ],
@@ -94,15 +93,6 @@
                       "type": "string",
                       "description": "Clear explanation of what this workflow point represents and why it belongs to the normal non-exceptional flow."
                     },
-                    "previous_node_ids": {
-                      "type": "array",
-                      "description": "Identifiers of existing workflow points that can normally precede this node. Use an empty array for normal entry points.",
-                      "items": {
-                        "type": "string",
-                        "description": "Existing wfpoint_id of a previous normal workflow point.",
-                        "pattern": "^mfp_[0-9]{3}$"
-                      }
-                    },
                     "next_node_ids": {
                       "type": "array",
                       "description": "Identifiers of existing workflow points that can normally follow this node. Use an empty array for normal exit points.",
@@ -123,7 +113,18 @@
                     }
                   }
                 }
-              },
+              }
+            }
+          },
+          "revision_request": {
+            "type": "object",
+            "description": "Review fields returned for the user to complete. The agent creates questions but leaves all user-editable fields empty.",
+            "additionalProperties": false,
+            "required": [
+              "clarification_questions",
+              "additional_user_context"
+            ],
+            "properties": {
               "clarification_questions": {
                 "type": "array",
                 "description": "Questions for the user about unresolved topology or boundary uncertainties that affect the normal-flow graph or later topology agents.",
@@ -135,8 +136,9 @@
                     "question_id",
                     "question",
                     "why_needed",
-                    "related_node_ids",
-                    "blocks_next_pass"
+                    "blocks_next_pass",
+                    "answer",
+                    "related_node_ids"
                   ],
                   "properties": {
                     "question_id": {
@@ -152,6 +154,17 @@
                       "type": "string",
                       "description": "Explanation of why this clarification is necessary and how the answer would affect the normal-flow topology or the next agents."
                     },
+                    "blocks_next_pass": {
+                      "type": "boolean",
+                      "description": "Whether this uncertainty materially blocks safe execution of the next topology agents."
+                    },
+                    "answer": {
+                      "type": "string",
+                      "description": "User-editable answer. The agent must return an empty string.",
+                      "enum": [
+                        ""
+                      ]
+                    },
                     "related_node_ids": {
                       "type": "array",
                       "description": "Workflow point ids related to this uncertainty. Use an empty array if the question concerns the global workflow boundary rather than a specific node.",
@@ -160,13 +173,16 @@
                         "description": "Existing wfpoint_id related to the clarification question.",
                         "pattern": "^mfp_[0-9]{3}$"
                       }
-                    },
-                    "blocks_next_pass": {
-                      "type": "boolean",
-                      "description": "Whether this uncertainty materially blocks safe execution of the next topology agents."
                     }
                   }
                 }
+              },
+              "additional_user_context": {
+                "type": "string",
+                "description": "User-editable additional context. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
               }
             }
           }

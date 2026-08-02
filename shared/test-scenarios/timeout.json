@@ -1,0 +1,4 @@
+{
+  "scenario": "TIMEOUT",
+  "message": "Configured OpenAI request timeout"
+}

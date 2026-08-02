@@ -1,0 +1,27 @@
+{
+  "alternative_candidates": {
+    "canonical_definition": "Alternative candidates are other objects that may appear relevant to the workflow but are not selected as the primary process object.",
+    "purpose": "They prevent confusion between the real primary object and nearby objects such as triggers, documents, requests, intermediate artifacts, outputs, or downstream objects.",
+    "selection_rule": "Include an alternative candidate when the object could plausibly be mistaken for the primary process object, but the agent has a reason to treat it as secondary, supporting, triggering, intermediate, or downstream.",
+    "what_it_is_not": [
+      "It is not a list of all objects mentioned in the workflow.",
+      "It is not a generic glossary.",
+      "It is not a list of actors, systems, or departments unless they are being considered as process objects.",
+      "It should not include weakly related objects that are not relevant to boundary definition."
+    ],
+    "examples": [
+      {
+        "name": "care transfer request",
+        "why_not_primary": "May trigger or support the workflow, but does not represent the whole workflow."
+      },
+      {
+        "name": "discharge letter",
+        "why_not_primary": "May be an important output or document inside the workflow, but the broader workflow is about the discharge case."
+      },
+      {
+        "name": "insurance approval",
+        "why_not_primary": "May be a required decision inside the workflow, but the whole workflow is about processing the claim."
+      }
+    ]
+  }
+}

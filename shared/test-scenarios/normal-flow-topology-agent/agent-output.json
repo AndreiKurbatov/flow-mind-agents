@@ -1,0 +1,473 @@
+{
+  "normal_flow_topology_draft": {
+    "workflow_name": "Complex Hospital Patient Discharge",
+    "topology_status": "changes_requested",
+    "summary": "The topology represents a complex hospital discharge workflow. It includes routine discharge preparation, medication-related activities, home-care coordination, facility transfers, transport alternatives, discharge postponement, return to active treatment and discharge against medical advice.",
+    "nodes": [
+      {
+        "wfpoint_id": "mfp_001",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm preliminary clinical readiness",
+        "description": "The responsible physician performs an initial assessment and determines whether the patient may enter the discharge preparation process.",
+        "next_node_ids": [
+          "mfp_002"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_002",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Determine discharge disposition",
+        "description": "The clinical team determines whether the planned discharge can continue, whether the patient must return to active treatment, or whether the patient intends to leave against medical advice.",
+        "next_node_ids": [
+          "mfp_003",
+          "mfp_030",
+          "mfp_032"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_003",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Assess discharge complexity",
+        "description": "The team identifies the clinical documentation, medication and continuity-of-care workstreams required for the discharge.",
+        "next_node_ids": [
+          "mfp_004",
+          "mfp_005",
+          "mfp_006"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_004",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Prepare routine clinical documentation",
+        "description": "The clinical team prepares the standard discharge letter, follow-up instructions, clinical reports and required certificates.",
+        "next_node_ids": [
+          "mfp_009"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_005",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Perform medication reconciliation",
+        "description": "Current medicines are compared with the intended post-discharge therapy to identify additions, discontinuations, substitutions and potential interactions.",
+        "next_node_ids": [
+          "mfp_007",
+          "mfp_008"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_006",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Assess social and continuity-of-care needs",
+        "description": "The team evaluates whether the patient can return home, requires organized home support, needs placement in another facility or currently has no safe discharge destination.",
+        "next_node_ids": [
+          "mfp_011",
+          "mfp_012",
+          "mfp_013"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_007",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Finalize internal medication plan",
+        "description": "The physician and hospital pharmacist finalize the post-discharge medication plan using resources available within the hospital.",
+        "next_node_ids": [
+          "mfp_010"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_008",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Obtain external medication authorization",
+        "description": "The team requests authorization or availability confirmation for medicines that require external approval, special dispensing or territorial pharmacy coordination.",
+        "next_node_ids": [
+          "mfp_010",
+          "mfp_029"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_009",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Complete core discharge documentation",
+        "description": "The standard clinical documents are reviewed for completeness and prepared for inclusion in the final discharge package.",
+        "next_node_ids": [
+          "mfp_014"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_010",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Finalize medication plan",
+        "description": "The final medication list, prescriptions, dispensing instructions and patient-facing medication information are completed.",
+        "next_node_ids": [
+          "mfp_014"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_011",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Coordinate home support",
+        "description": "Home nursing, caregiver availability, equipment delivery and community follow-up services are coordinated for a patient returning home.",
+        "next_node_ids": [
+          "mfp_015"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_012",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Secure rehabilitation or long-term care placement",
+        "description": "The team identifies a receiving facility, sends the clinical request and waits for an available bed and formal acceptance.",
+        "next_node_ids": [
+          "mfp_016"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_013",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Identify unsafe discharge destination",
+        "description": "The assessment concludes that neither home discharge nor immediate facility transfer is currently safe or operationally possible.",
+        "next_node_ids": [
+          "mfp_017"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_014",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Assemble clinical discharge package",
+        "description": "Clinical documentation and the finalized medication plan are combined into the complete clinical discharge package.",
+        "next_node_ids": [
+          "mfp_018",
+          "mfp_019"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_015",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm home-care readiness",
+        "description": "The responsible team confirms that the home environment, caregiver support, equipment and community services are ready.",
+        "next_node_ids": [
+          "mfp_018"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_016",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm receiving-facility readiness",
+        "description": "The receiving facility confirms acceptance, bed availability, admission timing and any transfer-specific requirements.",
+        "next_node_ids": [
+          "mfp_019"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_017",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Initiate safeguarding and bed-management escalation",
+        "description": "The case is escalated to social services, safeguarding personnel and bed management because a safe discharge destination is unavailable.",
+        "next_node_ids": [
+          "mfp_031"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_018",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm home discharge readiness",
+        "description": "The clinical discharge package and the required home-care arrangements are considered ready for final departure planning.",
+        "next_node_ids": [
+          "mfp_020",
+          "mfp_021",
+          "mfp_022"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_019",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm facility transfer readiness",
+        "description": "The clinical discharge package and receiving-facility acceptance are considered sufficient to organize the inter-facility transfer.",
+        "next_node_ids": [
+          "mfp_023"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_020",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Prepare independent departure",
+        "description": "The patient is considered capable of leaving independently without organized transportation.",
+        "next_node_ids": [
+          "mfp_024"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_021",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Coordinate family or caregiver pickup",
+        "description": "The patient departure time is coordinated with a family member or caregiver who will accompany the patient home.",
+        "next_node_ids": [
+          "mfp_024"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_022",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Arrange medical transport",
+        "description": "A medical transport provider is booked because the patient requires supervised or assisted transportation.",
+        "next_node_ids": [
+          "mfp_025"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_023",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Prepare inter-facility handoff",
+        "description": "The hospital prepares the patient, documentation, medication and operational information required for transfer to another facility.",
+        "next_node_ids": [
+          "mfp_026"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_024",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Verify standard departure",
+        "description": "Staff verify patient identity, documentation delivery, prescriptions, instructions and the presence of the expected accompanying person when applicable.",
+        "next_node_ids": [
+          "mfp_027"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_025",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Complete medical transport handoff",
+        "description": "The patient is handed over to the transport crew together with the necessary clinical information, equipment and transport instructions.",
+        "next_node_ids": [
+          "mfp_028"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_026",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Transmit transfer dossier",
+        "description": "The complete transfer dossier is transmitted to the receiving facility through the agreed digital, paper or mixed communication channel.",
+        "next_node_ids": [
+          "mfp_033"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_027",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Close administrative hospitalization episode",
+        "description": "The hospital records the departure or transfer, updates bed availability and closes the administrative hospitalization episode.",
+        "next_node_ids": [
+          "mfp_034"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_028",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Complete transport documentation",
+        "description": "Transport-specific documentation and departure timestamps are recorded after the patient has been handed over to the medical transport crew.",
+        "next_node_ids": [
+          "mfp_027"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_029",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Handle denied or unavailable medication authorization",
+        "description": "The requested medicine cannot be authorized, supplied or made available within the timeframe required for discharge.",
+        "next_node_ids": [
+          "mfp_035"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_030",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Return patient to active treatment",
+        "description": "A new clinical issue, deterioration or unresolved diagnostic concern causes the patient to return to active inpatient treatment.",
+        "next_node_ids": [
+          "mfp_036"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_031",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Place discharge on operational hold",
+        "description": "The discharge process is formally paused while a safe destination, legal arrangement or appropriate support solution is sought.",
+        "next_node_ids": [
+          "mfp_037"
+        ],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_032",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Process discharge against medical advice",
+        "description": "The patient decides to leave despite the clinical team's recommendation to remain in care, triggering a dedicated risk-documentation process.",
+        "next_node_ids": [
+          "mfp_038"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_033",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Confirm receiving-facility acceptance",
+        "description": "The receiving facility confirms receipt of the dossier and accepts operational responsibility for the arriving patient.",
+        "next_node_ids": [
+          "mfp_027"
+        ],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_034",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Complete planned discharge or transfer",
+        "description": "The patient has left the hospital through the planned home-discharge or inter-facility transfer path, and the hospitalization episode is closed.",
+        "next_node_ids": [],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_035",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Postpone discharge pending medication access",
+        "description": "The planned discharge is postponed because safe access to a required post-discharge medicine cannot be guaranteed.",
+        "next_node_ids": [],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_036",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Cancel current discharge attempt",
+        "description": "The current discharge attempt is closed and the patient remains admitted under an active treatment plan.",
+        "next_node_ids": [],
+        "confidence": "high"
+      },
+      {
+        "wfpoint_id": "mfp_037",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Continue hospitalization pending safe destination",
+        "description": "The patient remains hospitalized because no safe and operationally valid discharge destination is currently available.",
+        "next_node_ids": [],
+        "confidence": "medium"
+      },
+      {
+        "wfpoint_id": "mfp_038",
+        "node_type": "MAIN_FLOW_POINT",
+        "name": "Patient leaves against medical advice",
+        "description": "The patient leaves after receiving risk information and after the hospital records the refusal of the recommended treatment or continued hospitalization.",
+        "next_node_ids": [],
+        "confidence": "high"
+      }
+    ]
+  },
+  "revision_request": {
+    "clarification_questions": [
+      {
+        "question_id": "btq_001",
+        "question": "Are documentation, medication reconciliation and continuity-of-care assessment executed in parallel, or are they alternative paths selected according to discharge complexity?",
+        "why_needed": "Node mfp_003 has three outgoing connections, but the current topology does not distinguish parallel execution from mutually exclusive routing.",
+        "blocks_next_pass": true,
+        "answer": "",
+        "related_node_ids": [
+          "mfp_003",
+          "mfp_004",
+          "mfp_005",
+          "mfp_006"
+        ]
+      },
+      {
+        "question_id": "btq_002",
+        "question": "Is external medication authorization required only for selected patients, and what condition determines whether the workflow follows mfp_007, mfp_008 or both?",
+        "why_needed": "The medication branch may represent optional work, alternative work or parallel work, and the current graph does not encode that distinction.",
+        "blocks_next_pass": true,
+        "answer": "",
+        "related_node_ids": [
+          "mfp_005",
+          "mfp_007",
+          "mfp_008",
+          "mfp_010"
+        ]
+      },
+      {
+        "question_id": "btq_003",
+        "question": "Can the clinical discharge package be considered complete before home-care or receiving-facility readiness is confirmed?",
+        "why_needed": "The graph converges clinical preparation with destination-specific readiness at two different points, but the precise synchronization rule is unclear.",
+        "blocks_next_pass": true,
+        "answer": "",
+        "related_node_ids": [
+          "mfp_014",
+          "mfp_015",
+          "mfp_016",
+          "mfp_018",
+          "mfp_019"
+        ]
+      },
+      {
+        "question_id": "btq_004",
+        "question": "Does a denied external medication authorization always postpone discharge, or can the clinical team substitute the medicine and return to the main medication path?",
+        "why_needed": "The current branch terminates at postponed discharge, but a substitution or escalation loop may exist in the real workflow.",
+        "blocks_next_pass": false,
+        "answer": "",
+        "related_node_ids": [
+          "mfp_008",
+          "mfp_029",
+          "mfp_035"
+        ]
+      },
+      {
+        "question_id": "btq_005",
+        "question": "At what exact moment does responsibility transfer to the receiving facility: dossier receipt, explicit acceptance or physical patient arrival?",
+        "why_needed": "The transfer branch contains several possible handoff points that may belong to different operational or legal boundaries.",
+        "blocks_next_pass": true,
+        "answer": "",
+        "related_node_ids": [
+          "mfp_023",
+          "mfp_026",
+          "mfp_033",
+          "mfp_027"
+        ]
+      },
+      {
+        "question_id": "btq_006",
+        "question": "Should discharge against medical advice reuse any standard documentation or administrative closure activities from the planned discharge path?",
+        "why_needed": "The current topology models the against-medical-advice path as an independent terminal branch, but some documentation and closure steps may be shared.",
+        "blocks_next_pass": false,
+        "answer": "",
+        "related_node_ids": [
+          "mfp_032",
+          "mfp_038",
+          "mfp_009",
+          "mfp_027"
+        ]
+      }
+    ],
+    "additional_user_context": ""
+  }
+}

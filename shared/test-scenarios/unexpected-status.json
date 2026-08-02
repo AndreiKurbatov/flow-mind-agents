@@ -1,0 +1,5 @@
+{
+  "scenario": "UNEXPECTED_STATUS",
+  "response_id": "mock-response-unexpected-status",
+  "status": "queued"
+}

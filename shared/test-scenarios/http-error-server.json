@@ -1,0 +1,11 @@
+{
+  "scenario": "HTTP_ERROR",
+  "status_code": 500,
+  "request_id": "mock-request-server-error",
+  "error": {
+    "code": "server_error",
+    "type": "server_error",
+    "param": null,
+    "message": "Configured OpenAI server error"
+  }
+}

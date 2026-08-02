@@ -1,0 +1,4 @@
+{
+  "scenario": "CONNECTION_ERROR",
+  "message": "Configured connection failure"
+}

@@ -1,0 +1,12 @@
+{
+  "scenario": "COMPLETED",
+  "response_id": "mock-response-completed",
+  "output_path": "gs://flow-mind-test-scenarios/normal-flow-topology-agent/agent-output.json",
+  "usage": {
+    "input_tokens": 1200,
+    "cached_input_tokens": 0,
+    "output_tokens": 800,
+    "total_tokens": 2000,
+    "reasoning_tokens": 300
+  }
+}

@@ -3,7 +3,7 @@
   "reasoning": {
     "effort": "high"
   },
-  "max_output_tokens": 25000,
+  "max_output_tokens": 50000,
   "input": [
     {
       "role": "developer",
@@ -453,38 +453,6 @@
                       ],
                       "additionalProperties": false
                     }
-                  },
-                  "confirmation_questions": {
-                    "type": "array",
-                    "description": "Concrete questions for the user when an important boundary decision cannot be made safely from the provided input.",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "question_id": {
-                          "type": "string",
-                          "description": "Stable identifier for the confirmation question, such as cq_001."
-                        },
-                        "question": {
-                          "type": "string",
-                          "description": "The actual question to ask the user."
-                        },
-                        "why_needed": {
-                          "type": "string",
-                          "description": "Explanation of why this question is needed for defining the workflow boundary."
-                        },
-                        "impact_if_unresolved": {
-                          "type": "string",
-                          "description": "Explanation of what remains ambiguous, risky, or unstable if this question is not answered."
-                        }
-                      },
-                      "required": [
-                        "question_id",
-                        "question",
-                        "why_needed",
-                        "impact_if_unresolved"
-                      ],
-                      "additionalProperties": false
-                    }
                   }
                 },
                 "required": [
@@ -498,8 +466,7 @@
                   "excluded_scope",
                   "upstream_workflows",
                   "downstream_workflows",
-                  "adjacent_workflows",
-                  "confirmation_questions"
+                  "adjacent_workflows"
                 ],
                 "additionalProperties": false
               }
@@ -512,10 +479,74 @@
               "workflow_boundary"
             ],
             "additionalProperties": false
+          },
+          "revision_request": {
+            "type": "object",
+            "description": "Review fields returned for the user to complete. The agent creates questions but leaves all user-editable fields empty.",
+            "properties": {
+              "confirmation_questions": {
+                "type": "array",
+                "description": "Concrete questions for the user when an important boundary decision cannot be made safely.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "question_id": {
+                      "type": "string",
+                      "description": "Stable identifier for the confirmation question, such as cq_001."
+                    },
+                    "question": {
+                      "type": "string",
+                      "description": "The actual question to ask the user."
+                    },
+                    "why_needed": {
+                      "type": "string",
+                      "description": "Explanation of why this question is needed for defining the workflow boundary."
+                    },
+                    "impact_if_unresolved": {
+                      "type": "string",
+                      "description": "Explanation of what remains ambiguous, risky, or unstable if this question is not answered."
+                    },
+                    "blocks_next_pass": {
+                      "type": "boolean",
+                      "description": "Whether the unresolved question prevents downstream agents from safely continuing."
+                    },
+                    "answer": {
+                      "type": "string",
+                      "description": "User-editable answer. The agent must return an empty string.",
+                      "enum": [
+                        ""
+                      ]
+                    }
+                  },
+                  "required": [
+                    "question_id",
+                    "question",
+                    "why_needed",
+                    "impact_if_unresolved",
+                    "blocks_next_pass",
+                    "answer"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "additional_user_context": {
+                "type": "string",
+                "description": "User-editable additional context. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
+              }
+            },
+            "required": [
+              "confirmation_questions",
+              "additional_user_context"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
-          "workflow_boundary_definition_result"
+          "workflow_boundary_definition_result",
+          "revision_request"
         ],
         "additionalProperties": false
       }

@@ -1,0 +1,25 @@
+{
+  "primary_process_object": {
+    "canonical_definition": "The primary process object is the main object, case, entity, request, document, person, claim, order, ticket, file, or asset that moves through the parent workflow and gives the workflow its identity.",
+    "purpose": "It helps define what the parent workflow is fundamentally about. The workflow should normally be understood as the handling, progression, transformation, approval, completion, resolution, or coordination of this object.",
+    "selection_rule": "Choose the object that best represents the whole workflow from start to end, not merely a trigger, supporting document, intermediate artifact, actor, system, or final output.",
+    "what_it_is_not": [
+      "It is not necessarily the first input that triggers the workflow.",
+      "It is not necessarily the final output produced by the workflow.",
+      "It is not an actor or team performing the workflow.",
+      "It is not a supporting document unless that document is truly the central object being processed.",
+      "It is not a downstream result if the parent workflow is mainly about producing or enabling that result."
+    ],
+    "examples": [
+      "patient",
+      "discharge case",
+      "insurance claim",
+      "purchase request",
+      "invoice",
+      "support ticket",
+      "contract",
+      "application",
+      "document file"
+    ]
+  }
+}

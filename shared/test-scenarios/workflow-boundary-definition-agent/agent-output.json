@@ -1,0 +1,203 @@
+{
+  "workflow_boundary_definition_result": {
+    "response_status": "changes_requested",
+    "user_asserted_context": {
+      "workflow": {
+        "workflow_name": "Hospital Patient Discharge",
+        "domain_or_industry": "healthcare",
+        "country_or_jurisdiction": "Italy"
+      },
+      "organization": {
+        "organization_name": "San Marco Hospital",
+        "organization_type": "hospital",
+        "organization_scope_to_consider": "single_organization",
+        "local_environment": {
+          "site_or_unit_name": "Internal Medicine Department",
+          "unit_type": "department"
+        }
+      }
+    },
+    "user_boundary_constraints": {
+      "things_to_force_inside_scope": [
+        "Clinical discharge decision",
+        "Preparation of the discharge documentation",
+        "Communication of discharge instructions to the patient",
+        "Transmission of the discharge letter to the patient"
+      ],
+      "things_to_force_outside_scope": [
+        "Long-term follow-up after discharge",
+        "Home-care service execution",
+        "Administrative billing and reimbursement"
+      ],
+      "things_the_agent_must_not_assume": [
+        "The patient always returns home after discharge",
+        "The discharge letter is always signed digitally",
+        "A follow-up appointment is always required"
+      ]
+    },
+    "resolved_organization_context": {
+      "current_organization": "San Marco Hospital",
+      "current_operational_unit": "Internal Medicine Department",
+      "organization_scope_used": "single_organization",
+      "organization_boundary_description": "The organizational boundary includes hospital departments, healthcare professionals and internal administrative services involved in preparing and completing the patient's discharge.",
+      "internality_rule": "An activity is considered internal when it is performed by staff, systems or operational units belonging to San Marco Hospital.",
+      "externality_rule": "An activity is considered external when it is performed by the patient, family members, general practitioners, external healthcare providers, pharmacies or territorial care services."
+    },
+    "workflow_boundary": {
+      "workflow_name": "Hospital Patient Discharge",
+      "parent_workflow_definition": "Management of an inpatient hospitalization episode from admission to closure of the hospital stay.",
+      "operational_purpose": "Safely conclude the patient's hospital stay by confirming clinical readiness, preparing the required documentation and communicating the care instructions needed after discharge.",
+      "primary_process_object": {
+        "name": "Patient discharge case",
+        "why_primary": "It is the main operational object whose state changes from discharge candidate to formally discharged patient.",
+        "alternative_candidates": [
+          {
+            "name": "Discharge letter",
+            "why_not_primary": "The discharge letter is an important output of the workflow, but it does not represent the entire discharge process."
+          },
+          {
+            "name": "Hospitalization episode",
+            "why_not_primary": "The hospitalization episode is broader than the discharge workflow and includes activities performed before discharge planning begins."
+          }
+        ]
+      },
+      "start_boundary": {
+        "start_event_or_condition": "The responsible physician determines that the patient may be clinically ready for discharge.",
+        "first_internal_activity": "The physician starts the formal discharge assessment and verifies whether the required clinical and organizational conditions are satisfied.",
+        "what_is_before_start": [
+          "Patient admission",
+          "Diagnostic investigations",
+          "Treatment and clinical monitoring",
+          "General management of the hospitalization episode"
+        ]
+      },
+      "end_boundary": {
+        "end_event_or_condition": "The patient has formally left the hospital and the discharge documentation has been completed and delivered.",
+        "final_internal_output_or_state": "The hospitalization episode is marked as discharged in the hospital information system.",
+        "what_happens_after_end": [
+          "The patient follows the prescribed therapy",
+          "The general practitioner receives or reviews the discharge information",
+          "External follow-up appointments may be performed",
+          "Territorial or home-care services may begin"
+        ]
+      },
+      "included_scope": [
+        {
+          "activity_or_area": "Clinical discharge readiness assessment",
+          "reason_included": "It determines whether the discharge workflow can proceed."
+        },
+        {
+          "activity_or_area": "Medication reconciliation",
+          "reason_included": "It ensures that the patient's post-discharge therapy is complete and consistent."
+        },
+        {
+          "activity_or_area": "Preparation of the discharge letter",
+          "reason_included": "The discharge letter is one of the principal outputs required to complete the workflow."
+        },
+        {
+          "activity_or_area": "Collection of pending examination results",
+          "reason_included": "Pending results may affect the discharge decision or the instructions provided to the patient."
+        },
+        {
+          "activity_or_area": "Communication of post-discharge instructions",
+          "reason_included": "The patient must understand therapies, restrictions, warning signs and any required follow-up."
+        },
+        {
+          "activity_or_area": "Administrative closure of the hospitalization episode",
+          "reason_included": "The discharge must be recorded in the hospital system to formally conclude the workflow."
+        }
+      ],
+      "excluded_scope": [
+        {
+          "activity_or_area": "Patient admission and bed assignment",
+          "reason_excluded": "These activities occur before the discharge process begins.",
+          "belongs_to": "upstream_workflow",
+          "wf_name": "Hospital Admission Management"
+        },
+        {
+          "activity_or_area": "Execution of follow-up medical visits",
+          "reason_excluded": "Follow-up visits occur after the patient has been discharged.",
+          "belongs_to": "downstream_workflow",
+          "wf_name": "Post-Discharge Follow-up Management"
+        },
+        {
+          "activity_or_area": "Delivery of home-care services",
+          "reason_excluded": "The hospital may activate these services, but their actual execution is performed after discharge by another organization or unit.",
+          "belongs_to": "downstream_workflow",
+          "wf_name": "Home-Care Service Delivery"
+        },
+        {
+          "activity_or_area": "Hospital billing and reimbursement processing",
+          "reason_excluded": "Billing uses information produced by the discharge process but has a different operational purpose.",
+          "belongs_to": "adjacent_workflow",
+          "wf_name": "Healthcare Billing and Reimbursement"
+        }
+      ],
+      "upstream_workflows": [
+        {
+          "name": "Inpatient Clinical Care Management",
+          "relationship_to_parent": "Provides the clinical history, treatments, examination results and current patient condition required to evaluate discharge readiness.",
+          "output_passed_to_parent": "Updated clinical record and indication that the patient may be ready for discharge."
+        },
+        {
+          "name": "Hospital Admission Management",
+          "relationship_to_parent": "Creates the hospitalization episode that will later be closed by the discharge workflow.",
+          "output_passed_to_parent": "Active hospitalization record with patient, department and admission information."
+        }
+      ],
+      "downstream_workflows": [
+        {
+          "name": "Post-Discharge Follow-up Management",
+          "relationship_to_parent": "Uses the discharge instructions to organize subsequent clinical controls.",
+          "input_received_from_parent": "Discharge letter, therapy plan and recommended follow-up activities."
+        },
+        {
+          "name": "Home-Care Service Activation",
+          "relationship_to_parent": "Coordinates care that must continue outside the hospital.",
+          "input_received_from_parent": "Patient care needs, clinical documentation and requested territorial services."
+        }
+      ],
+      "adjacent_workflows": [
+        {
+          "name": "Healthcare Billing and Reimbursement",
+          "relationship_to_parent": "Receives hospitalization and discharge data to calculate costs and prepare reimbursement requests.",
+          "reason_not_inside_parent": "Its purpose is financial and administrative rather than clinical and operational discharge management."
+        },
+        {
+          "name": "Hospital Bed Management",
+          "relationship_to_parent": "Uses the discharge status to update bed availability.",
+          "reason_not_inside_parent": "The bed-management workflow reacts to the discharge but manages hospital capacity independently."
+        }
+      ]
+    }
+  },
+  "revision_request": {
+    "confirmation_questions": [
+      {
+        "question_id": "cq_001",
+        "question": "Should the workflow end when the patient physically leaves the department or only after the hospitalization episode is administratively closed in the hospital system?",
+        "why_needed": "The physical departure and the administrative closure may occur at different times.",
+        "impact_if_unresolved": "The end boundary and final internal activity would remain ambiguous.",
+        "blocks_next_pass": false,
+        "answer": ""
+      },
+      {
+        "question_id": "cq_002",
+        "question": "Should the activation of home-care or territorial services be included when hospital staff must complete it before the patient can leave?",
+        "why_needed": "Some service activations may be mandatory discharge prerequisites rather than downstream activities.",
+        "impact_if_unresolved": "Activities that are operationally necessary for discharge could be incorrectly excluded.",
+        "blocks_next_pass": true,
+        "answer": ""
+      },
+      {
+        "question_id": "cq_003",
+        "question": "Is medication delivery by the hospital pharmacy part of this workflow or managed through a separate pharmaceutical workflow?",
+        "why_needed": "The organizational responsibility for discharge medication may differ between hospitals.",
+        "impact_if_unresolved": "The included scope and relationship with the pharmacy workflow may be defined incorrectly.",
+        "blocks_next_pass": true,
+        "answer": ""
+      }
+    ],
+    "additional_user_context": ""
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "downstream_workflows": {
+    "canonical_definition": "Downstream workflows are workflows that happen after the parent workflow and consume, continue, execute, monitor, or act upon the output, result, decision, object, document, or final state produced by the parent workflow.",
+    "purpose": "They define what is outside and after the parent workflow, while explaining what the parent workflow enables or hands off to.",
+    "relationship_rule": "A workflow is downstream when it receives an output from the parent workflow and starts, continues, or becomes possible because the parent workflow has reached its end state.",
+    "what_it_is_not": [
+      "It is not an internal completion step of the parent workflow.",
+      "It is not an upstream workflow that produces the initial trigger.",
+      "It is not adjacent if it clearly depends on the parent workflow's final output.",
+      "It should not be merged into the parent workflow unless the selected analysis scope explicitly includes post-completion execution or follow-up."
+    ],
+    "typical_inputs_received_from_parent": [
+      "completed case",
+      "approved request",
+      "final document",
+      "handoff package",
+      "decision",
+      "discharge plan",
+      "closed ticket",
+      "validated file",
+      "authorization",
+      "notification"
+    ],
+    "examples": [
+      {
+        "name": "post-discharge home care workflow",
+        "relationship_to_parent": "Starts after the hospital discharge workflow produces a discharge plan and care instructions.",
+        "input_received_from_parent": "Discharge plan and patient handoff information."
+      },
+      {
+        "name": "invoice payment workflow",
+        "relationship_to_parent": "Starts after the invoice approval workflow approves the invoice.",
+        "input_received_from_parent": "Approved invoice."
+      }
+    ]
+  }
+}

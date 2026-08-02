@@ -1,0 +1,13 @@
+{
+  "scenario": "INCOMPLETE",
+  "response_id": "mock-response-incomplete-max-output-tokens",
+  "incomplete_reason": "max_output_tokens",
+  "output_path": "gs://flow-mind-test-scenarios/workflow-boundary-definition-agent/truncated-agent-output.json",
+  "usage": {
+    "input_tokens": 1200,
+    "cached_input_tokens": 0,
+    "output_tokens": 25000,
+    "total_tokens": 26200,
+    "reasoning_tokens": 5000
+  }
+}
