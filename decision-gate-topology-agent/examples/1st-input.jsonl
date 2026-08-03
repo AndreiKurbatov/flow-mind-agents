@@ -1,15 +1,12 @@
 {
   "normal_flow_topology_draft": {
-    "workflow_name": "string",
     "topology_status": "changes_requested | confirmed | cancelled",
-    "summary": "string",
     "nodes": [
       {
         "wfpoint_id": "string",
         "node_type": "MAIN_FLOW_POINT",
         "name": "string",
         "description": "string",
-        "previous_node_ids": ["string"],
         "next_node_ids": ["string"],
         "confidence": "low | medium | high"
       }
