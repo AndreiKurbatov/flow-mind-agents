@@ -3,14 +3,6 @@
     "topology_status": "changes_requested | confirmed | cancelled",
     "nodes": [
       {
-        "wfpoint_id": "string",
-        "node_type": "MAIN_FLOW_POINT",
-        "name": "string",
-        "description": "string",
-        "next_node_ids": ["string"],
-        "confidence": "low | medium | high"
-      },
-      {
         "decision_gate_id": "dg_001",
         "node_type": "DECISION_GATE",
         "name": "Discharge finalization decision",
@@ -86,15 +78,19 @@
         ],
         "confidence": "medium"
       }
-    ],
-    "clarification_questions": [
-      {
-        "question_id": "btq_001",
-        "question": "string",
-        "why_needed": "string",
-        "related_node_ids": ["string"],
-        "blocks_next_pass": true
-      }
     ]
+  },
+  "revision_request": {
+    "confirmation_questions": [
+      {
+        "question_id": "cq_001",
+        "question": "Should post-discharge follow-up be included inside the parent workflow or treated as downstream?",
+        "why_needed": "This affects the end boundary of the parent workflow.",
+        "related_node_ids": ["string"],
+        "blocks_next_pass": false,
+        "answer": ""
+      }
+    ],
+    "additional_user_context": "string"
   }
 }
