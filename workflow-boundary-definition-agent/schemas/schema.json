@@ -1,0 +1,531 @@
+{
+  "type": "object",
+  "description": "Structured result produced by the workflow-boundary-definition-agent during the first iteration.",
+  "properties": {
+    "workflow_boundary_definition_result": {
+      "type": "object",
+      "description": "Top-level result object containing copied user context, user boundary constraints, resolved organizational context, and the generated workflow boundary definition.",
+      "properties": {
+        "response_status": {
+          "type": "string",
+          "description": "Status of the boundary definition result. Use changes_requested when the result is a draft requiring user confirmation or correction. Use confirmed only when the boundary is explicitly confirmed. Use cancelled only when the user explicitly cancelled the task.",
+          "enum": [
+            "changes_requested",
+            "confirmed",
+            "cancelled"
+          ]
+        },
+        "user_asserted_context": {
+          "type": "object",
+          "description": "Context facts explicitly provided by the user and copied from the initial input when present. These fields should not be freely inferred by the agent.",
+          "properties": {
+            "workflow": {
+              "type": "object",
+              "description": "Explicit workflow-level facts provided by the user.",
+              "properties": {
+                "workflow_name": {
+                  "type": "string",
+                  "description": "Name of the workflow as explicitly provided by the user. If missing, return an empty string."
+                },
+                "domain_or_industry": {
+                  "type": "string",
+                  "description": "Domain or industry of the workflow, copied from the user input if present. Example values may include healthcare, legal, finance, insurance, public_administration, logistics, education, other, or unclear, but custom user values are allowed."
+                },
+                "country_or_jurisdiction": {
+                  "type": "string",
+                  "description": "Country, region, or jurisdiction relevant to the workflow, copied from the user input if present."
+                }
+              },
+              "required": [
+                "workflow_name",
+                "domain_or_industry",
+                "country_or_jurisdiction"
+              ],
+              "additionalProperties": false
+            },
+            "organization": {
+              "type": "object",
+              "description": "Explicit organization-level facts provided by the user.",
+              "properties": {
+                "organization_name": {
+                  "type": "string",
+                  "description": "Name of the organization explicitly provided by the user. If missing, return an empty string."
+                },
+                "organization_type": {
+                  "type": "string",
+                  "description": "Type of organization copied from the user input if present. Example values may include hospital, clinic, public_authority, private_company, non_profit, service_provider, department, multi_organization_network, other, or unclear, but custom user values are allowed."
+                },
+                "organization_scope_to_consider": {
+                  "type": "string",
+                  "description": "Organizational level at which the workflow should be analyzed. This value defines the organizational boundary used as the main analysis frame.",
+                  "enum": [
+                    "single_local_unit",
+                    "single_organization",
+                    "organization_network",
+                    "cross_organization_process",
+                    "unclear"
+                  ]
+                },
+                "local_environment": {
+                  "type": "object",
+                  "description": "Explicit local operational environment facts provided by the user.",
+                  "properties": {
+                    "site_or_unit_name": {
+                      "type": "string",
+                      "description": "Name of the local site, department, ward, branch, team, service unit, or operational area explicitly provided by the user. If missing, return an empty string."
+                    },
+                    "unit_type": {
+                      "type": "string",
+                      "description": "Type of local unit copied from the user input if present. Example values may include ward, department, office, branch, team, service_unit, operational_area, other, or unclear, but custom user values are allowed."
+                    }
+                  },
+                  "required": [
+                    "site_or_unit_name",
+                    "unit_type"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "organization_name",
+                "organization_type",
+                "organization_scope_to_consider",
+                "local_environment"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "workflow",
+            "organization"
+          ],
+          "additionalProperties": false
+        },
+        "user_boundary_constraints": {
+          "type": "object",
+          "description": "User-provided constraints that guide how the workflow boundary should be interpreted. These are not factual workflow evidence, but they should be respected unless they conflict with explicit user-provided facts.",
+          "properties": {
+            "things_to_force_inside_scope": {
+              "type": "array",
+              "description": "Activities, areas, responsibilities, phases, coordination zones, or workflow elements that the user wants to force inside the parent workflow boundary.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "things_to_force_outside_scope": {
+              "type": "array",
+              "description": "Activities, areas, responsibilities, phases, coordination zones, or workflow elements that the user wants to force outside the parent workflow boundary.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "things_the_agent_must_not_assume": {
+              "type": "array",
+              "description": "Assumptions the agent must avoid unless they are explicitly supported by the user input.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "things_to_force_inside_scope",
+            "things_to_force_outside_scope",
+            "things_the_agent_must_not_assume"
+          ],
+          "additionalProperties": false
+        },
+        "resolved_organization_context": {
+          "type": "object",
+          "description": "Agent-generated interpretation of the organizational frame used for the workflow boundary analysis. This explains what is considered internal, external, operationally external, upstream, downstream, or adjacent under the selected organization scope.",
+          "properties": {
+            "current_organization": {
+              "type": "string",
+              "description": "Organization treated as the main organizational reference point for this boundary analysis."
+            },
+            "current_operational_unit": {
+              "type": "string",
+              "description": "Local unit, department, team, site, branch, ward, or operational area treated as the main operational reference point for this boundary analysis."
+            },
+            "organization_scope_used": {
+              "type": "string",
+              "description": "Organizational scope actually used by the agent when deciding whether activities are internal, upstream, downstream, or adjacent.",
+              "enum": [
+                "single_local_unit",
+                "single_organization",
+                "organization_network",
+                "cross_organization_process",
+                "unclear"
+              ]
+            },
+            "organization_boundary_description": {
+              "type": "string",
+              "description": "Concise explanation of the organizational boundary used in this analysis, including what is considered internal and what is treated as outside or operationally external."
+            },
+            "internality_rule": {
+              "type": "string",
+              "description": "Rule used by the agent to decide when an activity, role, responsibility, or workflow area belongs inside the parent workflow under the selected organizational scope."
+            },
+            "externality_rule": {
+              "type": "string",
+              "description": "Rule used by the agent to decide when an activity, role, responsibility, or workflow area should be treated as outside the parent workflow, upstream, downstream, or adjacent."
+            }
+          },
+          "required": [
+            "current_organization",
+            "current_operational_unit",
+            "organization_scope_used",
+            "organization_boundary_description",
+            "internality_rule",
+            "externality_rule"
+          ],
+          "additionalProperties": false
+        },
+        "workflow_boundary": {
+          "type": "object",
+          "description": "Agent-generated boundary definition of the parent workflow.",
+          "properties": {
+            "workflow_name": {
+              "type": "string",
+              "description": "Name of the parent workflow being defined. Prefer the user-provided workflow name if present; otherwise infer cautiously from the provided context."
+            },
+            "parent_workflow_definition": {
+              "type": "string",
+              "description": "Concise definition of the parent workflow. It should explain what workflow is being analyzed and what kind of operational process it represents."
+            },
+            "operational_purpose": {
+              "type": "string",
+              "description": "Operational purpose of the parent workflow: why this workflow exists and what operational outcome it is meant to achieve."
+            },
+            "primary_process_object": {
+              "type": "object",
+              "description": "The main object, case, entity, person, request, document, claim, order, ticket, file, or asset that moves through the parent workflow and gives the workflow its identity.",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the selected primary process object."
+                },
+                "why_primary": {
+                  "type": "string",
+                  "description": "Explanation of why this object is the best representation of what the parent workflow processes from start to end."
+                },
+                "alternative_candidates": {
+                  "type": "array",
+                  "description": "Other objects that may appear relevant but are not selected as the primary process object.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the alternative process object candidate."
+                      },
+                      "why_not_primary": {
+                        "type": "string",
+                        "description": "Explanation of why this candidate should not be treated as the primary process object."
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "why_not_primary"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "why_primary",
+                "alternative_candidates"
+              ],
+              "additionalProperties": false
+            },
+            "start_boundary": {
+              "type": "object",
+              "description": "Definition of where the parent workflow begins.",
+              "properties": {
+                "start_event_or_condition": {
+                  "type": "string",
+                  "description": "Event, condition, request, need, decision, or state that marks the beginning of the parent workflow."
+                },
+                "first_internal_activity": {
+                  "type": "string",
+                  "description": "First activity that belongs inside the parent workflow boundary."
+                },
+                "what_is_before_start": {
+                  "type": "array",
+                  "description": "Related activities, events, decisions, preconditions, or workflows that happen before the parent workflow and should not be treated as part of it.",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "start_event_or_condition",
+                "first_internal_activity",
+                "what_is_before_start"
+              ],
+              "additionalProperties": false
+            },
+            "end_boundary": {
+              "type": "object",
+              "description": "Definition of where the parent workflow ends.",
+              "properties": {
+                "end_event_or_condition": {
+                  "type": "string",
+                  "description": "Event, condition, output, decision, or state that marks the completion of the parent workflow."
+                },
+                "final_internal_output_or_state": {
+                  "type": "string",
+                  "description": "Final result, output, status, or state produced inside the parent workflow before responsibility moves elsewhere or the process ends."
+                },
+                "what_happens_after_end": {
+                  "type": "array",
+                  "description": "Related activities, events, workflows, or follow-up processes that happen after the parent workflow and should not be treated as part of it.",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "end_event_or_condition",
+                "final_internal_output_or_state",
+                "what_happens_after_end"
+              ],
+              "additionalProperties": false
+            },
+            "included_scope": {
+              "type": "array",
+              "description": "Activities, areas, responsibilities, coordination zones, document handling, decisions, or operational responsibilities that belong inside the parent workflow boundary.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "activity_or_area": {
+                    "type": "string",
+                    "description": "Activity, phase, area, responsibility, decision, handoff zone, document handling, coordination area, or operational element included in the workflow."
+                  },
+                  "reason_included": {
+                    "type": "string",
+                    "description": "Explanation of why this element belongs inside the parent workflow boundary."
+                  }
+                },
+                "required": [
+                  "activity_or_area",
+                  "reason_included"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "excluded_scope": {
+              "type": "array",
+              "description": "Activities, areas, responsibilities, coordination zones, or related workflows that are connected to the parent workflow but should remain outside its boundary.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "activity_or_area": {
+                    "type": "string",
+                    "description": "Activity, phase, area, responsibility, decision, coordination zone, or workflow element excluded from the parent workflow boundary."
+                  },
+                  "reason_excluded": {
+                    "type": "string",
+                    "description": "Explanation of why this element should not be treated as part of the parent workflow."
+                  },
+                  "belongs_to": {
+                    "type": "string",
+                    "description": "Classification of the excluded element relative to the parent workflow.",
+                    "enum": [
+                      "upstream_workflow",
+                      "downstream_workflow",
+                      "adjacent_workflow",
+                      "uncertain"
+                    ]
+                  },
+                  "wf_name": {
+                    "type": "string",
+                    "description": "Likely name of the upstream, downstream, adjacent, or uncertain related workflow to which this excluded element belongs. Use an empty string if no safe name can be inferred."
+                  }
+                },
+                "required": [
+                  "activity_or_area",
+                  "reason_excluded",
+                  "belongs_to",
+                  "wf_name"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "upstream_workflows": {
+              "type": "array",
+              "description": "Workflows that happen before the parent workflow and provide an input, trigger, precondition, request, object, decision, document, authorization, or state required for the parent workflow to start or proceed.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the upstream workflow."
+                  },
+                  "relationship_to_parent": {
+                    "type": "string",
+                    "description": "Explanation of how the upstream workflow connects to, enables, triggers, or provides input to the parent workflow."
+                  },
+                  "output_passed_to_parent": {
+                    "type": "string",
+                    "description": "Object, information, request, document, decision, authorization, state, or trigger passed from the upstream workflow into the parent workflow."
+                  }
+                },
+                "required": [
+                  "name",
+                  "relationship_to_parent",
+                  "output_passed_to_parent"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "downstream_workflows": {
+              "type": "array",
+              "description": "Workflows that happen after the parent workflow and consume, continue, execute, monitor, or act upon the output, result, decision, object, document, or final state produced by the parent workflow.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the downstream workflow."
+                  },
+                  "relationship_to_parent": {
+                    "type": "string",
+                    "description": "Explanation of how the downstream workflow depends on, follows, consumes, continues, or is enabled by the parent workflow."
+                  },
+                  "input_received_from_parent": {
+                    "type": "string",
+                    "description": "Object, information, document, decision, result, state, handoff package, or notification received from the parent workflow."
+                  }
+                },
+                "required": [
+                  "name",
+                  "relationship_to_parent",
+                  "input_received_from_parent"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "adjacent_workflows": {
+              "type": "array",
+              "description": "Related workflows that interact with the parent workflow but are not clearly before it or after it. They may run in parallel, share actors, exchange information, support decisions, or coordinate around the same object while remaining separate workflows.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the adjacent workflow."
+                  },
+                  "relationship_to_parent": {
+                    "type": "string",
+                    "description": "Explanation of how the adjacent workflow interacts with or relates to the parent workflow."
+                  },
+                  "reason_not_inside_parent": {
+                    "type": "string",
+                    "description": "Explanation of why this related workflow should remain separate and not be included inside the parent workflow boundary."
+                  }
+                },
+                "required": [
+                  "name",
+                  "relationship_to_parent",
+                  "reason_not_inside_parent"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "workflow_name",
+            "parent_workflow_definition",
+            "operational_purpose",
+            "primary_process_object",
+            "start_boundary",
+            "end_boundary",
+            "included_scope",
+            "excluded_scope",
+            "upstream_workflows",
+            "downstream_workflows",
+            "adjacent_workflows"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "response_status",
+        "user_asserted_context",
+        "user_boundary_constraints",
+        "resolved_organization_context",
+        "workflow_boundary"
+      ],
+      "additionalProperties": false
+    },
+    "revision_request": {
+      "type": "object",
+      "description": "Review fields returned for the user to complete. The agent creates questions but leaves all user-editable fields empty.",
+      "properties": {
+        "confirmation_questions": {
+          "type": "array",
+          "description": "Concrete questions for the user when an important boundary decision cannot be made safely.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "description": "Stable identifier for the confirmation question, such as cq_001."
+              },
+              "question": {
+                "type": "string",
+                "description": "The actual question to ask the user."
+              },
+              "why_needed": {
+                "type": "string",
+                "description": "Explanation of why this question is needed for defining the workflow boundary."
+              },
+              "impact_if_unresolved": {
+                "type": "string",
+                "description": "Explanation of what remains ambiguous, risky, or unstable if this question is not answered."
+              },
+              "blocks_next_pass": {
+                "type": "boolean",
+                "description": "Whether the unresolved question prevents downstream agents from safely continuing."
+              },
+              "answer": {
+                "type": "string",
+                "description": "User-editable answer. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
+              }
+            },
+            "required": [
+              "question_id",
+              "question",
+              "why_needed",
+              "impact_if_unresolved",
+              "blocks_next_pass",
+              "answer"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additional_user_context": {
+          "type": "string",
+          "description": "User-editable additional context. The agent must return an empty string.",
+          "enum": [
+            ""
+          ]
+        }
+      },
+      "required": [
+        "confirmation_questions",
+        "additional_user_context"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "workflow_boundary_definition_result",
+    "revision_request"
+  ],
+  "additionalProperties": false
+}

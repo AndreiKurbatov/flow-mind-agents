@@ -1,0 +1,168 @@
+{
+  "type": "object",
+  "description": "Root object containing the normal-flow topology draft and fields presented to the user for revision.",
+  "additionalProperties": false,
+  "required": [
+    "normal_flow_topology_draft",
+    "revision_request"
+  ],
+  "properties": {
+    "normal_flow_topology_draft": {
+      "type": "object",
+      "description": "Draft topology of all expected non-exceptional normal paths through the workflow.",
+      "additionalProperties": false,
+      "required": [
+        "workflow_name",
+        "topology_status",
+        "summary",
+        "nodes"
+      ],
+      "properties": {
+        "workflow_name": {
+          "type": "string",
+          "description": "Name of the parent workflow being analyzed. Should normally match workflow_boundary.workflow_name."
+        },
+        "topology_status": {
+          "type": "string",
+          "description": "Current review status of the normal-flow topology draft. Use changes_requested when user review or clarification is still needed, confirmed when the draft is ready for the next topology agent, and cancelled only when topology work should stop.",
+          "enum": [
+            "changes_requested",
+            "confirmed",
+            "cancelled"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "description": "Concise human-readable summary of the normal-flow topology, including the main normal routes, important normal variants, and any major assumptions."
+        },
+        "nodes": {
+          "type": "array",
+          "description": "List of high-level workflow points representing the expected non-exceptional normal movement of the primary process object through the workflow.",
+          "items": {
+            "type": "object",
+            "description": "A high-level meaningful point in the normal workflow where the primary process object reaches a new important state, phase, route, branch, merge, or exit condition.",
+            "additionalProperties": false,
+            "required": [
+              "wfpoint_id",
+              "node_type",
+              "name",
+              "description",
+              "next_node_ids",
+              "confidence"
+            ],
+            "properties": {
+              "wfpoint_id": {
+                "type": "string",
+                "description": "Stable unique identifier of this workflow point. Use sequential ids such as mfp_001, mfp_002, mfp_003.",
+                "pattern": "^mfp_[0-9]{3}$"
+              },
+              "node_type": {
+                "type": "string",
+                "description": "Type of topology node. At this stage all nodes must be MAIN_FLOW_POINT because the agent models only normal-flow workflow points.",
+                "enum": [
+                  "MAIN_FLOW_POINT"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "description": "Short process-oriented name of the workflow point. It should describe a meaningful normal state, phase, route, branch, merge, or exit, not a local micro-task."
+              },
+              "description": {
+                "type": "string",
+                "description": "Clear explanation of what this workflow point represents and why it belongs to the normal non-exceptional flow."
+              },
+              "next_node_ids": {
+                "type": "array",
+                "description": "Identifiers of existing workflow points that can normally follow this node. Use an empty array for normal exit points.",
+                "items": {
+                  "type": "string",
+                  "description": "Existing wfpoint_id of a next normal workflow point.",
+                  "pattern": "^mfp_[0-9]{3}$"
+                }
+              },
+              "confidence": {
+                "type": "string",
+                "description": "Confidence that this workflow point and its placement in the normal-flow topology are supported by the provided workflow boundary context and user feedback.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "revision_request": {
+      "type": "object",
+      "description": "Review fields returned for the user to complete. The agent creates questions but leaves all user-editable fields empty.",
+      "additionalProperties": false,
+      "required": [
+        "clarification_questions",
+        "additional_user_context"
+      ],
+      "properties": {
+        "clarification_questions": {
+          "type": "array",
+          "description": "Questions for the user about unresolved topology or boundary uncertainties that affect the normal-flow graph or later topology agents.",
+          "items": {
+            "type": "object",
+            "description": "A specific clarification question needed to resolve uncertainty in the normal-flow topology.",
+            "additionalProperties": false,
+            "required": [
+              "question_id",
+              "question",
+              "why_needed",
+              "blocks_next_pass",
+              "answer",
+              "related_node_ids"
+            ],
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "description": "Stable identifier of the clarification question. Use sequential ids such as btq_001, btq_002, btq_003.",
+                "pattern": "^btq_[0-9]{3}$"
+              },
+              "question": {
+                "type": "string",
+                "description": "Clear question addressed to the user. It should ask for a concrete clarification about normal route structure, workflow boundaries, or unresolved topology assumptions."
+              },
+              "why_needed": {
+                "type": "string",
+                "description": "Explanation of why this clarification is necessary and how the answer would affect the normal-flow topology or the next agents."
+              },
+              "blocks_next_pass": {
+                "type": "boolean",
+                "description": "Whether this uncertainty materially blocks safe execution of the next topology agents."
+              },
+              "answer": {
+                "type": "string",
+                "description": "User-editable answer. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
+              },
+              "related_node_ids": {
+                "type": "array",
+                "description": "Workflow point ids related to this uncertainty. Use an empty array if the question concerns the global workflow boundary rather than a specific node.",
+                "items": {
+                  "type": "string",
+                  "description": "Existing wfpoint_id related to the clarification question.",
+                  "pattern": "^mfp_[0-9]{3}$"
+                }
+              }
+            }
+          }
+        },
+        "additional_user_context": {
+          "type": "string",
+          "description": "User-editable additional context. The agent must return an empty string.",
+          "enum": [
+            ""
+          ]
+        }
+      }
+    }
+  }
+}
