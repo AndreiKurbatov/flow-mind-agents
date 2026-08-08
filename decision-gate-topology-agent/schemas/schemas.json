@@ -1,0 +1,344 @@
+{
+  "text": {
+    "verbosity": "medium",
+    "format": {
+      "type": "json_schema",
+      "name": "decision_gate_topology_result",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "description": "Structured result produced by the Decision Gate Topology Agent. It returns the updated normal-flow topology with inserted decision gates and a revision request for unresolved questions.",
+        "additionalProperties": false,
+        "properties": {
+          "decision_gate_topology_draft": {
+            "type": "object",
+            "description": "Updated normal-flow topology. The nodes array contains the inherited MAIN_FLOW_POINT nodes and the inserted DECISION_GATE nodes.",
+            "additionalProperties": false,
+            "properties": {
+              "topology_status": {
+                "type": "string",
+                "description": "Current review status of the decision-gate topology.",
+                "enum": [
+                  "changes_requested",
+                  "confirmed",
+                  "cancelled"
+                ]
+              },
+              "decision_gates": {
+                "type": "array",
+                "description": "Complete mixed topology node list. Connections may reference a wfpoint_id, decision_gate_id, or outcome_id.",
+                "items": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/main_flow_point_node"
+                    },
+                    {
+                      "$ref": "#/$defs/decision_gate_node"
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [
+              "topology_status",
+              "decision_gates"
+            ]
+          },
+          "revision_request": {
+            "type": "object",
+            "description": "Review fields returned for the user to complete. The agent creates confirmation questions but leaves all user-editable answer fields empty.",
+            "additionalProperties": false,
+            "properties": {
+              "confirmation_questions": {
+                "type": "array",
+                "description": "Concrete questions whose answers may confirm, correct, or complete the decision-gate topology.",
+                "items": {
+                  "$ref": "#/$defs/confirmation_question"
+                }
+              },
+              "additional_user_context": {
+                "type": "string",
+                "description": "User-editable additional context. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
+              }
+            },
+            "required": [
+              "confirmation_questions",
+              "additional_user_context"
+            ]
+          }
+        },
+        "required": [
+          "decision_gate_topology_draft",
+          "revision_request"
+        ],
+        "$defs": {
+          "main_flow_point_node": {
+            "type": "object",
+            "description": "A high-level normal-flow point inherited from the input topology. Existing identifiers and semantics should be preserved unless the topology is explicitly revised.",
+            "additionalProperties": false,
+            "properties": {
+              "wfpoint_id": {
+                "type": "string",
+                "description": "Stable identifier of the normal-flow point, such as mfp_001."
+              },
+              "node_type": {
+                "type": "string",
+                "description": "Node discriminator for a normal-flow point.",
+                "enum": [
+                  "MAIN_FLOW_POINT"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "description": "Short human-readable name of the normal-flow point."
+              },
+              "description": {
+                "type": "string",
+                "description": "Explanation of what this normal-flow point represents in the workflow topology."
+              },
+              "previous_node_ids": {
+                "type": "array",
+                "description": "References that flow into this node. Values may reference wfpoint_id, decision_gate_id, or outcome_id. When this node follows a decision gate, the relevant outcome_id should normally be used.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "next_node_ids": {
+                "type": "array",
+                "description": "References that follow this node. Values may reference wfpoint_id or decision_gate_id. When a decision gate is inserted after this node, the decision_gate_id should be used.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "string",
+                "description": "Confidence that this node correctly represents its place in the normal-flow topology.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            },
+            "required": [
+              "wfpoint_id",
+              "node_type",
+              "name",
+              "description",
+              "previous_node_ids",
+              "next_node_ids",
+              "confidence"
+            ]
+          },
+          "decision_gate_node": {
+            "type": "object",
+            "description": "A high-level control point inserted into the normal-flow topology where the workflow selects, blocks, redirects, delays, confirms, or finalizes a path.",
+            "additionalProperties": false,
+            "properties": {
+              "decision_gate_id": {
+                "type": "string",
+                "description": "Stable identifier of the decision gate, such as dg_001."
+              },
+              "node_type": {
+                "type": "string",
+                "description": "Node discriminator for a decision gate.",
+                "enum": [
+                  "DECISION_GATE"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "description": "Short human-readable name of the decision gate, suitable for graph visualization."
+              },
+              "decision_question": {
+                "type": "string",
+                "description": "Concrete question answered by this gate. This field expresses the central meaning of the decision."
+              },
+              "decision_responsibility": {
+                "type": "string",
+                "description": "Explanation of what this gate is responsible for determining in the workflow."
+              },
+              "anchored_to_node_ids": {
+                "type": "array",
+                "description": "MAIN_FLOW_POINT identifiers that flow directly into this decision gate and to which the gate is semantically attached. These values map to canonical previousNodeIds.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "decision_basis": {
+                "type": "array",
+                "description": "Dynamically generated, workflow-specific factors, conditions, evidence, confirmations, checks, or criteria used to answer the decision question.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "decision_nature_tags": {
+                "type": "array",
+                "description": "Controlled semantic categories describing the nature of the decision. Every item must be selected from the configured vocabulary; new tags must not be invented.",
+                "items": {
+                  "type": "string",
+                  "enum": "{{DECISION_NATURE_TAG_ENUM_CONF}}"
+                }
+              },
+              "outcomes": {
+                "type": "array",
+                "description": "Logical possible results of this decision gate. Each outcome acts as an output port and may connect to existing nodes, request a missing branch, remain unresolved, or leave the current workflow scope.",
+                "items": {
+                  "$ref": "#/$defs/decision_gate_outcome"
+                }
+              },
+              "confidence": {
+                "type": "string",
+                "description": "Confidence that this decision gate correctly represents a meaningful macro-level control point.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            },
+            "required": [
+              "decision_gate_id",
+              "node_type",
+              "name",
+              "decision_question",
+              "decision_responsibility",
+              "anchored_to_node_ids",
+              "decision_basis",
+              "decision_nature_tags",
+              "outcomes",
+              "confidence"
+            ]
+          },
+          "decision_gate_outcome": {
+            "type": "object",
+            "description": "A logical result of a DECISION_GATE. The outcome may already be attached, may require a new branch, may remain unresolved, or may terminate or leave the parent workflow scope.",
+            "additionalProperties": false,
+            "properties": {
+              "outcome_id": {
+                "type": "string",
+                "description": "Stable identifier formed from the parent gate identifier and a sequential suffix, such as dg_001_out_001."
+              },
+              "outcome_label": {
+                "type": "string",
+                "description": "Short machine-readable label for the outcome, written in snake_case."
+              },
+              "description": {
+                "type": "string",
+                "description": "Human-readable explanation of the conditions and meaning of this outcome."
+              },
+              "connection_status": {
+                "type": "string",
+                "description": "Configured state of the connection between this outcome and the remaining topology.",
+                "enum": [
+                  "attached",
+                  "branch_candidate_needed",
+                  "unresolved",
+                  "terminal_or_out_of_scope"
+                ]
+              },
+              "branch_creation_request": {
+                "description": "Request describing a missing continuation branch. Must contain an object when connection_status is branch_candidate_needed and must otherwise be null.",
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/branch_creation_request"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "next_node_ids": {
+                "type": "array",
+                "description": "Existing topology nodes reached through this outcome. For attached outcomes this must contain an existing node reference. For branch_candidate_needed, unresolved, or terminal_or_out_of_scope it may be empty.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "outcome_id",
+              "outcome_label",
+              "description",
+              "connection_status",
+              "branch_creation_request",
+              "next_node_ids"
+            ]
+          },
+          "branch_creation_request": {
+            "type": "object",
+            "description": "Structured request for the normal-flow topology agent or another topology revision agent to create a missing branch for an outcome.",
+            "additionalProperties": false,
+            "properties": {
+              "requested_branch_purpose": {
+                "type": "string",
+                "description": "What the missing branch should represent and why it is needed."
+              },
+              "expected_start_context": {
+                "type": "string",
+                "description": "Where and under what decision outcome or operational condition the branch should begin."
+              },
+              "expected_end_or_merge_behavior": {
+                "type": "string",
+                "description": "How the branch may end, merge back, enter waiting, redirect, leave scope, or preserve unresolved alternatives."
+              }
+            },
+            "required": [
+              "requested_branch_purpose",
+              "expected_start_context",
+              "expected_end_or_merge_behavior"
+            ]
+          },
+          "confirmation_question": {
+            "type": "object",
+            "description": "A concrete user question required to resolve a material ambiguity in the decision-gate topology.",
+            "additionalProperties": false,
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "description": "Stable sequential identifier for the question, such as cq_001."
+              },
+              "question": {
+                "type": "string",
+                "description": "The concrete question to present to the user."
+              },
+              "why_needed": {
+                "type": "string",
+                "description": "Explanation of why the answer matters for the correctness of the topology."
+              },
+              "related_node_ids": {
+                "type": "array",
+                "description": "Identifiers of the MAIN_FLOW_POINT, DECISION_GATE, or outcome elements affected by this question.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blocks_next_pass": {
+                "type": "boolean",
+                "description": "Whether this unresolved question prevents downstream processing from continuing safely."
+              },
+              "answer": {
+                "type": "string",
+                "description": "User-editable answer. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
+              }
+            },
+            "required": [
+              "question_id",
+              "question",
+              "why_needed",
+              "related_node_ids",
+              "blocks_next_pass",
+              "answer"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

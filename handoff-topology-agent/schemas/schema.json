@@ -1,0 +1,302 @@
+{
+  "type": "object",
+  "description": "Structured handoff-region overlay and user revision fields.",
+  "additionalProperties": false,
+  "required": [
+    "handoff_region_overlay_draft",
+    "revision_request"
+  ],
+  "properties": {
+    "handoff_region_overlay_draft": {
+      "type": "object",
+      "description": "Authoritative handoff-region overlay over the current canonical workflow graph.",
+      "additionalProperties": false,
+      "required": [
+        "response_status",
+        "handoff_regions"
+      ],
+      "properties": {
+        "response_status": {
+          "type": "string",
+          "description": "Current review status of the handoff-region overlay.",
+          "enum": [
+            "changes_requested",
+            "confirmed",
+            "cancelled"
+          ]
+        },
+        "handoff_regions": {
+          "type": "array",
+          "description": "Handoff regions identified as an overlay. Regions reference existing graph nodes and do not modify graph topology.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "handoff_zone_candidate_id",
+              "name",
+              "handoff_summary",
+              "location_kind",
+              "source_ref_ids",
+              "target_ref_ids",
+              "boundary_ref_ids",
+              "from_party",
+              "to_party",
+              "transferred_responsibility_or_control",
+              "transferred_payload",
+              "sender_expected_action",
+              "receiver_expected_action",
+              "handoff_nature_tags",
+              "why_candidate",
+              "localization_uncertainty",
+              "confidence"
+            ],
+            "properties": {
+              "handoff_zone_candidate_id": {
+                "type": "string",
+                "description": "Stable unique identifier of the handoff region.",
+                "pattern": "^hzc_[0-9]{3}$"
+              },
+              "name": {
+                "type": "string",
+                "description": "Short human-readable name of the handoff region."
+              },
+              "handoff_summary": {
+                "type": "string",
+                "description": "Concise explanation of what passes from one party or context to another."
+              },
+              "location_kind": {
+                "type": "string",
+                "description": "Location of the handoff relative to existing canonical graph references.",
+                "enum": [
+                  "within_single_ref",
+                  "between_refs",
+                  "at_decision_gate",
+                  "at_decision_outcome",
+                  "uncertain_multi_ref_zone"
+                ]
+              },
+              "source_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references where the handoff begins, is triggered, or becomes visible.",
+                "items": {
+                  "$ref": "#/$defs/graph_ref_id"
+                }
+              },
+              "target_ref_ids": {
+                "type": "array",
+                "description": "Existing graph references where the receiving party takes over. May be empty when no target exists yet.",
+                "items": {
+                  "$ref": "#/$defs/graph_ref_id"
+                }
+              },
+              "boundary_ref_ids": {
+                "type": "array",
+                "description": "Minimal existing graph area that visually represents the handoff region.",
+                "items": {
+                  "$ref": "#/$defs/graph_ref_id"
+                }
+              },
+              "from_party": {
+                "$ref": "#/$defs/handoff_party"
+              },
+              "to_party": {
+                "$ref": "#/$defs/handoff_party"
+              },
+              "transferred_responsibility_or_control": {
+                "type": "string",
+                "description": "Responsibility, ownership, authority, work, or process control transferred to the receiving party."
+              },
+              "transferred_payload": {
+                "type": "array",
+                "description": "Concrete information, documents, cases, requests, tasks, or physical objects passed through the handoff.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sender_expected_action": {
+                "type": "string",
+                "description": "Action expected from the sending party to perform the handoff."
+              },
+              "receiver_expected_action": {
+                "type": "string",
+                "description": "Action expected from the receiving party after the handoff."
+              },
+              "handoff_nature_tags": {
+                "type": "array",
+                "description": "Controlled semantic tags describing the handoff.",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "responsibility_transfer",
+                    "ownership_transfer",
+                    "process_control_transfer",
+                    "information_or_document_transfer",
+                    "physical_or_material_transfer",
+                    "decision_authority_transfer",
+                    "work_queue_transfer",
+                    "human_to_human",
+                    "human_to_system",
+                    "system_to_human",
+                    "system_to_system",
+                    "cross_role_boundary",
+                    "cross_team_boundary",
+                    "cross_department_boundary",
+                    "cross_organization_boundary",
+                    "external_dependency_boundary",
+                    "confirmation_dependency",
+                    "waiting_for_receiver",
+                    "feedback_or_clarification_loop",
+                    "escalation_or_routing",
+                    "uncertain"
+                  ]
+                }
+              },
+              "why_candidate": {
+                "type": "string",
+                "description": "Why this graph area is considered a handoff region."
+              },
+              "localization_uncertainty": {
+                "description": "Why the handoff cannot be localized more precisely, or null when it is clearly localized.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "confidence": {
+                "type": "string",
+                "description": "Confidence that the handoff and its localization are supported by the available context.",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "revision_request": {
+      "type": "object",
+      "description": "Review fields returned for the user to complete.",
+      "additionalProperties": false,
+      "required": [
+        "confirmation_questions",
+        "additional_user_context"
+      ],
+      "properties": {
+        "confirmation_questions": {
+          "type": "array",
+          "description": "Questions needed to resolve material ambiguity in the handoff overlay.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "question_id",
+              "question",
+              "why_needed",
+              "handoff_zone_candidate_ids",
+              "blocks_next_pass",
+              "answer"
+            ],
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "description": "Stable sequential identifier of the confirmation question.",
+                "pattern": "^cq_[0-9]{3}$"
+              },
+              "question": {
+                "type": "string",
+                "description": "Concrete question presented to the user."
+              },
+              "why_needed": {
+                "type": "string",
+                "description": "Why the answer matters for the handoff overlay."
+              },
+              "handoff_zone_candidate_ids": {
+                "type": "array",
+                "description": "Handoff region identifiers affected by this question.",
+                "items": {
+                  "type": "string",
+                  "pattern": "^hzc_[0-9]{3}$"
+                }
+              },
+              "blocks_next_pass": {
+                "type": "boolean",
+                "description": "Whether the missing answer prevents a safe next pass."
+              },
+              "answer": {
+                "type": "string",
+                "description": "User-editable answer. The agent must return an empty string.",
+                "enum": [
+                  ""
+                ]
+              }
+            }
+          }
+        },
+        "additional_user_context": {
+          "type": "string",
+          "description": "User-editable additional context. The agent must return an empty string.",
+          "enum": [
+            ""
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "graph_ref_id": {
+      "type": "string",
+      "description": "Identifier of an existing MAIN_FLOW_POINT, DECISION_GATE, or DECISION_OUTCOME.",
+      "pattern": "^(mfp_[0-9]{3}|dg_[0-9]{3}(_out_[0-9]{3})?)$"
+    },
+    "handoff_party": {
+      "type": "object",
+      "description": "Party participating in the handoff.",
+      "additionalProperties": false,
+      "required": [
+        "party_kind",
+        "party_label",
+        "organization",
+        "party_detail",
+        "context_description"
+      ],
+      "properties": {
+        "party_kind": {
+          "type": "string",
+          "description": "Normalized kind of the party.",
+          "enum": [
+            "individual_person",
+            "human_role",
+            "team",
+            "department",
+            "organization",
+            "system",
+            "automated_service",
+            "work_queue",
+            "external_party",
+            "mixed_or_composite",
+            "unknown"
+          ]
+        },
+        "party_label": {
+          "type": "string",
+          "description": "Human-readable party label."
+        },
+        "organization": {
+          "type": "string",
+          "description": "Organization associated with the party, or unknown."
+        },
+        "party_detail": {
+          "type": "string",
+          "description": "Additional detail about the party and its role, or unknown."
+        },
+        "context_description": {
+          "type": "string",
+          "description": "Operational context of the party in this handoff."
+        }
+      }
+    }
+  }
+}

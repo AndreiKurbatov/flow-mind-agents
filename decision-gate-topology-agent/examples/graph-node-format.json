@@ -1,0 +1,103 @@
+{
+  "decision_gate" : {
+    "id": "dg_001",
+    "kind": "DECISION_GATE",
+    "title": "Discharge finalization decision",
+    "description": "Can the patient proceed to final discharge now?",
+    "confidence": "medium",
+    "previousNodeIds": [
+      "mfp_004"
+    ],
+    "nextNodeIds": [
+      "dg_001_out_001",
+      "dg_001_out_002",
+      "dg_001_out_003",
+      "dg_001_out_004"
+    ],
+    "data": {
+      "decision_responsibility": "Determine whether the patient is sufficiently ready, safe, authorized, documented, and logistically supported to proceed to final discharge.",
+      "anchored_to_node_ids": [
+        "mfp_004"
+      ],
+      "decision_basis": [
+        "clinical readiness",
+        "patient safety",
+        "required discharge documents",
+        "doctor authorization",
+        "post-discharge destination availability",
+        "transport or family support availability",
+        "timing constraints"
+      ],
+      "decision_nature_tags": [
+        "readiness",
+        "risk_or_safety_or_compliance",
+        "completeness_or_validation",
+        "approval_or_authorization",
+        "resource_or_capacity",
+        "timing_or_scheduling"
+      ]
+    }
+  },
+  "outcomes": [
+    {
+      "id": "dg_001_out_001",
+      "kind": "DECISION_OUTCOME",
+      "title": "can_finalize_discharge",
+      "description": "The patient is clinically ready, safe to leave, required documents are complete, authorization is present, and the destination/logistics are sufficiently confirmed.",
+      "confidence": "medium", // viene mappato il confidence dell DECISION_GATE associato per preservare il contratto (cioè del elemento padre)
+      "previousNodeIds" : [ "dg_001" ],
+      "nextNodeIds": [ "mfp_005" ],
+      "data" : {
+        "connection_status": "attached",
+        "branch_creation_request": null
+      }
+    },
+    {
+      "id": "dg_001_out_002",
+      "kind": "DECISION_OUTCOME",
+      "title": "must_wait_or_complete_missing_requirements",
+      "description": "One or more required conditions are not yet satisfied, so the patient cannot proceed to final discharge and the workflow enters waiting or completion activities.",
+      "confidence": "medium", // viene mappato il confidence dell DECISION_GATE associato per preservare il contratto (cioè del elemento padre)
+      "previousNodeIds" : [ "dg_001" ],
+      "nextNodeIds": [ "wait_001", "mfp_003" ],
+      "data" : {
+        "connection_status": "attached",
+        "branch_creation_request": null
+      }
+    },
+    {
+      "id": "dg_001_out_003",
+      "kind": "DECISION_OUTCOME",
+      "title": "requires_risk_or_social_review",
+      "description": "The patient may be clinically ready, but safety, social, or post-discharge support risks require additional review before discharge.",
+      "confidence": "medium", // viene mappato il confidence dell DECISION_GATE associato per preservare il contratto (cioè del elemento padre)
+      "previousNodeIds" : [ "dg_001" ],
+      "nextNodeIds": [ "wait_001", "mfp_003" ],
+      "data" : {
+        "connection_status": "branch_candidate_needed",
+        "branch_creation_request": {
+          "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+          "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+          "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+        }
+      }
+    },
+    {
+      "id": "dg_001_out_004",
+      "kind": "DECISION_OUTCOME",
+      "title": "requires_alternative_destination",
+      "description": "The planned discharge destination is unavailable or unsuitable, so the workflow must choose another destination or care path.",
+      "confidence": "medium", // viene mappato il confidence dell DECISION_GATE associato per preservare il contratto (cioè del elemento padre)
+      "previousNodeIds" : [ "dg_001" ],
+      "nextNodeIds": [ "wait_001", "mfp_003" ],
+      "data" : {
+        "connection_status": "branch_candidate_needed",
+        "branch_creation_request": {
+          "requested_branch_purpose": "Represent the alternative path where the patient cannot proceed directly to final discharge because safety, social support, or post-discharge risk must be reviewed first.",
+          "expected_start_context": "After discharge preparation, when the patient appears close to final discharge but risk or social support concerns are detected.",
+          "expected_end_or_merge_behavior": "The branch may merge back into discharge finalization if the risk is resolved, may lead to waiting if support is missing, or may redirect to an alternative destination path."
+        }
+      }
+    }
+  ]
+}

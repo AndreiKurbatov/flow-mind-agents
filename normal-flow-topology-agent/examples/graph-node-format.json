@@ -1,0 +1,10 @@
+{
+  "id": "string",
+  "kind": "MAIN_FLOW_POINT",
+  "title": "string",
+  "description": "string",
+  "confidence": "low | medium | high",
+  "nextNodeIds": ["string"],
+  "previousNodeIds": ["string"],
+  "data": {}
+}

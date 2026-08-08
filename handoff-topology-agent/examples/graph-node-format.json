@@ -1,0 +1,53 @@
+{
+  "handoffRegion" : {
+    "id": "hzc_001",
+    "kind": "HANDOFF_REGION",
+    "title": "Clinical team to social worker handoff",
+    "description": "The discharge case appears to move from the clinical ward team to a social worker for post-discharge support planning.",
+    "confidence": "medium",
+    "memberNodeIds": [ "mfp_003", "mfp_004" ],
+    "data": {
+      "locationKind": "between_refs",
+      "sourceRefIds": [ "mfp_003" ],
+      "targetRefIds": [ "mfp_004" ],
+      "fromParty": {
+        "partyKind": "team",
+        "partyLabel": "clinical ward team",
+        "organization": "hospital",
+        "partyDetail": "Ward team responsible for clinical discharge preparation",
+        "contextDescription": "Prepares the patient case before post-discharge support planning."
+      },
+      "toParty": {
+        "partyKind": "human_role",
+        "partyLabel": "social worker",
+        "organization": "hospital",
+        "partyDetail": "Role responsible for social and post-discharge support planning",
+        "contextDescription": "Receives the case to assess and arrange support needs."
+      },
+      "transferredResponsibilityOrControl": "Responsibility for assessing or arranging post-discharge social support moves from the clinical ward team to the social worker.",
+      "transferredPayload": [
+        "patient discharge case",
+        "post-discharge support needs",
+        "relevant clinical/social information"
+      ],
+      "senderExpectedAction": "Prepare and send the discharge support request with the relevant clinical and social information.",
+      "receiverExpectedAction": "Review the request and arrange the required post-discharge support.",
+      "handoffNatureTags": [
+        "responsibility_transfer",
+      ],
+      "whyСandidate": "The flow appears to move from clinical discharge preparation to a different responsible party for post-discharge support planning.",
+      "localization_uncertainty": "string"
+    }
+  }
+}
+
+//Instructions for locationKind field
+//within_single_ref — handoff находится внутри одного ref;
+//between_refs — между несколькими связанными refs;
+//at_decision_gate — на уровне decision gate целиком;
+//at_decision_outcome — только на конкретном outcome;
+//uncertain_multi_ref_zone — fallback, когда handoff есть, но точно локализовать его нельзя.
+
+
+// Mapping instructions
+// boundary_ref_ids --> memberNodeIds

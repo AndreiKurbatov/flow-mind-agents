@@ -1,0 +1,16 @@
+[
+  "entry_or_scope",
+  "case_classification",
+  "path_selection",
+  "readiness",
+  "completeness_or_validation",
+  "approval_or_authorization",
+  "risk_or_safety_or_compliance",
+  "resource_or_capacity",
+  "destination_or_outcome",
+  "ownership_routing",
+  "internal_dependency_result",
+  "external_dependency_result",
+  "timing_or_scheduling",
+  "uncertain"
+]

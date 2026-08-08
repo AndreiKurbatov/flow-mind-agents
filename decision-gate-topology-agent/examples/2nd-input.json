@@ -19,7 +19,6 @@
         "name": "Discharge finalization decision",
         "decision_question": "Can the patient proceed to final discharge now?",
         "decision_responsibility": "Determine whether the patient is sufficiently ready, safe, authorized, documented, and logistically supported to proceed to final discharge.",
-        "previous_node_ids": ["mfp_004"],
         "anchored_to_node_ids": [
           "mfp_004"
         ],

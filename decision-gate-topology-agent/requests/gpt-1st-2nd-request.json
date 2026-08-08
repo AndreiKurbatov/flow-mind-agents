@@ -168,16 +168,9 @@
                 "type": "string",
                 "description": "Explanation of what this gate is responsible for deciding in the workflow."
               },
-              "previous_node_ids": {
-                "type": "array",
-                "description": "References that flow into this decision gate. Usually these are MAIN_FLOW_POINT ids located before the gate. Values may reference wfpoint_id, decision_gate_id, or outcome_id.",
-                "items": {
-                  "type": "string"
-                }
-              },
               "anchored_to_node_ids": {
                 "type": "array",
-                "description": "MAIN_FLOW_POINT ids to which this decision gate is semantically attached. In the simplest case, this is the immediately preceding MAIN_FLOW_POINT after which the decision is evaluated.",
+                "description": "MAIN_FLOW_POINT ids that flow directly into this decision gate and to which the gate is semantically attached. These values map to canonical previousNodeIds.",
                 "items": {
                   "type": "string"
                 }
@@ -235,7 +228,6 @@
               "name",
               "decision_question",
               "decision_responsibility",
-              "previous_node_ids",
               "anchored_to_node_ids",
               "decision_basis",
               "decision_nature_tags",
